@@ -4,8 +4,9 @@
 
 package frc.robot.commands.autocommands;
 
-import com.choreo.lib.Choreo;
-import com.choreo.lib.ChoreoTrajectory;
+import choreo.Choreo;
+import choreo.trajectory.Trajectory;
+import choreo.auto.AutoTrajectory;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,7 +22,7 @@ import frc.robot.subsystems.SwerveBase;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FollowTrajectory extends SequentialCommandGroup {
   /** Creates a new FollowTrajectory. */
-  public FollowTrajectory(ChoreoTrajectory trajectory, SwerveBase swerve, boolean resetOdometry, boolean stopAtEnd) {
+  public FollowTrajectory(AutoTrajectory trajectory, SwerveBase swerve, boolean resetOdometry, boolean stopAtEnd) {
     if (resetOdometry) {
       addCommands(new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())));
     }
