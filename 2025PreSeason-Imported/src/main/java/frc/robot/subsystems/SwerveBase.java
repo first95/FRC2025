@@ -8,7 +8,9 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Pigeon2Configurator;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -32,6 +34,7 @@ import frc.lib.util.CamData;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.SwerveModule;
+import frc.robot.Constants.Auton;
 import frc.robot.Constants.CommandDebugFlags;
 import frc.robot.Constants.Drivebase;
 import frc.robot.Constants.Vision;
@@ -43,6 +46,9 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 public class SwerveBase extends SubsystemBase {
+  private final PIDController xController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+  private final PIDController yController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+  private final PIDController headingController = new PIDController(Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
 
   private final SwerveModule[] swerveModules;
   private SwerveModulePosition[] currentModulePositions = new SwerveModulePosition[Drivebase.NUM_MODULES];
@@ -574,6 +580,7 @@ public class SwerveBase extends SubsystemBase {
       SmartDashboard.putNumber("Robot Y Vel", currentRobotVelocity.vyMetersPerSecond);
       SmartDashboard.putNumber("Robot Ang Vel", currentRobotVelocity.omegaRadiansPerSecond);
     }
+
   }
 
   @Override
@@ -615,4 +622,17 @@ public class SwerveBase extends SubsystemBase {
     }
     return (sum / Drivebase.NUM_MODULES);
   }
+  public void followTrajectory(SwerveSample sample) {
+    
+    Pose2d pose = getPose();
+
+    ChassisSpeeds speeds = new ChassisSpeeds(
+      sample.vx + xController.calculate(pose.getX(), sample.x),
+      sample.vy + yController.calculate(pose.getY(), sample.y),
+      sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading)
+    );
+    setChassisSpeeds(speeds);
+   
+  }
+
 }

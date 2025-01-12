@@ -5,10 +5,12 @@
 package frc.robot.commands.autocommands;
 
 import choreo.Choreo;
+import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import choreo.auto.AutoTrajectory;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,23 +24,20 @@ import frc.robot.subsystems.SwerveBase;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FollowTrajectory extends SequentialCommandGroup {
   /** Creates a new FollowTrajectory. */
-  public FollowTrajectory(AutoTrajectory trajectory, SwerveBase swerve, boolean resetOdometry, boolean stopAtEnd) {
-    if (resetOdometry) {
-      addCommands(new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())));
-    }
-    addCommands(
-      Choreo.choreoSwerveCommand(
-        trajectory,
-        swerve::getPose,
-        new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD),
-        new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD),
-        new PIDController(Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD),
-        swerve::setChassisSpeeds,
-        () -> swerve.getAlliance() == Alliance.Red,
-        swerve)
+  private final PIDController xController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+  private final PIDController yController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+  private final PIDController headingController = new PIDController(Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
+
+  public FollowTrajectory(SwerveBase swerve, SwerveSample sample) {
+    
+    Pose2d pose = swerve.getPose();
+
+    ChassisSpeeds speeds = new ChassisSpeeds(
+      sample.vx + xController.calculate(pose.getX(), sample.x),
+      sample.vy + yController.calculate(pose.getY(), sample.y),
+      sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading)
     );
-    if (stopAtEnd) {
-      addCommands(new InstantCommand(() -> swerve.setChassisSpeeds(new ChassisSpeeds())));
-    }
+    swerve.setChassisSpeeds(speeds);
+   
   }
 }
