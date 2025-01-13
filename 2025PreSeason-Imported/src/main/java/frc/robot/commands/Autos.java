@@ -38,7 +38,7 @@ public final class Autos {
       swerve::getPose,
       swerve::resetOdometry,
       swerve::followTrajectory,
-      () -> swerve.getAlliance() == Alliance.Red,
+      true,
       swerve);
   }
 }

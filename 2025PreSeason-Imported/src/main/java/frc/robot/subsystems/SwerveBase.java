@@ -8,7 +8,6 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Pigeon2Configurator;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -39,6 +38,10 @@ import frc.robot.Constants.CommandDebugFlags;
 import frc.robot.Constants.Drivebase;
 import frc.robot.Constants.Vision;
 
+import choreo.trajectory.SwerveSample;
+import choreo.auto.AutoFactory;
+
+
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -46,9 +49,9 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 public class SwerveBase extends SubsystemBase {
-  private final PIDController xController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
-  private final PIDController yController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
-  private final PIDController headingController = new PIDController(Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
+  private final PIDController autonXController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+  private final PIDController autonYController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+  private final PIDController autonHeadingController = new PIDController(Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
 
   private final SwerveModule[] swerveModules;
   private SwerveModulePosition[] currentModulePositions = new SwerveModulePosition[Drivebase.NUM_MODULES];
@@ -88,6 +91,7 @@ public class SwerveBase extends SubsystemBase {
    * This subsytem also handles odometry.
   */
   public SwerveBase() {
+    autonHeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
     // Create an integrator for angle if the robot is being simulated to emulate an IMU
     // If the robot is real, instantiate the IMU instead.
@@ -397,7 +401,18 @@ public class SwerveBase extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     odometry.resetPosition(getYaw(), getCurrentModulePositions(), pose);
   }
+  public void followTrajectory(SwerveSample sample) {
+    
+    Pose2d pose = getPose();
 
+    ChassisSpeeds speeds = new ChassisSpeeds(
+      sample.vx + autonXController.calculate(pose.getX(), sample.x),
+      sample.vy + autonYController.calculate(pose.getY(), sample.y),
+      sample.omega + autonHeadingController.calculate(pose.getRotation().getRadians(), sample.heading)
+    );
+    setChassisSpeeds(speeds);
+   
+  }
   public void clearOdometrySeed() {
     wasOdometrySeeded = false;
   }
@@ -621,18 +636,6 @@ public class SwerveBase extends SubsystemBase {
       sum += module.getDriveVolts();
     }
     return (sum / Drivebase.NUM_MODULES);
-  }
-  public void followTrajectory(SwerveSample sample) {
-    
-    Pose2d pose = getPose();
-
-    ChassisSpeeds speeds = new ChassisSpeeds(
-      sample.vx + xController.calculate(pose.getX(), sample.x),
-      sample.vy + yController.calculate(pose.getY(), sample.y),
-      sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading)
-    );
-    setChassisSpeeds(speeds);
-   
   }
 
 }
