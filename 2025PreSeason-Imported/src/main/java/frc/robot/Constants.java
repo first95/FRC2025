@@ -233,14 +233,20 @@ public final class Constants {
         public static final double MAX_SPEED = 10.0;
         public static final double MAX_ACCELERATION = 10.0;
 
-        public static final Rotation2d restingPosition = Rotation2d.fromDegrees(90);
+        public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(193);
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(0);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(20);
+        public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(110);
+
 
         public static final double DEADBAND = Math.toRadians(0.1);
 
         public static final double TOLERANCE = Math.toRadians(0.1);
         public static final int SETTLE_TIME_LOOP_CYCLES = 10;
+
+        public static final double CURRENT_OFFSET = 5;
 
 
     }

@@ -114,7 +114,7 @@ public class L1Arm extends SubsystemBase {
       new TrapezoidProfile.Constraints(
         L1ArmConstants.MAX_SPEED, 
         L1ArmConstants.MAX_ACCELERATION));
-    armGoal = L1ArmConstants.restingPosition;
+    armGoal = L1ArmConstants.STOWED;
     profileStart = new TrapezoidProfile.State(shoulder.getEncoder().getPosition(),0);
     lastShoulderVelocitySetpoint = 0;
     armAccel = 0;
