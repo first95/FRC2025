@@ -196,7 +196,7 @@ public final class Constants {
     }
     public static final class L1ArmConstants{
 
-        public static final int SHOULDER_ID = 15;
+        public static final int SHOULDER_ID = ;
 
         public static final int SMARTCURRENTLIMIT = 50;
 
@@ -244,6 +244,24 @@ public final class Constants {
 
 
     }
+    public static final class L1IntakeConstants{
+        public static final int INTAKE_ID = ;
+
+        public static final boolean INVERTED;
+
+        public static final int SMARTCURRENTLIMIT;
+
+        public static final int FAULTS_PERIOD_MS = 20;
+
+        public static final int PRIMARY_ENCODER_POSITON_PERIODMS = 6000;
+        public static final int PRIMARY_ENCODER_VELOCITY_PERIODMS = 5900;
+
+        public static final boolean OUTPUT_CURRENT_ALWAYS_ON = true;
+        public static final int OUTPUT_CURRENT_PERIODMS = 20;
+
+        public static final double MAX_SPEED = 1;
+
+    }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
 
@@ -270,17 +288,6 @@ public final class Constants {
         public static final double ANG_STD_DEV_COEFFICIENT = 0.01;
 
         public static final double MAX_ALLOWABLE_Z_ERROR = 0.25; // Meters
-
-        public static final Translation3d BLUE_SPEAKER_POS = new Translation3d(
-            0.15,
-            5.5474,
-            2.0828
-        );
-        public static final Translation3d RED_SPEAKER_POS = new Translation3d(
-            FIELD_LENGTH - 0.15,
-            5.5474,
-            2.0828
-        );
     }
 
     public static final class Auton {
@@ -313,13 +320,7 @@ public final class Constants {
         public static final double DRIVE_POSITIONAL_TOLERANCE = 0.05; // m
 
         private static final Map<String, Pose2d> BLUE_MAP = Map.ofEntries(
-            Map.entry("ScoreAmp", new Pose2d(new Translation2d(1.83, 7.5), Rotation2d.fromDegrees(90))),
-            Map.entry("CenterNearNote", new Pose2d(new Translation2d(2.63, 5.55), Rotation2d.fromDegrees(0))),
-            Map.entry("AmpNote", new Pose2d(new Translation2d(2.66, 6.8), new Rotation2d(0.5))),
-            Map.entry("PodiumNote", new Pose2d(new Translation2d(2.637, 4.219), new Rotation2d(-0.464))),
-            Map.entry("DisruptorStart", new Pose2d(new Translation2d(7.964, 0.865), new Rotation2d(-0.489))),
-            Map.entry("Source3Start", new Pose2d(new Translation2d(1.473, 3.325), new Rotation2d(-0.983))),
-            Map.entry("AmpZoneStart", new Pose2d(new Translation2d(2.887, 6.334), new Rotation2d()))
+           
         );
         // Iterates through every element in the pose map and mirrors them for the red alliance
         private static final Map<String, Pose2d> RED_MAP =

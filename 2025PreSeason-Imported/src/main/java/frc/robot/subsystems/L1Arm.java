@@ -27,9 +27,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Voltage;
 import static edu.wpi.first.units.Units.Volts;
@@ -41,12 +42,16 @@ import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import frc.robot.Constants.L1ArmConstants;
+import frc.robot.Constants.L1IntakeConstants;
 
 
 public class L1Arm extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  private final SparkFlex shoulder;
-  private final SparkFlexConfig shoulderConfig;
+  private final SparkMax intake;
+  private final SparkMaxConfig intakeConfig;  
+
+  private final SparkMax shoulder;
+  private final SparkMaxConfig shoulderConfig;
   private final SparkClosedLoopController shoulderPID;
   private final RelativeEncoder shoulderEncoder;
 
@@ -64,8 +69,21 @@ public class L1Arm extends SubsystemBase {
 
 
   public L1Arm() {
-    shoulder = new SparkFlex(L1ArmConstants.SHOULDER_ID, MotorType.kBrushless);
-    shoulderConfig = new SparkFlexConfig();
+    intake = new SparkMax(L1IntakeConstants.INTAKE_ID, MotorType.kBrushless);
+    intakeConfig = new SparkMaxConfig();
+
+    intakeConfig
+      .inverted(L1IntakeConstants.INVERTED)
+      .idleMode(IdleMode.kBrake)
+      .smartCurrentLimit(L1IntakeConstants.SMARTCURRENTLIMIT);
+    intakeConfig.signals
+      .faultsPeriodMs(L1IntakeConstants.FAULTS_PERIOD_MS)
+      .primaryEncoderPositionPeriodMs(L1IntakeConstants.PRIMARY_ENCODER_POSITON_PERIODMS)
+      .primaryEncoderVelocityPeriodMs(L1IntakeConstants.PRIMARY_ENCODER_VELOCITY_PERIODMS)
+      .outputCurrentPeriodMs(L1IntakeConstants.OUTPUT_CURRENT_PERIODMS);
+
+    shoulder = new SparkMax(L1ArmConstants.SHOULDER_ID, MotorType.kBrushless);
+    shoulderConfig = new SparkMaxConfig();
     shoulderPID = shoulder.getClosedLoopController();
 
     shoulderConfig
@@ -161,7 +179,12 @@ public class L1Arm extends SubsystemBase {
   public Rotation2d getArmAngle(){
     return Rotation2d.fromRadians(shoulderEncoder.getPosition());
   }
-
+  public void runIntake(double speed){
+    intake.set(speed * L1IntakeConstants.MAX_SPEED);
+  }
+  public double getIntakeCurrent(){
+    return intake.getOutputCurrent();
+  }
   @Override
   public void periodic() {
 
@@ -199,6 +222,7 @@ public class L1Arm extends SubsystemBase {
       cyclesSinceShoulderNotAtGoal + 1 :
       0;
     
+    
     SmartDashboard.putNumber("ShoulderGoal", armGoal.getDegrees());
     SmartDashboard.putNumber("ShoulderSetpoint", Math.toDegrees(shoulderSetpoint.position));
     SmartDashboard.putNumber("ShoulderSetpointVel", Math.toDegrees(shoulderSetpoint.velocity));
@@ -207,6 +231,8 @@ public class L1Arm extends SubsystemBase {
     SmartDashboard.putBoolean("ShoulderAtGoal", armAtGoal());
     SmartDashboard.putNumber("CycleCounter", cyclesSinceShoulderNotAtGoal);
     SmartDashboard.putNumber("SetpointAccel", Math.toDegrees(armAccel));
+
+    SmartDashboard.putNumber("IntakeCurrentDraw",getIntakeCurrent());
 
   }
 
