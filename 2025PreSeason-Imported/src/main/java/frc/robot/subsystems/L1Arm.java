@@ -10,6 +10,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
@@ -35,6 +36,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
@@ -156,6 +158,9 @@ public class L1Arm extends SubsystemBase {
   public boolean armAtGoal() {
     return cyclesSinceShoulderNotAtGoal >= L1ArmConstants.SETTLE_TIME_LOOP_CYCLES;
   }
+  public Rotation2d getArmAngle(){
+    return Rotation2d.fromRadians(shoulderEncoder.getPosition());
+  }
 
   @Override
   public void periodic() {
@@ -193,6 +198,15 @@ public class L1Arm extends SubsystemBase {
     cyclesSinceShoulderNotAtGoal = Math.abs(armGoal.getRadians() - shoulderEncoder.getPosition()) <= L1ArmConstants.TOLERANCE ?
       cyclesSinceShoulderNotAtGoal + 1 :
       0;
+    
+    SmartDashboard.putNumber("ShoulderGoal", armGoal.getDegrees());
+    SmartDashboard.putNumber("ShoulderSetpoint", Math.toDegrees(shoulderSetpoint.position));
+    SmartDashboard.putNumber("ShoulderSetpointVel", Math.toDegrees(shoulderSetpoint.velocity));
+    SmartDashboard.putNumber("ShoulderPos", getArmAngle().getDegrees());
+    SmartDashboard.putNumber("ShoulderControlEffort", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
+    SmartDashboard.putBoolean("ShoulderAtGoal", armAtGoal());
+    SmartDashboard.putNumber("CycleCounter", cyclesSinceShoulderNotAtGoal);
+    SmartDashboard.putNumber("SetpointAccel", Math.toDegrees(armAccel));
 
   }
 
