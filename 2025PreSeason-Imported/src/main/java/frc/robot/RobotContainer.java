@@ -22,12 +22,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Driver;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.choreo.lib.Choreo;
-import com.choreo.lib.ChoreoTrajectory;
+import choreo.Choreo;
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
+import choreo.trajectory.SwerveSample;
+import choreo.trajectory.Trajectory;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -37,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -50,7 +55,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private final Map<String, ChoreoTrajectory> trajMap;
+  private final Map<String, Optional<Trajectory<SwerveSample>>> trajMap;
 
   // The robot's subsystems and commands are defined here...
   private final SwerveBase drivebase = new SwerveBase();
@@ -63,7 +68,7 @@ public class RobotContainer {
       OperatorConstants.operatorControllerPort);
   
   private Command autoCommand;
-  SendableChooser<Command> autoChooser = new SendableChooser<>();
+  private final AutoChooser autoChooser;
   SendableChooser<Integer> debugMode = new SendableChooser<>();
 
   /**
@@ -145,6 +150,14 @@ public class RobotContainer {
     SmartDashboard.putNumber("KP", 0);
     SmartDashboard.putNumber("KI", 0);
     SmartDashboard.putNumber("KD", 0);
+
+    autoChooser = new AutoChooser();
+
+    //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
+    //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
+    SmartDashboard.putData(autoChooser);
+
+    RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
   }
 
   /**
@@ -193,7 +206,7 @@ public class RobotContainer {
     drivebase.isAuto = isAuto;
   }
 
-  private Map<String, ChoreoTrajectory> loadTrajectories() {
+  private Map<String, Optional<Trajectory<SwerveSample>>> loadTrajectories() {
     Set<String> trajNames;
     try {
       if (Robot.isReal()) {
@@ -207,7 +220,7 @@ public class RobotContainer {
     }
     return trajNames.stream().collect(Collectors.toMap(
         entry -> entry.replace(".traj", ""),
-        entry -> Choreo.getTrajectory(entry.replace(".traj", ""))));
+        entry -> Choreo.loadTrajectory(entry.replace(".traj", ""))));
   }
 
   private Set<String> listFilesUsingFilesList(String dir) throws IOException {
