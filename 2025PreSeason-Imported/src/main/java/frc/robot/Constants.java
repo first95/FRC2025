@@ -196,7 +196,7 @@ public final class Constants {
     }
     public static final class L1ArmConstants{
 
-        public static final int SHOULDER_ID = 15;
+        public static final int SHOULDER_ID = ;
 
         public static final int SMARTCURRENTLIMIT = 50;
 
@@ -242,6 +242,24 @@ public final class Constants {
         public static final double TOLERANCE = Math.toRadians(0.1);
         public static final int SETTLE_TIME_LOOP_CYCLES = 10;
 
+
+    }
+    public static final class L1IntakeConstants{
+        public static final int INTAKE_ID = ;
+
+        public static final boolean INVERTED;
+
+        public static final int SMARTCURRENTLIMIT;
+
+        public static final int FAULTS_PERIOD_MS = 20;
+
+        public static final int PRIMARY_ENCODER_POSITON_PERIODMS = 6000;
+        public static final int PRIMARY_ENCODER_VELOCITY_PERIODMS = 5900;
+
+        public static final boolean OUTPUT_CURRENT_ALWAYS_ON = true;
+        public static final int OUTPUT_CURRENT_PERIODMS = 20;
+
+        public static final double MAX_SPEED = 1;
 
     }
     public static final class Vision {
