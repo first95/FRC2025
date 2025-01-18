@@ -163,6 +163,13 @@ public class L1Arm extends SubsystemBase {
           /* one-time action goes here */
         });
   }
+  public Command sysIdQuasiShoulder(SysIdRoutine.Direction direction) {
+    return shoulderCharacterizer.quasistatic(direction);
+  }
+  public Command sysIdDynShoulder(SysIdRoutine.Direction direction) {
+    return shoulderCharacterizer.dynamic(direction);
+  }
+
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
@@ -200,7 +207,7 @@ public class L1Arm extends SubsystemBase {
       timer.start();
     }
   }
-  
+
   @Override
   public void periodic() {
 

@@ -12,6 +12,7 @@ import frc.robot.Constants.Vision;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CoralHandlerCommand;
 import frc.robot.commands.drivebase.AbsoluteDrive;
+import frc.robot.subsystems.L1Arm;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.drivebase.TeleopDrive;
 import frc.robot.subsystems.SwerveBase;
@@ -59,6 +60,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final SwerveBase drivebase = new SwerveBase();
+  private final L1Arm L1arm = new L1Arm();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
 
@@ -178,6 +180,10 @@ public class RobotContainer {
    
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     operatorController.start().onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
+    operatorController.a().onTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
+    operatorController.b().onTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
+    operatorController.x().onTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
+    operatorController.y().onTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
     /*driveController.button(2).whileTrue(new AutoAmp(drivebase)).onFalse(new InstantCommand(() -> {
       SmartDashboard.putBoolean(Auton.AUTO_AMP_SCORE_KEY, false);
       SmartDashboard.putBoolean(Auton.AUTO_AMP_ALIGN_KEY, false);
