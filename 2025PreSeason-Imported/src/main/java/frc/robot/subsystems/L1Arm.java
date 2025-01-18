@@ -163,6 +163,13 @@ public class L1Arm extends SubsystemBase {
           /* one-time action goes here */
         });
   }
+  public Command sysIdQuasiShoulder(SysIdRoutine.Direction direction) {
+    return shoulderCharacterizer.quasistatic(direction);
+  }
+  public Command sysIdDynShoulder(SysIdRoutine.Direction direction) {
+    return shoulderCharacterizer.dynamic(direction);
+  }
+
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
@@ -173,18 +180,34 @@ public class L1Arm extends SubsystemBase {
     // Query some boolean state, such as a digital sensor.
     return false;
   }
+
   public boolean armAtGoal() {
     return cyclesSinceShoulderNotAtGoal >= L1ArmConstants.SETTLE_TIME_LOOP_CYCLES;
   }
+
   public Rotation2d getArmAngle(){
     return Rotation2d.fromRadians(shoulderEncoder.getPosition());
   }
+
   public void runIntake(double speed){
     intake.set(speed * L1IntakeConstants.MAX_SPEED);
   }
+  
   public double getIntakeCurrent(){
     return intake.getOutputCurrent();
   }
+
+  public void setArmAngle(Rotation2d angle){
+    if(angle.getRadians() != armGoal.getRadians()){
+      armGoal = angle;
+      profileStart = new TrapezoidProfile.State(shoulderEncoder.getPosition(),shoulderEncoder.getVelocity());
+      cyclesSinceShoulderNotAtGoal = 0;
+      timer.stop();
+      timer.reset();
+      timer.start();
+    }
+  }
+
   @Override
   public void periodic() {
 
