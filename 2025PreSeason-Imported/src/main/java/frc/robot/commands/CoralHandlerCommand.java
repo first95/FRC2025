@@ -6,16 +6,19 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
+import frc.robot.subsystems.L1Arm;
+import frc.robot.Constants.L1ArmConstants;
+
 
 public class CoralHandlerCommand extends Command {
     
     private final BooleanSupplier L1IntakeButtonSupplier, L4IntakeButtonSupplier, HandOffButtonSupplier, ScoreButtonSupplier, RollerTriggerSupplier;
-    //private final L1Arm L1arm;
-    //private final L4Arm L4arm;
+    private final L1Arm L1arm;
+    
 
         public CoralHandlerCommand(BooleanSupplier L1IntakeButtonSupplier, BooleanSupplier L4IntakeButtonSupplier, 
                                    BooleanSupplier HandOffButtonSupplier, BooleanSupplier ScoreButtonSupplier, 
-                                   BooleanSupplier RollerTriggerSupplier){
+                                   BooleanSupplier RollerTriggerSupplier, L1Arm L1arm){
             
     
     
@@ -25,8 +28,10 @@ public class CoralHandlerCommand extends Command {
 
             this.HandOffButtonSupplier = HandOffButtonSupplier;
             this.ScoreButtonSupplier = ScoreButtonSupplier;
-
             this.RollerTriggerSupplier = RollerTriggerSupplier;
+
+            this.L1arm = L1arm;
+
 
     }
 
@@ -48,6 +53,7 @@ public class CoralHandlerCommand extends Command {
 
     private boolean L1IntakeButton, L4IntakeButton, HandOffButton, ScoreButton, RollerTrigger;
     private boolean coralInL1 = false; 
+    private double IntakeCurrent;
 
     public void execute(){
         // read in the inputs
@@ -62,7 +68,10 @@ public class CoralHandlerCommand extends Command {
         // State Machine 
         switch (currentState) {
             case IDLE:
-                // L1 ~90, L4 stowed 
+                // L1 ~90, 
+                L1arm.setArmAngle(L1ArmConstants.STOWED);
+                
+                //L4 stowed 
                 
 
 
@@ -96,11 +105,14 @@ public class CoralHandlerCommand extends Command {
                     currentState = State.L4_INTAKING;
                 }
 
+                L1arm.setArmAngle(L1ArmConstants.INTAKING);
+
 
             break;
 
             case L1_HOLDING:
                 // Stow L1 
+                L1arm.setArmAngle(L1ArmConstants.STOWED);
 
                 if(ScoreButton){
 
@@ -117,6 +129,8 @@ public class CoralHandlerCommand extends Command {
             case L1_SCORE_POSITIONING:
                 // Move to scoring position then stop
 
+                L1arm.setArmAngle(L1ArmConstants.SCORING);
+
                 if(RollerTrigger){
 
                     currentState = State.L1_SCORING;
@@ -128,14 +142,22 @@ public class CoralHandlerCommand extends Command {
 
             case L1_SCORING:
                 // Move the roller forward
+                L1arm.runIntake(1);
+                IntakeCurrent = L1arm.getIntakeCurrent();
+                
 
                 // If current drops then return to IDLE
+                if(IntakeCurrent > L1ArmConstants.CURRENT_OFFSET + L1arm.getIntakeCurrent()){
+                    currentState = State.IDLE;
+
+                }
 
             break;
 
 
-
             case POSITIONING_HANDOFF:
+                L1arm.setArmAngle(L1ArmConstants.HAND_OFF);
+                
                 if(!HandOffButton){
                     currentState = State.PERFORMING_HANDOFF;
             }
@@ -155,6 +177,8 @@ public class CoralHandlerCommand extends Command {
             case L4_INTAKING:
                 // L4 intaking pos
                 // L1 backstop ~95 deg
+                L1arm.setArmAngle(L1ArmConstants.STOWED);
+
                 if(L1IntakeButton){
                     currentState = State.IDLE;
 
