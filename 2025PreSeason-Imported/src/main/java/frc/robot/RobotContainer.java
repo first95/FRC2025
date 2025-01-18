@@ -10,6 +10,7 @@ import frc.robot.Constants.Drivebase;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Vision;
 import frc.robot.commands.Autos;
+import frc.robot.commands.CoralHandlerCommand;
 import frc.robot.commands.drivebase.AbsoluteDrive;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.drivebase.TeleopDrive;
@@ -128,6 +129,13 @@ public class RobotContainer {
         false,
         () -> driveController.getHID().getRawButton(3));
 
+
+
+    CoralHandlerCommand manageCoral = new CoralHandlerCommand(
+      () -> operatorController.getHID().getYButton(),    // Y = L1
+      () -> operatorController.getHID().getBButton(),   // B = L4
+      () -> operatorController.getHID().getAButton()   // A = Intake 
+    );
 
     drivebase.setDefaultCommand(absoluteDrive);
     // Configure the trigger bindings
