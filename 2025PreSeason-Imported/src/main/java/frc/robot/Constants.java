@@ -194,6 +194,56 @@ public final class Constants {
 
         public static final int PIGEON = 30;
     }
+    public static final class L1ArmConstants{
+
+        public static final int SHOULDER_ID = 0;
+
+        public static final int SMARTCURRENTLIMIT = 50;
+
+       
+
+        public static final boolean PRIMARY_ENCODER_POSITION_ALWAYS_ON = true;
+        public static final int PRIMARY_ENCODER_POSITIONS_PERIOD = 20;
+        public static final boolean PRIMARY_ENCODER_VELOCITY_ALWAYS_ON = true;
+        public static final int PRIMARY_ENCODER_VELOCITY_PERIOD = 20;
+        public static final boolean PRIMARY_ENCODER_INVERTED = false;
+        public static final double PRIMARY_ENCODER_OFFSET = 0;
+
+        public static final boolean ABSOLUTE_ENCODER_POSITION_ALWAYS_ON = true;
+        public static final int ABSOLUTE_ENCODER_POSITIONS_PERIOD = 20;
+        public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
+        public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
+        public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 0;
+
+        public static final double KP = 0.0;
+        public static final double KI = 0.0;
+        public static final double KD = 0.0;
+        public static final double KF = 0.0;
+
+        public static final double KS = 0.0;
+        public static final double KG = 0.0;
+        public static final double KV = 0.0;
+        public static final double KA = 0.0;
+      
+        
+        public static final double OutputRangeMin = -1;
+        public static final double OutputRangeMax = 1;
+
+        public static final double MAX_SPEED = 10.0;
+        public static final double MAX_ACCELERATION = 10.0;
+
+        public static final Rotation2d restingPosition = Rotation2d.fromDegrees(90);
+        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(193);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(0);
+
+        public static final double DEADBAND = Math.toRadians(0.1);
+
+        public static final double TOLERANCE = Math.toRadians(0.1);
+        public static final int SETTLE_TIME_LOOP_CYCLES = 10;
+
+
+    }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
 
