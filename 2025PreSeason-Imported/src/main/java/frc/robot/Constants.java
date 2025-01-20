@@ -196,7 +196,7 @@ public final class Constants {
     }
     public static final class L1ArmConstants{
 
-        public static final int SHOULDER_ID = ;
+        public static final int SHOULDER_ID = 12;
 
         public static final int SMARTCURRENTLIMIT = 80;
 
@@ -251,7 +251,7 @@ public final class Constants {
 
     }
     public static final class L1IntakeConstants{
-        public static final int INTAKE_ID = ;
+        public static final int INTAKE_ID = 16;
 
         public static final boolean INVERTED;
 

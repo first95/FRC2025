@@ -31,6 +31,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Voltage;
 import static edu.wpi.first.units.Units.Volts;
@@ -163,6 +164,7 @@ public class L1Arm extends SubsystemBase {
           /* one-time action goes here */
         });
   }
+
   public Command sysIdQuasiShoulder(SysIdRoutine.Direction direction) {
     return shoulderCharacterizer.quasistatic(direction);
   }
@@ -189,6 +191,10 @@ public class L1Arm extends SubsystemBase {
     return Rotation2d.fromRadians(shoulderEncoder.getPosition());
   }
 
+  public double getArmCurrent(){
+    return shoulder.getOutputCurrent();
+  }
+
   public void runIntake(double speed){
     intake.set(speed * L1IntakeConstants.MAX_SPEED);
   }
@@ -207,7 +213,6 @@ public class L1Arm extends SubsystemBase {
       timer.start();
     }
   }
-
   @Override
   public void periodic() {
 
@@ -254,6 +259,7 @@ public class L1Arm extends SubsystemBase {
     SmartDashboard.putBoolean("ShoulderAtGoal", armAtGoal());
     SmartDashboard.putNumber("CycleCounter", cyclesSinceShoulderNotAtGoal);
     SmartDashboard.putNumber("SetpointAccel", Math.toDegrees(armAccel));
+    SmartDashboard.putNumber("ShoulderCurrentDraw", getArmCurrent());
 
     SmartDashboard.putNumber("IntakeCurrentDraw",getIntakeCurrent());
 
