@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.Auton;
 import frc.robot.Constants.CommandDebugFlags;
 import frc.robot.Constants.Drivebase;
+import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Vision;
 import frc.robot.commands.Autos;
@@ -180,10 +181,10 @@ public class RobotContainer {
    
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     operatorController.start().onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
-    operatorController.a().onTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
-    operatorController.b().onTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
-    operatorController.x().onTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
-    operatorController.y().onTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
+    operatorController.a().onTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward).until(() -> L1arm.getArmAngle().getDegrees() >= L1ArmConstants.UPPER_LIMIT.getDegrees()));
+    operatorController.b().onTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse).until(() -> L1arm.getArmAngle().getDegrees() <= L1ArmConstants.LOWER_LIMIT.getDegrees()));
+    operatorController.x().onTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward).until(() -> L1arm.getArmAngle().getDegrees() >= L1ArmConstants.UPPER_LIMIT.getDegrees()));
+    operatorController.y().onTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse).until(() -> L1arm.getArmAngle().getDegrees() <= L1ArmConstants.LOWER_LIMIT.getDegrees()));
     /*driveController.button(2).whileTrue(new AutoAmp(drivebase)).onFalse(new InstantCommand(() -> {
       SmartDashboard.putBoolean(Auton.AUTO_AMP_SCORE_KEY, false);
       SmartDashboard.putBoolean(Auton.AUTO_AMP_ALIGN_KEY, false);

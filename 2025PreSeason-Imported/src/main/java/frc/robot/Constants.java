@@ -198,7 +198,7 @@ public final class Constants {
 
         public static final int SHOULDER_ID = ;
 
-        public static final int SMARTCURRENTLIMIT = 50;
+        public static final int SMARTCURRENTLIMIT = 80;
 
        
 

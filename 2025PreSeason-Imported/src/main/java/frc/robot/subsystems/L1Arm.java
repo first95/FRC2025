@@ -53,7 +53,7 @@ public class L1Arm extends SubsystemBase {
   private final SparkMax shoulder;
   private final SparkMaxConfig shoulderConfig;
   private final SparkClosedLoopController shoulderPID;
-  private final RelativeEncoder shoulderEncoder;
+  private final SparkAbsoluteEncoder shoulderEncoder;
 
   private final TrapezoidProfile shoulderProfile;
   private Rotation2d armGoal; 
@@ -128,7 +128,7 @@ public class L1Arm extends SubsystemBase {
     shoulderFeedforwardValue = 0;
 
     shoulder.configure(shoulderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    shoulderEncoder = shoulder.getEncoder();
+    shoulderEncoder = shoulder.getAbsoluteEncoder();
 
     timer = new Timer();
     timer.start();
