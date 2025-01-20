@@ -35,6 +35,7 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Voltage;
 import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.Seconds;
 
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
@@ -108,15 +109,15 @@ public class L1Arm extends SubsystemBase {
             L1ArmConstants.KF)
       .outputRange(L1ArmConstants.OutputRangeMin, L1ArmConstants.OutputRangeMax);
     shoulderConfig.absoluteEncoder
-      .zeroOffset(L1ArmConstants.ABSOLUTE_ENCODER_OFFSET)
+      .zeroOffset(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED ? -1 * L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360 : L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360)
       .inverted(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED);
 
     shoulderProfile = new TrapezoidProfile(
       new TrapezoidProfile.Constraints(
         L1ArmConstants.MAX_SPEED, 
         L1ArmConstants.MAX_ACCELERATION));
-    armGoal = L1ArmConstants.STOWED;
-    profileStart = new TrapezoidProfile.State(shoulder.getEncoder().getPosition(),0);
+    //armGoal = L1ArmConstants.STOWED;
+    //profileStart = new TrapezoidProfile.State(shoulder.getEncoder().getPosition(),0);
     lastShoulderVelocitySetpoint = 0;
     armAccel = 0;
 
@@ -137,7 +138,7 @@ public class L1Arm extends SubsystemBase {
     cyclesSinceShoulderNotAtGoal = 0;
 
     shoulderCharacterizer = new SysIdRoutine(
-      new SysIdRoutine.Config(),
+      new SysIdRoutine.Config(Volts.of(0.1).per(Seconds), Volts.of(1),null,null),
       new SysIdRoutine.Mechanism(
         voltage ->{
           shoulder.setVoltage(voltage);
@@ -188,7 +189,7 @@ public class L1Arm extends SubsystemBase {
   }
 
   public Rotation2d getArmAngle(){
-    return Rotation2d.fromRadians(shoulderEncoder.getPosition());
+    return Rotation2d.fromDegrees(shoulderEncoder.getPosition()* 360);
   }
 
   public double getArmCurrent(){
@@ -216,44 +217,44 @@ public class L1Arm extends SubsystemBase {
   @Override
   public void periodic() {
 
-    if(armGoal.getRadians() >= L1ArmConstants.UPPER_LIMIT.getRadians()){
-      armGoal = L1ArmConstants.UPPER_LIMIT;
-    }
-    shoulderSetpoint = shoulderProfile.calculate(
-      timer.get(), 
-      profileStart,
-      new TrapezoidProfile.State(armGoal.getRadians(),0));
+    // if(armGoal.getRadians() >= L1ArmConstants.UPPER_LIMIT.getRadians()){
+    //   armGoal = L1ArmConstants.UPPER_LIMIT;
+    // }
+    // shoulderSetpoint = shoulderProfile.calculate(
+    //   timer.get(), 
+    //   profileStart,
+    //   new TrapezoidProfile.State(armGoal.getRadians(),0));
 
-      if (shoulderSetpoint.velocity > lastShoulderVelocitySetpoint) {
-        armAccel = L1ArmConstants.MAX_ACCELERATION;
-      } else if (shoulderSetpoint.velocity < lastShoulderVelocitySetpoint) {
-        armAccel = -L1ArmConstants.MAX_ACCELERATION;
-      } else {
-        armAccel = 0;
-      }
-    lastShoulderVelocitySetpoint = shoulderSetpoint.velocity;
+    //   if (shoulderSetpoint.velocity > lastShoulderVelocitySetpoint) {
+    //     armAccel = L1ArmConstants.MAX_ACCELERATION;
+    //   } else if (shoulderSetpoint.velocity < lastShoulderVelocitySetpoint) {
+    //     armAccel = -L1ArmConstants.MAX_ACCELERATION;
+    //   } else {
+    //     armAccel = 0;
+    //   }
+    // lastShoulderVelocitySetpoint = shoulderSetpoint.velocity;
 
-    if (!armAtGoal() && ((Math.abs(shoulderSetpoint.position - L1ArmConstants.LOWER_LIMIT.getRadians()) <= L1ArmConstants.DEADBAND) ||
-                        (Math.abs(shoulderSetpoint.position - L1ArmConstants.UPPER_LIMIT.getRadians()) <= L1ArmConstants.DEADBAND))) {
-      shoulder.set(0);
-      shoulderFeedforwardValue = 0;
-    } else {
-      shoulderFeedforwardValue = shoulderFeedforward.calculate(shoulderSetpoint.position, shoulderSetpoint.velocity, armAccel);
-      shoulderPID.setReference(
-          shoulderSetpoint.position,
-          ControlType.kPosition,
-          ClosedLoopSlot.kSlot0,
-          shoulderFeedforwardValue,
-          ArbFFUnits.kVoltage);
-    }
-    cyclesSinceShoulderNotAtGoal = Math.abs(armGoal.getRadians() - shoulderEncoder.getPosition()) <= L1ArmConstants.TOLERANCE ?
-      cyclesSinceShoulderNotAtGoal + 1 :
-      0;
+    // if (!armAtGoal() && ((Math.abs(shoulderSetpoint.position - L1ArmConstants.LOWER_LIMIT.getRadians()) <= L1ArmConstants.DEADBAND) ||
+    //                     (Math.abs(shoulderSetpoint.position - L1ArmConstants.UPPER_LIMIT.getRadians()) <= L1ArmConstants.DEADBAND))) {
+    //   shoulder.set(0);
+    //   shoulderFeedforwardValue = 0;
+    // } else {
+    //   shoulderFeedforwardValue = shoulderFeedforward.calculate(shoulderSetpoint.position, shoulderSetpoint.velocity, armAccel);
+    //   shoulderPID.setReference(
+    //       shoulderSetpoint.position,
+    //       ControlType.kPosition,
+    //       ClosedLoopSlot.kSlot0,
+    //       shoulderFeedforwardValue,
+    //       ArbFFUnits.kVoltage);
+    // }
+    // cyclesSinceShoulderNotAtGoal = Math.abs(armGoal.getRadians() - shoulderEncoder.getPosition()) <= L1ArmConstants.TOLERANCE ?
+    //   cyclesSinceShoulderNotAtGoal + 1 :
+    //   0;
     
     
-    SmartDashboard.putNumber("ShoulderGoal", armGoal.getDegrees());
-    SmartDashboard.putNumber("ShoulderSetpoint", Math.toDegrees(shoulderSetpoint.position));
-    SmartDashboard.putNumber("ShoulderSetpointVel", Math.toDegrees(shoulderSetpoint.velocity));
+    //SmartDashboard.putNumber("ShoulderGoal", armGoal.getDegrees());
+    //SmartDashboard.putNumber("ShoulderSetpoint", Math.toDegrees(shoulderSetpoint.position));
+   // SmartDashboard.putNumber("ShoulderSetpointVel", Math.toDegrees(shoulderSetpoint.velocity));
     SmartDashboard.putNumber("ShoulderPos", getArmAngle().getDegrees());
     SmartDashboard.putNumber("ShoulderControlEffort", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
     SmartDashboard.putBoolean("ShoulderAtGoal", armAtGoal());

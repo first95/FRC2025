@@ -200,7 +200,6 @@ public final class Constants {
 
         public static final int SMARTCURRENTLIMIT = 80;
 
-       
 
         public static final boolean PRIMARY_ENCODER_POSITION_ALWAYS_ON = true;
         public static final int PRIMARY_ENCODER_POSITIONS_PERIOD = 20;
@@ -214,7 +213,7 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 0;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 112.0 - 90;
 
         public static final double KP = 0.0;
         public static final double KI = 0.0;
@@ -234,8 +233,8 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 10.0;
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
-        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(193);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(0);
+        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(17);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(227);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(20);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(110);
@@ -253,9 +252,9 @@ public final class Constants {
     public static final class L1IntakeConstants{
         public static final int INTAKE_ID = 16;
 
-        public static final boolean INVERTED;
+        public static final boolean INVERTED = false;
 
-        public static final int SMARTCURRENTLIMIT;
+        public static final int SMARTCURRENTLIMIT = 50;
 
         public static final int FAULTS_PERIOD_MS = 20;
 

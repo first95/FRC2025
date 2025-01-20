@@ -134,11 +134,11 @@ public class RobotContainer {
 
 
 
-    CoralHandlerCommand manageCoral = new CoralHandlerCommand(
-      () -> operatorController.getHID().getYButton(),    // Y = L1
-      () -> operatorController.getHID().getBButton(),   // B = L4
-      () -> operatorController.getHID().getAButton()   // A = Intake 
-    );
+    // CoralHandlerCommand manageCoral = new CoralHandlerCommand(
+    //   () -> operatorController.getHID().getYButton(),    // Y = L1
+    //   () -> operatorController.getHID().getBButton(),   // B = L4
+    //   () -> operatorController.getHID().getAButton()   // A = Intake 
+    // );
 
     drivebase.setDefaultCommand(absoluteDrive);
     // Configure the trigger bindings
