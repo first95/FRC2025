@@ -36,7 +36,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Voltage;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.Seconds;
-
+import static edu.wpi.first.units.Units.Millisecond;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Rotation;
@@ -261,6 +261,7 @@ public class L1Arm extends SubsystemBase {
     SmartDashboard.putNumber("CycleCounter", cyclesSinceShoulderNotAtGoal);
     SmartDashboard.putNumber("SetpointAccel", Math.toDegrees(armAccel));
     SmartDashboard.putNumber("ShoulderCurrentDraw", getArmCurrent());
+    SmartDashboard.putNumber("PrimaryEncoderPos",shoulder.getEncoder().getPosition());
 
     SmartDashboard.putNumber("IntakeCurrentDraw",getIntakeCurrent());
 
