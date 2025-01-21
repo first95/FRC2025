@@ -12,9 +12,10 @@
 
 ## Static IPs used so far
 
-| IP         | Device       |
-|------------|--------------|
-| 10.0.95.13 | LimeLight 2+ |
-| 10.0.95.14 | LimeLight 3G |
+| IP         | Device           |
+|------------|------------------|
+| 10.0.95.13 | LimeLight 2+     |
+| 10.0.95.14 | 1st LimeLight 3G |
+| 10.0.95.15 | 2nd LimeLight 3G |
 
 Both LimeLights are on Firmware 2025.0 and are configured with AprilTag localization pipelines.
