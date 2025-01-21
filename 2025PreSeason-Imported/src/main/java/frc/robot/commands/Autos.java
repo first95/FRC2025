@@ -10,10 +10,14 @@ import frc.robot.commands.autocommands.FollowTrajectory;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveBase;
 
+import java.sql.Driver;
 import java.util.Map;
 
-import com.choreo.lib.ChoreoTrajectory;
+import choreo.trajectory.Trajectory;
+import choreo.auto.AutoFactory;
+import choreo.trajectory.SwerveSample;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -22,13 +26,19 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
+  private final AutoFactory autoFactory;
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
   }
 
  
 
-  private Autos() {
-    throw new UnsupportedOperationException("This is a utility class!");
+  private Autos(SwerveBase swerve) {
+    autoFactory = new AutoFactory(
+      swerve::getPose,
+      swerve::resetOdometry,
+      swerve::followTrajectory,
+      true,
+      swerve);
   }
 }

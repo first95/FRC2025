@@ -57,7 +57,7 @@ public final class Constants {
         // Hold time on motor brakes when disabled
         public static final double WHEEL_LOCK_TIME = 10; // seconds
 
-        public static final int SWERVE_MODULE_CURRENT_LIMIT = 60/3;
+        public static final int SWERVE_MODULE_CURRENT_LIMIT = 60/6;
 
         public static final double HEADING_TOLERANCE = Math.toRadians(1.5);
 
@@ -163,7 +163,7 @@ public final class Constants {
         public static final class Mod0 {
             public static final int DRIVE_MOTOR_ID = 3;
             public static final int ANGLE_MOTOR_ID = 2;
-            public static final double ANGLE_OFFSET = 360 - 20.3;
+            public static final double ANGLE_OFFSET = 360 - 213.5;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(0, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, FRONT_LEFT_X, FRONT_LEFT_Y);
         }
@@ -171,7 +171,7 @@ public final class Constants {
         public static final class Mod1 {
             public static final int DRIVE_MOTOR_ID = 5;
             public static final int ANGLE_MOTOR_ID = 4;
-            public static final double ANGLE_OFFSET = 360 - 7.36;
+            public static final double ANGLE_OFFSET = 360 - 53.7;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(1, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, FRONT_RIGHT_X, FRONT_RIGHT_Y);
         }
@@ -179,7 +179,7 @@ public final class Constants {
         public static final class Mod2 {
             public static final int DRIVE_MOTOR_ID = 7;
             public static final int ANGLE_MOTOR_ID = 6;
-            public static final double ANGLE_OFFSET = 360 - 180.89;
+            public static final double ANGLE_OFFSET = 360 - 168.6;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(2, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, BACK_LEFT_X, BACK_LEFT_Y);
         }
@@ -187,12 +187,85 @@ public final class Constants {
         public static final class Mod3 {
             public static final int DRIVE_MOTOR_ID = 9;
             public static final int ANGLE_MOTOR_ID = 8;
-            public static final double ANGLE_OFFSET = 360 - 259.57;
+            public static final double ANGLE_OFFSET = 360 - 310.3;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(3, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, BACK_RIGHT_X, BACK_RIGHT_Y);
         }
 
         public static final int PIGEON = 30;
+    }
+    public static final class L1ArmConstants{
+
+        public static final int SHOULDER_ID = 12;
+
+        public static final int SMARTCURRENTLIMIT = 80;
+
+
+        public static final boolean PRIMARY_ENCODER_POSITION_ALWAYS_ON = true;
+        public static final int PRIMARY_ENCODER_POSITIONS_PERIOD = 20;
+        public static final boolean PRIMARY_ENCODER_VELOCITY_ALWAYS_ON = true;
+        public static final int PRIMARY_ENCODER_VELOCITY_PERIOD = 20;
+        public static final boolean PRIMARY_ENCODER_INVERTED = false;
+        public static final double PRIMARY_ENCODER_OFFSET = 0;
+
+        public static final boolean ABSOLUTE_ENCODER_POSITION_ALWAYS_ON = true;
+        public static final int ABSOLUTE_ENCODER_POSITIONS_PERIOD = 20;
+        public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
+        public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
+        public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 112.0 - 90;
+
+        public static final double KP = 0.0;
+        public static final double KI = 0.0;
+        public static final double KD = 0.0;
+        public static final double KF = 0.0;
+
+        public static final double KS = 0.0;
+        public static final double KG = 0.0;
+        public static final double KV = 0.0;
+        public static final double KA = 0.0;
+      
+        
+        public static final double OutputRangeMin = -1;
+        public static final double OutputRangeMax = 1;
+
+        public static final double MAX_SPEED = 10.0;
+        public static final double MAX_ACCELERATION = 10.0;
+
+        public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
+        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(17);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(227);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(20);
+        public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(110);
+
+
+        public static final double DEADBAND = Math.toRadians(0.1);
+
+        public static final double TOLERANCE = Math.toRadians(0.1);
+        public static final int SETTLE_TIME_LOOP_CYCLES = 10;
+
+        public static final double CURRENT_OFFSET = 5;
+
+
+    }
+    public static final class L1IntakeConstants{
+        public static final int INTAKE_ID = 16;
+
+        public static final boolean INVERTED = false;
+
+        public static final int SMARTCURRENTLIMIT = 50;
+
+        public static final int FAULTS_PERIOD_MS = 20;
+
+        public static final int PRIMARY_ENCODER_POSITON_PERIODMS = 6000;
+        public static final int PRIMARY_ENCODER_VELOCITY_PERIODMS = 5900;
+
+        public static final boolean OUTPUT_CURRENT_ALWAYS_ON = true;
+        public static final int OUTPUT_CURRENT_PERIODMS = 20;
+
+        public static final double MAX_SPEED = 1;
+
     }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
@@ -220,17 +293,6 @@ public final class Constants {
         public static final double ANG_STD_DEV_COEFFICIENT = 0.01;
 
         public static final double MAX_ALLOWABLE_Z_ERROR = 0.25; // Meters
-
-        public static final Translation3d BLUE_SPEAKER_POS = new Translation3d(
-            0.15,
-            5.5474,
-            2.0828
-        );
-        public static final Translation3d RED_SPEAKER_POS = new Translation3d(
-            FIELD_LENGTH - 0.15,
-            5.5474,
-            2.0828
-        );
     }
 
     public static final class Auton {
@@ -263,13 +325,7 @@ public final class Constants {
         public static final double DRIVE_POSITIONAL_TOLERANCE = 0.05; // m
 
         private static final Map<String, Pose2d> BLUE_MAP = Map.ofEntries(
-            Map.entry("ScoreAmp", new Pose2d(new Translation2d(1.83, 7.5), Rotation2d.fromDegrees(90))),
-            Map.entry("CenterNearNote", new Pose2d(new Translation2d(2.63, 5.55), Rotation2d.fromDegrees(0))),
-            Map.entry("AmpNote", new Pose2d(new Translation2d(2.66, 6.8), new Rotation2d(0.5))),
-            Map.entry("PodiumNote", new Pose2d(new Translation2d(2.637, 4.219), new Rotation2d(-0.464))),
-            Map.entry("DisruptorStart", new Pose2d(new Translation2d(7.964, 0.865), new Rotation2d(-0.489))),
-            Map.entry("Source3Start", new Pose2d(new Translation2d(1.473, 3.325), new Rotation2d(-0.983))),
-            Map.entry("AmpZoneStart", new Pose2d(new Translation2d(2.887, 6.334), new Rotation2d()))
+           
         );
         // Iterates through every element in the pose map and mirrors them for the red alliance
         private static final Map<String, Pose2d> RED_MAP =

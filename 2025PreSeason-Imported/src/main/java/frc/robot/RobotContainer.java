@@ -7,10 +7,13 @@ package frc.robot;
 import frc.robot.Constants.Auton;
 import frc.robot.Constants.CommandDebugFlags;
 import frc.robot.Constants.Drivebase;
+import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Vision;
 import frc.robot.commands.Autos;
+import frc.robot.commands.CoralHandlerCommand;
 import frc.robot.commands.drivebase.AbsoluteDrive;
+import frc.robot.subsystems.L1Arm;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.drivebase.TeleopDrive;
 import frc.robot.subsystems.SwerveBase;
@@ -21,12 +24,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Driver;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.choreo.lib.Choreo;
-import com.choreo.lib.ChoreoTrajectory;
+import choreo.Choreo;
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
+import choreo.trajectory.SwerveSample;
+import choreo.trajectory.Trajectory;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -36,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -49,10 +57,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private final Map<String, ChoreoTrajectory> trajMap;
+  private final Map<String, Optional<Trajectory<SwerveSample>>> trajMap;
 
   // The robot's subsystems and commands are defined here...
   private final SwerveBase drivebase = new SwerveBase();
+  private final L1Arm L1arm = new L1Arm();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
 
@@ -62,7 +71,7 @@ public class RobotContainer {
       OperatorConstants.operatorControllerPort);
   
   private Command autoCommand;
-  SendableChooser<Command> autoChooser = new SendableChooser<>();
+  private final AutoChooser autoChooser;
   SendableChooser<Integer> debugMode = new SendableChooser<>();
 
   /**
@@ -124,6 +133,13 @@ public class RobotContainer {
         () -> driveController.getHID().getRawButton(3));
 
 
+
+    // CoralHandlerCommand manageCoral = new CoralHandlerCommand(
+    //   () -> operatorController.getHID().getYButton(),    // Y = L1
+    //   () -> operatorController.getHID().getBButton(),   // B = L4
+    //   () -> operatorController.getHID().getAButton()   // A = Intake 
+    // );
+
     drivebase.setDefaultCommand(absoluteDrive);
     // Configure the trigger bindings
     configureBindings();
@@ -137,6 +153,14 @@ public class RobotContainer {
     SmartDashboard.putNumber("KP", 0);
     SmartDashboard.putNumber("KI", 0);
     SmartDashboard.putNumber("KD", 0);
+
+    autoChooser = new AutoChooser();
+
+    //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
+    //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
+    SmartDashboard.putData(autoChooser);
+
+    RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
   }
 
   /**
@@ -157,6 +181,10 @@ public class RobotContainer {
    
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     operatorController.start().onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
+    operatorController.a().onTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward).until(() -> L1arm.getArmAngle().getDegrees() >= L1ArmConstants.UPPER_LIMIT.getDegrees()));
+    operatorController.b().onTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse).until(() -> L1arm.getArmAngle().getDegrees() <= L1ArmConstants.LOWER_LIMIT.getDegrees()));
+    operatorController.x().onTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward).until(() -> L1arm.getArmAngle().getDegrees() >= L1ArmConstants.UPPER_LIMIT.getDegrees()));
+    operatorController.y().onTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse).until(() -> L1arm.getArmAngle().getDegrees() <= L1ArmConstants.LOWER_LIMIT.getDegrees()));
     /*driveController.button(2).whileTrue(new AutoAmp(drivebase)).onFalse(new InstantCommand(() -> {
       SmartDashboard.putBoolean(Auton.AUTO_AMP_SCORE_KEY, false);
       SmartDashboard.putBoolean(Auton.AUTO_AMP_ALIGN_KEY, false);
@@ -185,7 +213,7 @@ public class RobotContainer {
     drivebase.isAuto = isAuto;
   }
 
-  private Map<String, ChoreoTrajectory> loadTrajectories() {
+  private Map<String, Optional<Trajectory<SwerveSample>>> loadTrajectories() {
     Set<String> trajNames;
     try {
       if (Robot.isReal()) {
@@ -199,7 +227,7 @@ public class RobotContainer {
     }
     return trajNames.stream().collect(Collectors.toMap(
         entry -> entry.replace(".traj", ""),
-        entry -> Choreo.getTrajectory(entry.replace(".traj", ""))));
+        entry -> Choreo.loadTrajectory(entry.replace(".traj", ""))));
   }
 
   private Set<String> listFilesUsingFilesList(String dir) throws IOException {

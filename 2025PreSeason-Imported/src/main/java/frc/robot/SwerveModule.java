@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.util.SwerveModuleConstants;
 import frc.robot.Constants.Drivebase;
 
@@ -63,7 +64,7 @@ public class SwerveModule {
         angleMotorConfig.absoluteEncoder
             .positionConversionFactor(Drivebase.DEGREES_PER_STEERING_ROTATION)
             .velocityConversionFactor(Drivebase.DEGREES_PER_STEERING_ROTATION / 60)
-            .zeroOffset(angleOffset)
+            .zeroOffset(Drivebase.ANGLE_MOTOR_INVERT ? -1 * angleOffset/Drivebase.DEGREES_PER_STEERING_ROTATION : angleOffset/Drivebase.DEGREES_PER_STEERING_ROTATION)
             .inverted(Drivebase.ABSOLUTE_ENCODER_INVERT)
             .averageDepth(1);
         angleMotorConfig.closedLoop
@@ -76,7 +77,7 @@ public class SwerveModule {
             .positionWrappingEnabled(true)
             .positionWrappingInputRange(-180,180);
             
-            angleMotor.configure(angleMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        angleMotor.configure(angleMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
             
             
             
@@ -93,10 +94,9 @@ public class SwerveModule {
         driveMotorConfig.encoder
             .positionConversionFactor(Drivebase.METERS_PER_MOTOR_ROTATION)
             .velocityConversionFactor(Drivebase.METERS_PER_MOTOR_ROTATION / 60)
-            .inverted(Drivebase.DRIVE_MOTOR_INVERT)
             .uvwAverageDepth(1); //uvwAverageDepth instead of quadratureAverageDepth, guessed based on old value
-        angleMotorConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+        driveMotorConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pidf(Drivebase.VELOCITY_KP,
                   Drivebase.VELOCITY_KI,
                   Drivebase.VELOCITY_KD,
@@ -206,6 +206,7 @@ public class SwerveModule {
             position = fakePos;
             azimuth = Rotation2d.fromDegrees(angle);
         }
+        SmartDashboard.putNumber("Module " + moduleNumber + "Angle", azimuth.getDegrees());
         return new SwerveModulePosition(position, azimuth);
     }
 
