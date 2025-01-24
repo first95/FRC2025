@@ -1,5 +1,7 @@
 # Team 95 2025 season on-robot network notes
 
+
+
 | IP                  | Description     |
 |---------------------|-----------------|
 | 10.0.95.1           | VH-109 radio    |
@@ -18,4 +20,5 @@
 | 10.0.95.14 | 1st LimeLight 3G |
 | 10.0.95.15 | 2nd LimeLight 3G |
 
-Both LimeLights are on Firmware 2025.0 and are configured with AprilTag localization pipelines.
+All three LimeLights are on Firmware 2025.0 and are configured with AprilTag localization pipelines.  We did get a couple Google Coral TPUs to try Machine Learning game piece recognition
+as well.
