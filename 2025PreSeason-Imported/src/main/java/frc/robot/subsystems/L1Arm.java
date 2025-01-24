@@ -36,7 +36,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Voltage;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.Seconds;
-
+import static edu.wpi.first.units.Units.Millisecond;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Rotation;
@@ -109,14 +109,19 @@ public class L1Arm extends SubsystemBase {
             L1ArmConstants.KF)
       .outputRange(L1ArmConstants.OutputRangeMin, L1ArmConstants.OutputRangeMax);
     shoulderConfig.absoluteEncoder
+      .positionConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION)
+      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION/ 60)
       .zeroOffset(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED ? -1 * L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360 : L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360)
-      .inverted(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED);
+      .inverted(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED);     
+    shoulderConfig.encoder
+      .positionConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION)
+      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION/60);
 
     shoulderProfile = new TrapezoidProfile(
       new TrapezoidProfile.Constraints(
         L1ArmConstants.MAX_SPEED, 
         L1ArmConstants.MAX_ACCELERATION));
-    //armGoal = L1ArmConstants.STOWED;
+    //armGoal = L1ArmConstants.STOWED
     //profileStart = new TrapezoidProfile.State(shoulder.getEncoder().getPosition(),0);
     lastShoulderVelocitySetpoint = 0;
     armAccel = 0;
@@ -189,7 +194,7 @@ public class L1Arm extends SubsystemBase {
   }
 
   public Rotation2d getArmAngle(){
-    return Rotation2d.fromDegrees(shoulderEncoder.getPosition()* 360);
+    return Rotation2d.fromRadians(shoulderEncoder.getPosition());
   }
 
   public double getArmCurrent(){
@@ -261,9 +266,9 @@ public class L1Arm extends SubsystemBase {
     SmartDashboard.putNumber("CycleCounter", cyclesSinceShoulderNotAtGoal);
     SmartDashboard.putNumber("SetpointAccel", Math.toDegrees(armAccel));
     SmartDashboard.putNumber("ShoulderCurrentDraw", getArmCurrent());
+    SmartDashboard.putNumber("PrimaryEncoderPos",shoulder.getEncoder().getPosition());
 
     SmartDashboard.putNumber("IntakeCurrentDraw",getIntakeCurrent());
-
   }
 
   @Override
