@@ -64,7 +64,7 @@ public class SwerveModule {
         angleMotorConfig.absoluteEncoder
             .positionConversionFactor(Drivebase.DEGREES_PER_STEERING_ROTATION)
             .velocityConversionFactor(Drivebase.DEGREES_PER_STEERING_ROTATION / 60)
-            .zeroOffset(Drivebase.ANGLE_MOTOR_INVERT ? -1 * angleOffset/Drivebase.DEGREES_PER_STEERING_ROTATION : angleOffset/Drivebase.DEGREES_PER_STEERING_ROTATION)
+            .zeroOffset(angleOffset/Drivebase.DEGREES_PER_STEERING_ROTATION)
             .inverted(Drivebase.ABSOLUTE_ENCODER_INVERT)
             .averageDepth(1);
         angleMotorConfig.closedLoop
