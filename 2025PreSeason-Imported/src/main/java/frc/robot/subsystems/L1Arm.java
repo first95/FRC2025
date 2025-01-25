@@ -71,6 +71,7 @@ public class L1Arm extends SubsystemBase {
 
 
   public L1Arm() {
+    // configure intake motor parameters
     intake = new SparkMax(L1IntakeConstants.INTAKE_ID, MotorType.kBrushless);
     intakeConfig = new SparkMaxConfig();
 
@@ -83,6 +84,9 @@ public class L1Arm extends SubsystemBase {
       .primaryEncoderPositionPeriodMs(L1IntakeConstants.PRIMARY_ENCODER_POSITON_PERIODMS)
       .primaryEncoderVelocityPeriodMs(L1IntakeConstants.PRIMARY_ENCODER_VELOCITY_PERIODMS)
       .outputCurrentPeriodMs(L1IntakeConstants.OUTPUT_CURRENT_PERIODMS);
+
+    // write the intake motor parameters to the SparkMAX and write to flash  
+    intake.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     shoulder = new SparkMax(L1ArmConstants.SHOULDER_ID, MotorType.kBrushless);
     shoulderConfig = new SparkMaxConfig();
