@@ -14,6 +14,19 @@ public class CoralHandlerCommand extends Command {
     
     private final BooleanSupplier L1IntakeInButtonSupplier, L1IntakeOutButtonSupplier, L4IntakeButtonSupplier, HandOffButtonSupplier, ScoreButtonSupplier;
     private final L1Arm L1arm;
+    private enum State{
+        IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
+        POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
+        L4_INTAKING, L4_HOLDING, L4_SCORING;
+
+
+    }
+
+    private boolean L1IntakeInButton, L1IntakeOutButton, L4IntakeButton, HandOffButton, ScoreButton, RollerTrigger;
+    private boolean coralInL1 = false; 
+    private double IntakeCurrent;
+    private double L1IntakeSpeed;
+    private State currentState = State.IDLE;
     
 
         public CoralHandlerCommand(BooleanSupplier L1IntakeInButtonSupplier, BooleanSupplier L1IntakeOutButtonSupplier, BooleanSupplier L4IntakeButtonSupplier, 
@@ -35,25 +48,11 @@ public class CoralHandlerCommand extends Command {
 
     }
 
-    private enum State{
-        IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
-        POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
-        L4_INTAKING, L4_HOLDING, L4_SCORING
-
-
-    }
-    private State currentState;
+   
 
     public void initalize(){
         currentState = State.IDLE;
     }
-
-    
-
-    private boolean L1IntakeInButton, L1IntakeOutButton, L4IntakeButton, HandOffButton, ScoreButton, RollerTrigger;
-    private boolean coralInL1 = false; 
-    private double IntakeCurrent;
-    private double L1IntakeSpeed;
 
     public void execute(){
         // read in the inputs
