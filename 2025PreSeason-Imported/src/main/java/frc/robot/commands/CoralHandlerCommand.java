@@ -64,6 +64,8 @@ public class CoralHandlerCommand extends Command {
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         ScoreButton = ScoreButtonSupplier.getAsBoolean();
 
+        L1IntakeSpeed = (operatorController.getHID().getLeftBumper() ? 1 : 0) + (operatorController.getHID().getRightBumper() ? -1 : 0)
+
 
         // State Machine 
         switch (currentState) {
