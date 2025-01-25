@@ -31,14 +31,7 @@ public class CoralHandlerCommand extends Command {
             this.ScoreButtonSupplier = ScoreButtonSupplier;
 
             this.L1arm = L1arm;
-
-
-    }
-
-    public void initalize(){
-        currentState = State.IDLE;
-
-
+            addRequirements(L1arm);
 
     }
 
@@ -51,6 +44,12 @@ public class CoralHandlerCommand extends Command {
     }
     private State currentState;
 
+    public void initalize(){
+        currentState = State.IDLE;
+    }
+
+    
+
     private boolean L1IntakeInButton, L1IntakeOutButton, L4IntakeButton, HandOffButton, ScoreButton, RollerTrigger;
     private boolean coralInL1 = false; 
     private double IntakeCurrent;
@@ -58,6 +57,7 @@ public class CoralHandlerCommand extends Command {
 
     public void execute(){
         // read in the inputs
+        if (currentState == null) {currentState = State.IDLE;} 
 
         L1IntakeInButton = L1IntakeInButtonSupplier.getAsBoolean();
         L1IntakeOutButton = L1IntakeOutButtonSupplier.getAsBoolean();
@@ -65,6 +65,7 @@ public class CoralHandlerCommand extends Command {
 
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         ScoreButton = ScoreButtonSupplier.getAsBoolean();
+
 
         L1IntakeSpeed = (L1IntakeInButton ? 1 : 0) + (L1IntakeOutButton ? -1 : 0);
         L1arm.runIntake(L1IntakeSpeed);
