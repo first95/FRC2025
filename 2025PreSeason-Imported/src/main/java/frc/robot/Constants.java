@@ -205,7 +205,7 @@ public final class Constants {
         public static final int PRIMARY_ENCODER_POSITIONS_PERIOD = 20;
         public static final boolean PRIMARY_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int PRIMARY_ENCODER_VELOCITY_PERIOD = 20;
-        public static final boolean PRIMARY_ENCODER_INVERTED = false;
+        public static final boolean PRIMARY_ENCODER_INVERTED = true;
         public static final double PRIMARY_ENCODER_OFFSET = 0;
         public static final double SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION = 2 * Math.PI * 16/48;
 
@@ -214,7 +214,7 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 22;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 202;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
         public static final double KP = 0.0;
