@@ -252,7 +252,7 @@ public final class Constants {
 
     }
     public static final class L1IntakeConstants{
-        public static final int INTAKE_ID = 16;
+        public static final int INTAKE_ID = 13;
 
         public static final boolean INVERTED = false;
 
