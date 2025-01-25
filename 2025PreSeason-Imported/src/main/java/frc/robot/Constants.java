@@ -256,7 +256,7 @@ public final class Constants {
 
         public static final boolean INVERTED = false;
 
-        public static final int SMARTCURRENTLIMIT = 50;
+        public static final int SMARTCURRENTLIMIT = 10;
 
         public static final int FAULTS_PERIOD_MS = 20;
 

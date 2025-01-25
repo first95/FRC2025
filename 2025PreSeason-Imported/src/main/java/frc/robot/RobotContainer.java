@@ -64,6 +64,7 @@ public class RobotContainer {
   private final L1Arm L1arm = new L1Arm();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
+  private final CoralHandlerCommand manageCoral;
 
   private final CommandJoystick driveController = new CommandJoystick(OperatorConstants.driveControllerPort);
   private final CommandJoystick headingController = new CommandJoystick(OperatorConstants.headingControllerPort);
@@ -132,15 +133,20 @@ public class RobotContainer {
         false,
         () -> driveController.getHID().getRawButton(3));
 
+        drivebase.setDefaultCommand(absoluteDrive);
 
 
-    // CoralHandlerCommand manageCoral = new CoralHandlerCommand(
-    //   () -> operatorController.getHID().getYButton(),    // Y = L1
-    //   () -> operatorController.getHID().getBButton(),   // B = L4
-    //   () -> operatorController.getHID().getAButton()   // A = Intake 
-    // );
+    manageCoral = new CoralHandlerCommand(
+      () -> operatorController.getHID().getLeftBumperButton(),    // L1IntakeInButtonSupplier
+      () -> operatorController.getHID().getRightBumperButton(),    // L1IntakeOutButtonSupplier
+      () -> operatorController.getHID().getBButton(),   // B = L4 intake
+      () -> operatorController.getHID().getAButton(),   // A = Handoff
+      () -> operatorController.getHID().getYButton(),    // Score button
+      L1arm
+    );
 
-    drivebase.setDefaultCommand(absoluteDrive);
+    L1arm.setDefaultCommand(manageCoral);
+
     // Configure the trigger bindings
     configureBindings();
 
@@ -181,10 +187,10 @@ public class RobotContainer {
    
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     operatorController.start().onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
-    operatorController.a().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
-    operatorController.b().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
-    operatorController.x().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
-    operatorController.y().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
+    // operatorController.a().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
+    // operatorController.b().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
+    // operatorController.x().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
+    // operatorController.y().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
     /*driveController.button(2).whileTrue(new AutoAmp(drivebase)).onFalse(new InstantCommand(() -> {
       SmartDashboard.putBoolean(Auton.AUTO_AMP_SCORE_KEY, false);
       SmartDashboard.putBoolean(Auton.AUTO_AMP_ALIGN_KEY, false);
