@@ -28,6 +28,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -55,7 +56,8 @@ public class L1Arm extends SubsystemBase {
   private final SparkMax shoulder;
   private final SparkMaxConfig shoulderConfig;
   private final SparkClosedLoopController shoulderPID;
-  private final SparkAbsoluteEncoder shoulderEncoder;
+  private final SparkAbsoluteEncoder shoulderAbsoluteEncoder;
+  private final RelativeEncoder shoulderRelativeEncoder;
 
   private final TrapezoidProfile shoulderProfile;
   private Rotation2d armGoal; 
@@ -87,11 +89,12 @@ public class L1Arm extends SubsystemBase {
 
     // write the intake motor parameters to the SparkMAX and write to flash  
     intake.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+    
     shoulder = new SparkMax(L1ArmConstants.SHOULDER_ID, MotorType.kBrushless);
     shoulderConfig = new SparkMaxConfig();
     shoulderPID = shoulder.getClosedLoopController();
 
+    
     shoulderConfig
       .inverted(L1ArmConstants.PRIMARY_ENCODER_INVERTED)
       .idleMode(IdleMode.kBrake)
@@ -115,12 +118,12 @@ public class L1Arm extends SubsystemBase {
     shoulderConfig.absoluteEncoder
       .positionConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION)
       .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION/ 60)
-      .zeroOffset(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED ? -1 * L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360 : L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360)
+      .zeroOffset(L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360)
       .inverted(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED);     
     shoulderConfig.encoder
       .positionConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION)
       .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION/60);
-
+    
     shoulderProfile = new TrapezoidProfile(
       new TrapezoidProfile.Constraints(
         L1ArmConstants.MAX_SPEED, 
@@ -139,7 +142,9 @@ public class L1Arm extends SubsystemBase {
     shoulderFeedforwardValue = 0;
 
     shoulder.configure(shoulderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    shoulderEncoder = shoulder.getAbsoluteEncoder();
+    shoulderAbsoluteEncoder = shoulder.getAbsoluteEncoder();
+    shoulderRelativeEncoder = shoulder.getEncoder();
+    shoulderRelativeEncoder.setPosition(shoulderRelativeEncoder.getPosition());
 
     timer = new Timer();
     timer.start();
@@ -155,8 +160,8 @@ public class L1Arm extends SubsystemBase {
       log -> {
         log.motor("L1Shoulder")
           .voltage(Volts.of(shoulder.getAppliedOutput() * shoulder.getBusVoltage()))
-          .angularPosition(Radians.of(shoulderEncoder.getPosition()))
-          .angularVelocity(RadiansPerSecond.of(shoulderEncoder.getVelocity()));
+          .angularPosition(Radians.of(shoulderAbsoluteEncoder.getPosition()))
+          .angularVelocity(RadiansPerSecond.of(shoulderAbsoluteEncoder.getVelocity()));
       }, 
       this));
   }
@@ -192,15 +197,22 @@ public class L1Arm extends SubsystemBase {
     // Query some boolean state, such as a digital sensor.
     return false;
   }
-
+  public void setArmVoltage(double voltage){
+    shoulder.setVoltage(voltage);
+  }
+  public void incrementArmVoltage(double increment){
+    shoulder.setVoltage(shoulder.getAppliedOutput() + increment);
+  }
   public boolean armAtGoal() {
     return cyclesSinceShoulderNotAtGoal >= L1ArmConstants.SETTLE_TIME_LOOP_CYCLES;
   }
 
   public Rotation2d getArmAngle(){
-    return Rotation2d.fromRadians(shoulderEncoder.getPosition());
+    return Rotation2d.fromRadians(shoulderAbsoluteEncoder.getPosition());
   }
-
+  public Rotation2d getRelativeEncoderPos(){
+    return Rotation2d.fromRadians(shoulderRelativeEncoder.getPosition());
+  }
   public double getArmCurrent(){
     return shoulder.getOutputCurrent();
   }
@@ -216,7 +228,7 @@ public class L1Arm extends SubsystemBase {
   public void setArmAngle(Rotation2d angle){
     if(angle.getRadians() != armGoal.getRadians()){
       armGoal = angle;
-      profileStart = new TrapezoidProfile.State(shoulderEncoder.getPosition(),shoulderEncoder.getVelocity());
+      profileStart = new TrapezoidProfile.State(shoulderAbsoluteEncoder.getPosition(),shoulderAbsoluteEncoder.getVelocity());
       cyclesSinceShoulderNotAtGoal = 0;
       timer.stop();
       timer.reset();
@@ -256,7 +268,7 @@ public class L1Arm extends SubsystemBase {
     //       shoulderFeedforwardValue,
     //       ArbFFUnits.kVoltage);
     // }
-    // cyclesSinceShoulderNotAtGoal = Math.abs(armGoal.getRadians() - shoulderEncoder.getPosition()) <= L1ArmConstants.TOLERANCE ?
+    // cyclesSinceShoulderNotAtGoal = Math.abs(armGoal.getRadians() - shoulderAbsoluteEncoder.getPosition()) <= L1ArmConstants.TOLERANCE ?
     //   cyclesSinceShoulderNotAtGoal + 1 :
     //   0;
     
@@ -270,7 +282,8 @@ public class L1Arm extends SubsystemBase {
     SmartDashboard.putNumber("CycleCounter", cyclesSinceShoulderNotAtGoal);
     SmartDashboard.putNumber("SetpointAccel", Math.toDegrees(armAccel));
     SmartDashboard.putNumber("ShoulderCurrentDraw", getArmCurrent());
-    SmartDashboard.putNumber("PrimaryEncoderPos",shoulder.getEncoder().getPosition());
+    SmartDashboard.putNumber("ArmVoltage", shoulder.getAppliedOutput());
+    SmartDashboard.putNumber("PrimaryEncoderPos",getRelativeEncoderPos().getDegrees());
 
     SmartDashboard.putNumber("IntakeCurrentDraw",getIntakeCurrent());
   }
