@@ -1,7 +1,7 @@
 package frc.robot;
 
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.config.SparkFlexConfig;
+// import com.revrobotics.spark.SparkFlex;
+// import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
@@ -31,8 +31,8 @@ public class SwerveModule {
     private final double angleOffset;
     private final SparkMax angleMotor;
     private final SparkMaxConfig angleMotorConfig;
-    private final SparkFlex driveMotor;
-    private final SparkFlexConfig driveMotorConfig;
+    private final SparkMax driveMotor;
+    private final SparkMaxConfig driveMotorConfig;
     private final SparkAbsoluteEncoder absoluteEncoder;
     private final RelativeEncoder driveEncoder;
     private final SparkClosedLoopController angleController, driveController;
@@ -82,8 +82,8 @@ public class SwerveModule {
             
             
         // Config drive motor/controller
-        driveMotor = new SparkFlex(moduleConstants.driveMotorID, MotorType.kBrushless);
-        driveMotorConfig = new SparkFlexConfig();
+        driveMotor = new SparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
+        driveMotorConfig = new SparkMaxConfig();
         driveEncoder = driveMotor.getEncoder();
         driveController = driveMotor.getClosedLoopController();
             
