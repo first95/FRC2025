@@ -133,7 +133,6 @@ public class SwerveModule {
     
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop, boolean antijitter) {
         desiredState.optimize(getState().angle);
-        this.desiredState = desiredState;
 
         if (isOpenLoop) {
             double percentOutput = desiredState.speedMetersPerSecond / Drivebase.MAX_SPEED;
