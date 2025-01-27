@@ -28,6 +28,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.Arrays;
+
 
 import choreo.Choreo;
 import choreo.auto.AutoChooser;
@@ -36,6 +38,7 @@ import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -72,7 +75,11 @@ public class RobotContainer {
       OperatorConstants.operatorControllerPort);
   
   private Command autoCommand;
-  private final AutoChooser autoChooser;
+  public AutoChooser autoChooser;
+  private final SendableChooser<String> modularAutoTargetChooser = new SendableChooser<>();
+  private String[] modularAutoTargets = {};
+  private final Autos autos;
+
   SendableChooser<Integer> debugMode = new SendableChooser<>();
 
   /**
@@ -150,8 +157,6 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    SmartDashboard.putString("Selected Auto:", "NONE!!!");
-
     trajMap = loadTrajectories();
 
     SmartDashboard.putNumber("KV", Drivebase.KV);
@@ -161,12 +166,43 @@ public class RobotContainer {
     SmartDashboard.putNumber("KD", 0);
 
     autoChooser = new AutoChooser();
+    autos = new Autos(drivebase);
 
+
+    autoChooser.addCmd("diamond",() -> autos.Diamond());
+    autoChooser.addRoutine("TestModularAuto",() -> autos.testModularAuto(modularAutoTargets));
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
-    SmartDashboard.putData(autoChooser);
 
-    RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+    modularAutoTargetChooser.addOption("S1", "S1");
+    modularAutoTargetChooser.addOption("R1", "R1");
+    modularAutoTargetChooser.addOption("L1", "L1");
+    
+    SmartDashboard.putData("AutoChooser",autoChooser);
+    SmartDashboard.putData("ModularAutoChooser",modularAutoTargetChooser);
+    
+    
+    SmartDashboard.putData("addPosToAuto",
+      new InstantCommand(
+        () -> addToModularAuto()
+      )
+      .ignoringDisable(true)
+      );
+    SmartDashboard.putData("removePosFromAuto",
+      new InstantCommand(
+        () -> removeFromModularAuto()
+    )
+    .ignoringDisable(true)
+    );
+
+    SmartDashboard.putData("setGains", new InstantCommand(drivebase::setVelocityModuleGains));
+    SmartDashboard.putData("SendAlliance",
+      new InstantCommand(
+        () -> drivebase.setAlliance(DriverStation.getAlliance().get())
+      )
+      .ignoringDisable(true)
+    );
+
   }
 
   /**
@@ -211,6 +247,21 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return autoCommand;
+  }
+  
+  public void addToModularAuto(){
+    final int N = modularAutoTargets.length;
+    modularAutoTargets = Arrays.copyOf(modularAutoTargets,N + 1);
+    modularAutoTargets[N] = modularAutoTargetChooser.getSelected();
+    SmartDashboard.putStringArray("CurrentAuto", modularAutoTargets);
+  }
+  public void removeFromModularAuto(){
+    
+    final int N = modularAutoTargets.length;
+    if (N >= 1){
+      modularAutoTargets = Arrays.copyOf(modularAutoTargets,N - 1);
+      SmartDashboard.putStringArray("CurrentAuto", modularAutoTargets);
+    }
   }
 
   public void stopDrive() {
