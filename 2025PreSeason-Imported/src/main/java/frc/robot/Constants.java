@@ -215,17 +215,18 @@ public final class Constants {
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = true;
         public static final double ABSOLUTE_ENCODER_OFFSET = 202;
+        public static final boolean ABSOLUTE_ENCODER_ZERO_CENTERED = true;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
-        public static final double KP = 0.0;
+        public static final double KP = 0;
         public static final double KI = 0.0;
-        public static final double KD = 0.0;
+        public static final double KD = 0;
         public static final double KF = 0.0;
 
-        public static final double KS = 0.0;
-        public static final double KG = 0.0;
-        public static final double KV = 0.0;
-        public static final double KA = 0.0;
+        public static final double KS = 0.113;
+        public static final double KG = 0.065;
+        public static final double KV = 0;
+        public static final double KA = 0;
       
         
         public static final double OutputRangeMin = -1;
@@ -235,8 +236,8 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 10.0;
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
-        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(17);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(227);
+        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(160);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-45);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(20);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(110);

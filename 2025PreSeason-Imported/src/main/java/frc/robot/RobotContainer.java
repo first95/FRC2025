@@ -223,16 +223,18 @@ public class RobotContainer {
    
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     
-    if(operatorController.a().getAsBoolean() == true){
-      L1arm.incrementArmVoltage(0.01);   
-    }  
-    if (operatorController.b().getAsBoolean() == true){
-      L1arm.incrementArmVoltage(-0.01);
-    }
-    operatorController.a().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
-    operatorController.b().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
-    operatorController.x().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
-    operatorController.y().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
+    // if(operatorController.a().getAsBoolean() == true){
+    //   L1arm.incrementArmVoltage(0.01);   
+    // }  
+    // if (operatorController.b().getAsBoolean() == true){
+    //   L1arm.incrementArmVoltage(-0.01);
+    // }
+    operatorController.a().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(0.001)));
+    operatorController.b().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(-0.001)));
+    // operatorController.a().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
+    // operatorController.b().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
+    // operatorController.x().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
+    // operatorController.y().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
     /*driveController.button(2).whileTrue(new AutoAmp(drivebase)).onFalse(new InstantCommand(() -> {
       SmartDashboard.putBoolean(Auton.AUTO_AMP_SCORE_KEY, false);
       SmartDashboard.putBoolean(Auton.AUTO_AMP_ALIGN_KEY, falSse);
