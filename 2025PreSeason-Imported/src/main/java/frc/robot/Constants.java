@@ -218,22 +218,22 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_ZERO_CENTERED = true;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
-        public static final double KP = 0;
+        public static final double KP = 1;
         public static final double KI = 0.0;
         public static final double KD = 0;
         public static final double KF = 0.0;
 
         public static final double KS = 0.113;
-        public static final double KG = 0.065;
-        public static final double KV = 0;
+        public static final double KG = 0.162;
+        public static final double KV = 1.65;
         public static final double KA = 0;
       
         
         public static final double OutputRangeMin = -1;
         public static final double OutputRangeMax = 1;
 
-        public static final double MAX_SPEED = 10.0;
-        public static final double MAX_ACCELERATION = 10.0;
+        public static final double MAX_SPEED = 1.788;
+        public static final double MAX_ACCELERATION = 1.788;
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(160);
@@ -246,7 +246,7 @@ public final class Constants {
         public static final double DEADBAND = Math.toRadians(0.1);
 
         public static final double TOLERANCE = Math.toRadians(0.1);
-        public static final int SETTLE_TIME_LOOP_CYCLES = 10;
+        public static final int SETTLE_TIME_LOOP_CYCLES = 200;
 
         public static final double CURRENT_OFFSET = 5;
 

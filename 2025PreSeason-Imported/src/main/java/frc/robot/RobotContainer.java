@@ -165,6 +165,19 @@ public class RobotContainer {
     SmartDashboard.putNumber("KI", 0);
     SmartDashboard.putNumber("KD", 0);
 
+    SmartDashboard.putNumber("shoulderKP", 0);
+    SmartDashboard.putNumber("shoulderKI", 0);
+    SmartDashboard.putNumber("shoulderKD", 0);
+    SmartDashboard.putNumber("shoulderKF", 0);
+
+    SmartDashboard.putNumber("shoulderKS",  0.113);
+    SmartDashboard.putNumber("shoulderKG", 0.16200);
+    SmartDashboard.putNumber("shoulderKV", 1.650000);
+    SmartDashboard.putNumber("shoulderKA", 0);
+
+    SmartDashboard.putNumber("setShoulderAngleNumber", 0);
+
+
     autoChooser = new AutoChooser();
     autos = new Autos(drivebase);
 
@@ -181,13 +194,17 @@ public class RobotContainer {
     SmartDashboard.putData("AutoChooser",autoChooser);
     SmartDashboard.putData("ModularAutoChooser",modularAutoTargetChooser);
     
-    
+    SmartDashboard.putData("setShoulderGains",
+    new InstantCommand(
+      () -> L1arm.setGains()
+    ).ignoringDisable(true));
     SmartDashboard.putData("addPosToAuto",
       new InstantCommand(
         () -> addToModularAuto()
       )
       .ignoringDisable(true)
       );
+    
     SmartDashboard.putData("removePosFromAuto",
       new InstantCommand(
         () -> removeFromModularAuto()
