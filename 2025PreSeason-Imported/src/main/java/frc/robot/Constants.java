@@ -57,7 +57,7 @@ public final class Constants {
         // Hold time on motor brakes when disabled
         public static final double WHEEL_LOCK_TIME = 10; // seconds
 
-        public static final int SWERVE_MODULE_CURRENT_LIMIT = 60/6;
+        public static final int SWERVE_MODULE_CURRENT_LIMIT = 60;
 
         public static final double HEADING_TOLERANCE = Math.toRadians(1.5);
 
@@ -109,21 +109,21 @@ public final class Constants {
     public static final double ANGULAR_ACCELERATION_LIMIT = 100;
     public static final double ANGULAR_VELOCITY_LIMIT = 5;
 
-        // Robot heading control gains
-        public static final double HEADING_KP = 5.7766;
+        // Robot control gains
+        public static final double HEADING_KP = 2;
         public static final double HEADING_KI = 0;
-        public static final double HEADING_KD = 0.094;//0.94272;
+        public static final double HEADING_KD = 0;
 
-    public static final double HEADING_MIN_ANGULAR_CONTROL_EFFORT = 0.005; // rad/s— Prevent oscillation by cancelling rotational commands less than this
+    public static final double HEADING_MIN_ANGULAR_CONTROL_EFFORT = 0.05; // rad/s— Prevent oscillation by cancelling rotational commands less than this
 
         // Swerve base kinematics object
         public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_LOCATIONS);
 
-    public static final double SKEW_CORRECTION_FACTOR = 6;
+    public static final double SKEW_CORRECTION_FACTOR = 0;
 
         // Module PIDF gains
         public static final double MODULE_KP = 0.06;
-        public static final double MODULE_KI = 0;
+        public static final double MODULE_KI = 0.0;
         public static final double MODULE_KD = 0.0005;
         public static final double MODULE_IZ = 0;
         public static final double MODULE_KF = 0;
@@ -131,8 +131,8 @@ public final class Constants {
         // (maxMotorSpeedRPM / gearRatio) * (minutesPerSecond))
         public static final double MODULE_KV = 12 / MAX_MODULE_ANGULAR_SPEED;
 
-        public static final double VELOCITY_KP = 0.07;
-        public static final double VELOCITY_KI = 0; // Leave all of these zero to disable them
+        public static final double VELOCITY_KP = 0.06;
+        public static final double VELOCITY_KI = 0.001; // Leave all of these zero to disable them
         public static final double VELOCITY_KD = 0;
         public static final double VELOCITY_IZ = 0;
         public static final double VELOCITY_KF = 0;
@@ -163,7 +163,7 @@ public final class Constants {
         public static final class Mod0 {
             public static final int DRIVE_MOTOR_ID = 3;
             public static final int ANGLE_MOTOR_ID = 2;
-            public static final double ANGLE_OFFSET = 360 - 213.5;
+            public static final double ANGLE_OFFSET = 180+360 - 213.5;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(0, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, FRONT_LEFT_X, FRONT_LEFT_Y);
         }
@@ -171,7 +171,7 @@ public final class Constants {
         public static final class Mod1 {
             public static final int DRIVE_MOTOR_ID = 5;
             public static final int ANGLE_MOTOR_ID = 4;
-            public static final double ANGLE_OFFSET = 360 - 53.7;
+            public static final double ANGLE_OFFSET = 180 - 53.7;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(1, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, FRONT_RIGHT_X, FRONT_RIGHT_Y);
         }
@@ -179,7 +179,7 @@ public final class Constants {
         public static final class Mod2 {
             public static final int DRIVE_MOTOR_ID = 7;
             public static final int ANGLE_MOTOR_ID = 6;
-            public static final double ANGLE_OFFSET = 360 - 168.6;
+            public static final double ANGLE_OFFSET = 180 - 168.6;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(2, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, BACK_LEFT_X, BACK_LEFT_Y);
         }
@@ -187,7 +187,7 @@ public final class Constants {
         public static final class Mod3 {
             public static final int DRIVE_MOTOR_ID = 9;
             public static final int ANGLE_MOTOR_ID = 8;
-            public static final double ANGLE_OFFSET = 360 - 310.3;
+            public static final double ANGLE_OFFSET = 360 - 310.3 + 180;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(3, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, BACK_RIGHT_X, BACK_RIGHT_Y);
         }

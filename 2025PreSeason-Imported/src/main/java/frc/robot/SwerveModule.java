@@ -132,6 +132,7 @@ public class SwerveModule {
     }
     
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop, boolean antijitter) {
+        this.desiredState = desiredState;
         desiredState.optimize(getState().angle);
 
         if (isOpenLoop) {

@@ -492,7 +492,6 @@ public class SwerveBase extends SubsystemBase {
       currentModulePositions[module.moduleNumber] = module.getPosition();
       currentModuleStates[module.moduleNumber] = module.getState();
 
-      if ((debugFlags & Drivebase.DEBUG_FLAG) != 0) {
         SmartDashboard.putNumber("Module " + module.moduleNumber + " Absolute Encoder", module.getAbsoluteEncoder());
         SmartDashboard.putNumber("Module " + module.moduleNumber + " Speed", module.getState().speedMetersPerSecond);
         SmartDashboard.putNumber("Module " + module.moduleNumber + " Drive Current", module.getDriveCurrent());
@@ -505,7 +504,6 @@ public class SwerveBase extends SubsystemBase {
         moduleSetpoints[module.moduleNumber] = desState.angle.getRadians();
         moduleStates[module.moduleNumber + 1] = currentModuleStates[module.moduleNumber].speedMetersPerSecond;
         moduleSetpoints[module.moduleNumber + 1] = desState.speedMetersPerSecond;
-      }
     }
     odometry.update(getYaw(), currentModulePositions);
     currentPose = odometry.getEstimatedPosition();
