@@ -185,7 +185,7 @@ public class RobotContainer {
 
 
     autoChooser.addCmd("diamond",() -> autos.Diamond());
-    autoChooser.addRoutine("TestModularAuto",() -> autos.testModularAuto(modularAutoTargets));
+    autoChooser.addRoutine("TestModularAuto",() -> autos.testModularAuto());
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
 
@@ -278,14 +278,13 @@ public class RobotContainer {
     final int N = modularAutoTargets.length;
     modularAutoTargets = Arrays.copyOf(modularAutoTargets,N + 1);
     modularAutoTargets[N] = modularAutoTargetChooser.getSelected();
-    SmartDashboard.putStringArray("CurrentAuto", modularAutoTargets);
+    SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
   }
   public void removeFromModularAuto(){
-    
     final int N = modularAutoTargets.length;
     if (N >= 1){
       modularAutoTargets = Arrays.copyOf(modularAutoTargets,N - 1);
-      SmartDashboard.putStringArray("CurrentAuto", modularAutoTargets);
+      SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
     }
   }
 

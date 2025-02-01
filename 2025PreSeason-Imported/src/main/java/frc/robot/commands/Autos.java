@@ -52,8 +52,9 @@ public final class Autos {
       autoFactory.trajectoryCmd("Diamond"));
   }
   
-  public AutoRoutine testModularAuto(String[] posTargets){
+  public AutoRoutine testModularAuto(){
     AutoRoutine routine = autoFactory.newRoutine("TestModularAuto");
+    String [] posTargets = SmartDashboard.getStringArray("modularAutoTargets", null);
     if (posTargets.length > 2){
       AutoTrajectory[] trajectories = {};
 
@@ -63,7 +64,8 @@ public final class Autos {
       for(int n = 0; n < trajectories.length; n++){
         trajectories[n] = routine.trajectory(posTargets[n] + " - " + posTargets[n+1]);
       } 
-  
+      
+      //When the routine starts run the first trajectory
       routine.active().onTrue(
         Commands.sequence(
           trajectories[0].resetOdometry(),
@@ -71,6 +73,7 @@ public final class Autos {
         )
       );
       
+      //go through all trajectorys and run them one after another
       for(int n = 0; n < trajectories.length; n++){
         trajectories[n].done().onTrue(trajectories[n+1].cmd());
       }
