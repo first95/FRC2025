@@ -403,7 +403,7 @@ public class SwerveBase extends SubsystemBase {
   }
   public void followTrajectory(SwerveSample sample) {
     
-    Pose2d pose = getPose();
+    Pose2d pose = currentPose;
 
     ChassisSpeeds speeds = new ChassisSpeeds(
       sample.vx + autonXController.calculate(pose.getX(), sample.x),
