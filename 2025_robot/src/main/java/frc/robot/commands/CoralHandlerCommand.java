@@ -8,17 +8,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.L1Arm;
 import frc.robot.Constants.L1ArmConstants;
+import frc.robot.subsystems.L4Arm;
+import frc.robot.Constants.L4ArmConstants;
 
 
 public class CoralHandlerCommand extends Command {
     
     private final BooleanSupplier L1IntakeButtonSupplier, L4IntakeButtonSupplier, HandOffButtonSupplier, ScoreButtonSupplier, RollerTriggerSupplier;
     private final L1Arm L1arm;
+    private final L4Arm L4arm;
     
 
         public CoralHandlerCommand(BooleanSupplier L1IntakeButtonSupplier, BooleanSupplier L4IntakeButtonSupplier, 
                                    BooleanSupplier HandOffButtonSupplier, BooleanSupplier ScoreButtonSupplier, 
-                                   BooleanSupplier RollerTriggerSupplier, L1Arm L1arm){
+                                   BooleanSupplier RollerTriggerSupplier, L1Arm L1arm, L4Arm L4arm){
             
     
     
@@ -31,7 +34,8 @@ public class CoralHandlerCommand extends Command {
             this.RollerTriggerSupplier = RollerTriggerSupplier;
 
             this.L1arm = L1arm;
-
+            this.L4arm = L4arm;
+            
 
     }
 
