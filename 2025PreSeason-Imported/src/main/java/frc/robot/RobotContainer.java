@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.drivebase.TeleopDrive;
 import frc.robot.subsystems.SwerveBase;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,7 +69,7 @@ public class RobotContainer {
   private final L1Arm L1arm = new L1Arm();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
-  //private final CoralHandlerCommand manageCoral;
+  private final CoralHandlerCommand coralHandler;
 
   private final CommandJoystick driveController = new CommandJoystick(OperatorConstants.driveControllerPort);
   private final CommandJoystick headingController = new CommandJoystick(OperatorConstants.headingControllerPort);
@@ -143,16 +145,16 @@ public class RobotContainer {
         drivebase.setDefaultCommand(absoluteDrive);
 
 
-    // manageCoral = new CoralHandlerCommand(
-    //   () -> operatorController.getHID().getLeftBumperButton(),    // L1IntakeInButtonSupplier
-    //   () -> operatorController.getHID().getRightBumperButton(),    // L1IntakeOutButtonSupplier
-    //   () -> operatorController.getHID().getBButton(),   // B = L4 intake
-    //   () -> operatorController.getHID().getAButton(),   // A = Handoff
-    //   () -> operatorController.getHID().getYButton(),    // Score button
-    //   L1arm
-    // );
+    coralHandler = new CoralHandlerCommand(
+      () -> operatorController.getHID().getLeftBumperButton(),    // L1IntakeInButtonSupplier
+      () -> operatorController.getHID().getRightBumperButton(),    // L1IntakeOutButtonSupplier
+      () -> operatorController.getHID().getBButton(),   // B = L4 intake
+      () -> operatorController.getHID().getAButton(),   // A = Handoff
+      () -> operatorController.getHID().getYButton(),    // Score button
+      L1arm
+    );
 
-    //L1arm.setDefaultCommand(manageCoral);
+    L1arm.setDefaultCommand(coralHandler);
 
     // Configure the trigger bindings
     configureBindings();
@@ -204,6 +206,10 @@ public class RobotContainer {
       )
       .ignoringDisable(true)
       );
+    SmartDashboard.putData("setArmAngle",
+      new InstantCommand(
+        () -> L1arm.setArmAngle(Rotation2d.fromDegrees(0))
+      ).ignoringDisable(true));
     
     SmartDashboard.putData("removePosFromAuto",
       new InstantCommand(
@@ -246,8 +252,8 @@ public class RobotContainer {
     // if (operatorController.b().getAsBoolean() == true){
     //   L1arm.incrementArmVoltage(-0.01);
     // }
-    operatorController.a().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(0.001)));
-    operatorController.b().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(-0.001)));
+    // operatorController.a().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(0.001)));
+    // operatorController.b().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(-0.001)));
     // operatorController.a().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
     // operatorController.b().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
     // operatorController.x().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
