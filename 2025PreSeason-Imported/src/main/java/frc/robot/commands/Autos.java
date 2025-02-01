@@ -15,8 +15,10 @@ import java.util.Map;
 
 import choreo.trajectory.Trajectory;
 import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
-
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,18 +29,57 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public final class Autos {
   /** Example static factory for an autonomous command. */
   private final AutoFactory autoFactory;
+  private final SwerveBase swerve;
+  
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
   }
 
  
 
-  private Autos(SwerveBase swerve) {
+  public Autos(SwerveBase swerve) {
     autoFactory = new AutoFactory(
       swerve::getPose,
       swerve::resetOdometry,
       swerve::followTrajectory,
       true,
       swerve);
+      this.swerve = swerve;
+  }
+  public Command Diamond(){
+    return Commands.sequence(
+      autoFactory.resetOdometry("Diamond"),
+      autoFactory.trajectoryCmd("Diamond"));
+  }
+  
+  public AutoRoutine testModularAuto(){
+    AutoRoutine routine = autoFactory.newRoutine("TestModularAuto");
+    String [] posTargets = SmartDashboard.getStringArray("modularAutoTargets", null);
+    if (posTargets.length > 2){
+      AutoTrajectory[] trajectories = {};
+
+      
+
+      //load trajectorys based on posTargets
+      for(int n = 0; n < trajectories.length; n++){
+        trajectories[n] = routine.trajectory(posTargets[n] + " - " + posTargets[n+1]);
+      } 
+      
+      //When the routine starts run the first trajectory
+      routine.active().onTrue(
+        Commands.sequence(
+          trajectories[0].resetOdometry(),
+          trajectories[0].cmd()
+        )
+      );
+      
+      //go through all trajectorys and run them one after another
+      for(int n = 0; n < trajectories.length; n++){
+        trajectories[n].done().onTrue(trajectories[n+1].cmd());
+      }
+      
+      
+    }
+    return routine;  
   }
 }

@@ -1,0 +1,10 @@
+[
+  {
+    "name": "/Preferences/Starting Position",
+    "type": "string[]",
+    "value": ["C1"],
+    "properties": {
+      "persistent": true
+    }
+  }
+]
