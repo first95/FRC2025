@@ -28,6 +28,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -55,22 +56,18 @@ public class L1Arm extends SubsystemBase {
   private final SparkMax shoulder;
   private final SparkMaxConfig shoulderConfig;
   private final SparkClosedLoopController shoulderPID;
-  private final SparkAbsoluteEncoder shoulderEncoder;
+  private final SparkAbsoluteEncoder shoulderAbsoluteEncoder;
+  private final RelativeEncoder shoulderRelativeEncoder;
 
-  private final TrapezoidProfile shoulderProfile;
   private Rotation2d armGoal; 
-  private final Timer timer;
-  private TrapezoidProfile.State profileStart, shoulderSetpoint; 
-  private double lastShoulderVelocitySetpoint, armAccel;
-  private int cyclesSinceShoulderNotAtGoal; 
 
-  private final ArmFeedforward shoulderFeedforward;
-  private double shoulderFeedforwardValue;
+  private ArmFeedforward shoulderFeedforward;
 
   private final SysIdRoutine shoulderCharacterizer;
 
 
   public L1Arm() {
+    // configure intake motor parameters
     intake = new SparkMax(L1IntakeConstants.INTAKE_ID, MotorType.kBrushless);
     intakeConfig = new SparkMaxConfig();
 
@@ -84,10 +81,14 @@ public class L1Arm extends SubsystemBase {
       .primaryEncoderVelocityPeriodMs(L1IntakeConstants.PRIMARY_ENCODER_VELOCITY_PERIODMS)
       .outputCurrentPeriodMs(L1IntakeConstants.OUTPUT_CURRENT_PERIODMS);
 
+    // write the intake motor parameters to the SparkMAX and write to flash  
+    intake.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
     shoulder = new SparkMax(L1ArmConstants.SHOULDER_ID, MotorType.kBrushless);
     shoulderConfig = new SparkMaxConfig();
     shoulderPID = shoulder.getClosedLoopController();
 
+    
     shoulderConfig
       .inverted(L1ArmConstants.PRIMARY_ENCODER_INVERTED)
       .idleMode(IdleMode.kBrake)
@@ -110,40 +111,37 @@ public class L1Arm extends SubsystemBase {
       .outputRange(L1ArmConstants.OutputRangeMin, L1ArmConstants.OutputRangeMax);
     shoulderConfig.absoluteEncoder
       .positionConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION)
-      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION/ 60)
-      .zeroOffset(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED ? -1 * L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360 : L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360)
-      .inverted(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED);     
+      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION)
+      .zeroOffset(L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360)
+      .inverted(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED)
+      .zeroCentered(L1ArmConstants.ABSOLUTE_ENCODER_ZERO_CENTERED);     
     shoulderConfig.encoder
       .positionConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION)
-      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION/60);
+      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION);
+    
+  
+    armGoal = L1ArmConstants.STOWED;
 
-    shoulderProfile = new TrapezoidProfile(
-      new TrapezoidProfile.Constraints(
-        L1ArmConstants.MAX_SPEED, 
-        L1ArmConstants.MAX_ACCELERATION));
-    //armGoal = L1ArmConstants.STOWED
-    //profileStart = new TrapezoidProfile.State(shoulder.getEncoder().getPosition(),0);
-    lastShoulderVelocitySetpoint = 0;
-    armAccel = 0;
+    shoulderAbsoluteEncoder = shoulder.getAbsoluteEncoder();
+    shoulderRelativeEncoder = shoulder.getEncoder();
+    shoulderRelativeEncoder.setPosition(shoulderRelativeEncoder.getPosition());
+
+
+
 
     shoulderFeedforward = new ArmFeedforward(
       L1ArmConstants.KS,
       L1ArmConstants.KG,
       L1ArmConstants.KV,
       L1ArmConstants.KA);
+    
 
-    shoulderFeedforwardValue = 0;
 
     shoulder.configure(shoulderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    shoulderEncoder = shoulder.getAbsoluteEncoder();
-
-    timer = new Timer();
-    timer.start();
-
-    cyclesSinceShoulderNotAtGoal = 0;
+    
 
     shoulderCharacterizer = new SysIdRoutine(
-      new SysIdRoutine.Config(Volts.of(0.1).per(Seconds), Volts.of(1),null,null),
+      new SysIdRoutine.Config(),
       new SysIdRoutine.Mechanism(
         voltage ->{
           shoulder.setVoltage(voltage);
@@ -151,10 +149,11 @@ public class L1Arm extends SubsystemBase {
       log -> {
         log.motor("L1Shoulder")
           .voltage(Volts.of(shoulder.getAppliedOutput() * shoulder.getBusVoltage()))
-          .angularPosition(Radians.of(shoulderEncoder.getPosition()))
-          .angularVelocity(RadiansPerSecond.of(shoulderEncoder.getVelocity()));
+          .angularPosition(Radians.of(shoulderAbsoluteEncoder.getPosition()))
+          .angularVelocity(RadiansPerSecond.of(shoulderAbsoluteEncoder.getVelocity()));
       }, 
       this));
+      
   }
 
   /**
@@ -188,13 +187,29 @@ public class L1Arm extends SubsystemBase {
     // Query some boolean state, such as a digital sensor.
     return false;
   }
+  public double getArmVoltage(){
+    return (shoulder.getAppliedOutput() * shoulder.getBusVoltage());
+  }
 
-  public boolean armAtGoal() {
-    return cyclesSinceShoulderNotAtGoal >= L1ArmConstants.SETTLE_TIME_LOOP_CYCLES;
+  public void setGains(){
+    shoulderFeedforward = new ArmFeedforward(
+    SmartDashboard.getNumber("shoulderKS",0), 
+    SmartDashboard.getNumber("shoulderKG",0), 
+    SmartDashboard.getNumber("shoulderKV", 0), 
+    SmartDashboard.getNumber("shoulderKA", 0));
+    shoulderConfig.closedLoop.pid(
+    SmartDashboard.getNumber("shoulderKP",0), 
+    SmartDashboard.getNumber("shoulderKI",0), 
+    SmartDashboard.getNumber("shoulderKD", 0));
+    shoulder.configure(shoulderConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   public Rotation2d getArmAngle(){
-    return Rotation2d.fromRadians(shoulderEncoder.getPosition());
+    return Rotation2d.fromRadians(shoulderAbsoluteEncoder.getPosition());
+  }
+
+  public Rotation2d getRelativeEncoderPos(){
+    return Rotation2d.fromRadians(shoulderRelativeEncoder.getPosition());
   }
 
   public double getArmCurrent(){
@@ -202,6 +217,7 @@ public class L1Arm extends SubsystemBase {
   }
 
   public void runIntake(double speed){
+    
     intake.set(speed * L1IntakeConstants.MAX_SPEED);
   }
   
@@ -210,64 +226,30 @@ public class L1Arm extends SubsystemBase {
   }
 
   public void setArmAngle(Rotation2d angle){
-    if(angle.getRadians() != armGoal.getRadians()){
-      armGoal = angle;
-      profileStart = new TrapezoidProfile.State(shoulderEncoder.getPosition(),shoulderEncoder.getVelocity());
-      cyclesSinceShoulderNotAtGoal = 0;
-      timer.stop();
-      timer.reset();
-      timer.start();
+    armGoal = Rotation2d.fromDegrees(SmartDashboard.getNumber("setShoulderAngleNumber", 0));
+    if(armGoal.getRadians() > L1ArmConstants.LOWER_LIMIT.getRadians() || armGoal.getRadians() < L1ArmConstants.UPPER_LIMIT.getRadians()){
+      shoulderPID.setReference(
+        armGoal.getRadians(),
+        ControlType.kPosition,
+        ClosedLoopSlot.kSlot0,
+        shoulderFeedforward.calculate(armGoal.getRadians(),0),
+        ArbFFUnits.kVoltage);
     }
   }
   @Override
   public void periodic() {
 
-    // if(armGoal.getRadians() >= L1ArmConstants.UPPER_LIMIT.getRadians()){
-    //   armGoal = L1ArmConstants.UPPER_LIMIT;
-    // }
-    // shoulderSetpoint = shoulderProfile.calculate(
-    //   timer.get(), 
-    //   profileStart,
-    //   new TrapezoidProfile.State(armGoal.getRadians(),0));
 
-    //   if (shoulderSetpoint.velocity > lastShoulderVelocitySetpoint) {
-    //     armAccel = L1ArmConstants.MAX_ACCELERATION;
-    //   } else if (shoulderSetpoint.velocity < lastShoulderVelocitySetpoint) {
-    //     armAccel = -L1ArmConstants.MAX_ACCELERATION;
-    //   } else {
-    //     armAccel = 0;
-    //   }
-    // lastShoulderVelocitySetpoint = shoulderSetpoint.velocity;
-
-    // if (!armAtGoal() && ((Math.abs(shoulderSetpoint.position - L1ArmConstants.LOWER_LIMIT.getRadians()) <= L1ArmConstants.DEADBAND) ||
-    //                     (Math.abs(shoulderSetpoint.position - L1ArmConstants.UPPER_LIMIT.getRadians()) <= L1ArmConstants.DEADBAND))) {
-    //   shoulder.set(0);
-    //   shoulderFeedforwardValue = 0;
-    // } else {
-    //   shoulderFeedforwardValue = shoulderFeedforward.calculate(shoulderSetpoint.position, shoulderSetpoint.velocity, armAccel);
-    //   shoulderPID.setReference(
-    //       shoulderSetpoint.position,
-    //       ControlType.kPosition,
-    //       ClosedLoopSlot.kSlot0,
-    //       shoulderFeedforwardValue,
-    //       ArbFFUnits.kVoltage);
-    // }
-    // cyclesSinceShoulderNotAtGoal = Math.abs(armGoal.getRadians() - shoulderEncoder.getPosition()) <= L1ArmConstants.TOLERANCE ?
-    //   cyclesSinceShoulderNotAtGoal + 1 :
-    //   0;
     
     
-    //SmartDashboard.putNumber("ShoulderGoal", armGoal.getDegrees());
-    //SmartDashboard.putNumber("ShoulderSetpoint", Math.toDegrees(shoulderSetpoint.position));
-   // SmartDashboard.putNumber("ShoulderSetpointVel", Math.toDegrees(shoulderSetpoint.velocity));
+    SmartDashboard.putNumber("ShoulderGoal", armGoal.getDegrees());
+    SmartDashboard.putNumber("shoulderVelocity", shoulderAbsoluteEncoder.getVelocity());
     SmartDashboard.putNumber("ShoulderPos", getArmAngle().getDegrees());
     SmartDashboard.putNumber("ShoulderControlEffort", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
-    SmartDashboard.putBoolean("ShoulderAtGoal", armAtGoal());
-    SmartDashboard.putNumber("CycleCounter", cyclesSinceShoulderNotAtGoal);
-    SmartDashboard.putNumber("SetpointAccel", Math.toDegrees(armAccel));
     SmartDashboard.putNumber("ShoulderCurrentDraw", getArmCurrent());
-    SmartDashboard.putNumber("PrimaryEncoderPos",shoulder.getEncoder().getPosition());
-
+    SmartDashboard.putNumber("ArmVoltage", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
+    SmartDashboard.putNumber("PrimaryEncoderPos",getRelativeEncoderPos().getDegrees());
+    
     SmartDashboard.putNumber("IntakeCurrentDraw",getIntakeCurrent());
   }
 
