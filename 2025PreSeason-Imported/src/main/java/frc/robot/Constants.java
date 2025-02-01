@@ -269,6 +269,63 @@ public final class Constants {
         public static final double MAX_SPEED = 1;
 
     }
+
+    public static final class L4ArmConstants {
+        //Values currently copied from L1ArmConstants, not updated 1/31/25
+        public static final int SHOULDER_ID = 0;
+
+        public static final int SMARTCURRENTLIMIT = 80;
+
+
+        public static final boolean PRIMARY_ENCODER_POSITION_ALWAYS_ON = true;
+        public static final int PRIMARY_ENCODER_POSITIONS_PERIOD = 20;
+        public static final boolean PRIMARY_ENCODER_VELOCITY_ALWAYS_ON = true;
+        public static final int PRIMARY_ENCODER_VELOCITY_PERIOD = 20;
+        public static final boolean PRIMARY_ENCODER_INVERTED = true;
+        public static final double PRIMARY_ENCODER_OFFSET = 0;
+        public static final double SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION = 2 * Math.PI * 16/48;
+
+        public static final boolean ABSOLUTE_ENCODER_POSITION_ALWAYS_ON = true;
+        public static final int ABSOLUTE_ENCODER_POSITIONS_PERIOD = 20;
+        public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
+        public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
+        public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 202;
+        public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
+
+        public static final double KP = 0.0;
+        public static final double KI = 0.0;
+        public static final double KD = 0.0;
+        public static final double KF = 0.0;
+
+        public static final double KS = 0.0;
+        public static final double KG = 0.0;
+        public static final double KV = 0.0;
+        public static final double KA = 0.0;
+      
+        
+        public static final double OutputRangeMin = -1;
+        public static final double OutputRangeMax = 1;
+
+        public static final double MAX_SPEED = 10.0;
+        public static final double MAX_ACCELERATION = 10.0;
+
+        public static final Rotation2d STOWED = Rotation2d.fromDegrees(-50);
+        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(135);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-55);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-35);
+        public static final Rotation2d SCORING = Rotation2d.fromDegrees(110);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-35);
+
+
+        public static final double DEADBAND = Math.toRadians(0.1);
+
+        public static final double TOLERANCE = Math.toRadians(0.1);
+        public static final int SETTLE_TIME_LOOP_CYCLES = 10;
+
+        public static final double CURRENT_OFFSET = 5;
+
+    }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
 
