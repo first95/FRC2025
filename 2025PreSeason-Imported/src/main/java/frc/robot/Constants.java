@@ -198,7 +198,7 @@ public final class Constants {
 
         public static final int SHOULDER_ID = 12;
 
-        public static final int SMARTCURRENTLIMIT = 80;
+        public static final int SMARTCURRENTLIMIT = 50;
 
 
         public static final boolean PRIMARY_ENCODER_POSITION_ALWAYS_ON = true;
@@ -267,7 +267,13 @@ public final class Constants {
         public static final boolean OUTPUT_CURRENT_ALWAYS_ON = true;
         public static final int OUTPUT_CURRENT_PERIODMS = 20;
 
-        public static final double MAX_SPEED = 0.35;
+        public static final double MAX_SPEED = 1;
+
+        public static final double HOLDING_CURRENT_THRESHOULD = 10;
+
+        public static final double HOLDING_SPEED = 0.05;
+        public static final double SCORE_SPEED = 0.5;
+        public static final double INTAKE_SPEED = 0.35;
 
     }
     public static final class Vision {

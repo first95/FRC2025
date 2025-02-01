@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.L1Arm;
 import frc.robot.Constants.L1ArmConstants;
+import frc.robot.Constants.L1IntakeConstants;
 
 
 public class CoralHandlerCommand extends Command {
@@ -65,169 +66,167 @@ public class CoralHandlerCommand extends Command {
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         ScoreButton = ScoreButtonSupplier.getAsBoolean();
 
-
-        L1IntakeSpeed = (L1IntakeInButton ? 1 : 0) + (L1IntakeOutButton ? -1 : 0) + 0.01;
         L1arm.runIntake(L1IntakeSpeed);
 
-        // // State Machine 
-        // switch (currentState) {
-        //     case IDLE:
-        //         // L1 ~90, 
-        //         L1arm.setArmAngle(L1ArmConstants.STOWED);
+        coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.HOLDING_CURRENT_THRESHOULD;
+        // State Machine 
+        switch (currentState) {
+            case IDLE:
+                // L1 ~90, 
+                L1arm.setArmAngle(L1ArmConstants.STOWED);
                 
-        //         //L4 stowed 
-                
-
-
-        //         // change state?
-
-        //         if(L1IntakeInButton){
-        //             currentState = State.L1_INTAKING;
-        //         }
-
-        //         if(L4IntakeButton){
-        //             currentState = State.L4_INTAKING;
-        //         }
-
-
-
-        //     break;
-
-
-        //     case L1_INTAKING:
-        //         // Move L1 to intaking pos, make sure L4 is stowed
-
-        //         // wait for spike in current that means we have coral
-
-        //         if(coralInL1){
-        //             currentState = State.L1_HOLDING;
-
-        //         }
+                //L4 stowed 
                 
 
-        //         if(L4IntakeButton){
-        //             currentState = State.L4_INTAKING;
-        //         }
+                L1IntakeSpeed = 0;
+                // change state?
 
-        //         L1arm.setArmAngle(L1ArmConstants.INTAKING);
+                if(L1IntakeInButton){
+                    currentState = State.L1_INTAKING;
+                }
 
-
-        //     break;
-
-        //     case L1_HOLDING:
-        //         // Stow L1 
-        //         L1arm.setArmAngle(L1ArmConstants.STOWED);
-
-        //         if(ScoreButton){
-
-        //             currentState = State.L1_SCORE_POSITIONING;
-        //         }
-                
-        //         if(HandOffButton){
-        //             currentState = State.POSITIONING_HANDOFF;
-        //         }
-
-        //     break;
+                if(L4IntakeButton){
+                    currentState = State.L4_INTAKING;
+                }
 
 
-        //     case L1_SCORE_POSITIONING:
-        //         // Move to scoring position then stop
 
-        //         L1arm.setArmAngle(L1ArmConstants.SCORING);
+            break;
 
-        //         if(RollerTrigger){
 
-        //             currentState = State.L1_SCORING;
-        //         }
+            case L1_INTAKING:
+                // Move L1 to intaking pos, make sure L4 is stowed
+                L1arm.setArmAngle(L1ArmConstants.LOWER_LIMIT);
+                // wait for spike in current that means we have coral
+
+                L1IntakeSpeed = L1IntakeInButton ? L1IntakeConstants.INTAKE_SPEED : 0;
+
+                if(coralInL1){
+                    currentState = State.L1_HOLDING;
+                }
                 
 
-        //     break;
+                if(L4IntakeButton){
+                    currentState = State.L4_INTAKING;
+                }
+
+            break;
+
+            case L1_HOLDING:
+                // Stow L1 
+                L1arm.setArmAngle(L1ArmConstants.STOWED);
+
+                L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
+
+                if(ScoreButton){
+
+                    currentState = State.L1_SCORE_POSITIONING;
+                }
+                
+                if(HandOffButton){
+                    currentState = State.POSITIONING_HANDOFF;
+                }
+
+            break;
 
 
-        //     case L1_SCORING:
-        //         // Move the roller forward
-        //         L1arm.runIntake(1);
-        //         IntakeCurrent = L1arm.getIntakeCurrent();
+            case L1_SCORE_POSITIONING:
+                // Move to scoring position then stop
+
+                L1arm.setArmAngle(L1ArmConstants.SCORING);
+
+
+                if(L1arm.atGoal() && ScoreButton){
+                    currentState = State.L1_SCORING;
+                }
                 
 
-        //         // If current drops then return to IDLE
-        //         if(IntakeCurrent > L1ArmConstants.CURRENT_OFFSET + L1arm.getIntakeCurrent()){
-        //             currentState = State.IDLE;
-
-        //         }
-
-        //     break;
+            break;
 
 
-        //     case POSITIONING_HANDOFF:
-        //         L1arm.setArmAngle(L1ArmConstants.HAND_OFF);
+            case L1_SCORING:
+                // Move the roller forward
                 
-        //         if(!HandOffButton){
-        //             currentState = State.PERFORMING_HANDOFF;
-        //     }
+                IntakeCurrent = L1arm.getIntakeCurrent();
+                
+                L1arm.runIntake(L1IntakeConstants.SCORE_SPEED);
+                // If current drops then return to IDLE
+                if(IntakeCurrent > L1ArmConstants.CURRENT_OFFSET + L1arm.getIntakeCurrent()){
+                    currentState = State.IDLE;
+                }
+
+            break;
+
+
+            case POSITIONING_HANDOFF:
+                L1arm.setArmAngle(L1ArmConstants.HAND_OFF);
+                
+                if(!HandOffButton){
+                    currentState = State.PERFORMING_HANDOFF;
+            }
                 
 
-        //     break;
+            break;
 
 
-        //     case PERFORMING_HANDOFF:
-        //         // Less resistance then go to L4 holding
+            case PERFORMING_HANDOFF:
+                // Less resistance then go to L4 holding
 
                 
 
-        //     break;
+            break;
 
 
-        //     case L4_INTAKING:
-        //         // L4 intaking pos
-        //         // L1 backstop ~95 deg
-        //         L1arm.setArmAngle(L1ArmConstants.STOWED);
+            case L4_INTAKING:
+                // L4 intaking pos
+                // L1 backstop ~95 deg
+                L1arm.setArmAngle(L1ArmConstants.STOWED);
 
-        //         if(L1IntakeInButton){
-        //             currentState = State.IDLE;
+                if(L1IntakeInButton){
+                    currentState = State.IDLE;
 
-        //         }
+                }
 
-        //         // if holding coral go to L4_HOLDING
-
-
-
-        //     break;
-
-
-        //     case L4_HOLDING:
-
-        //         if(ScoreButton){
-        //             currentState = State.L4_SCORING;
-        //         }
-
-        //         // Handoff fail or misclick
-        //         if(L1IntakeInButton){
-        //             currentState = State.L1_INTAKING;
-        //         }
-
-        //         if(L4IntakeButton){
-        //             currentState = State.L4_INTAKING;
-        //         }
-
-        //     break;
-
-
-        //     case L4_SCORING:
-        //         if(L1IntakeInButton){
-        //             currentState = State.IDLE;
-        //     }
-
-        //         if(L4IntakeButton){
-        //             currentState = State.IDLE;
-        //     }
+                // if holding coral go to L4_HOLDING
 
 
 
-        //     break;
+            break;
 
 
-   // }
+            case L4_HOLDING:
+
+                if(ScoreButton){
+                    currentState = State.L4_SCORING;
+                }
+
+                // Handoff fail or misclick
+                if(L1IntakeInButton){
+                    currentState = State.L1_INTAKING;
+                }
+
+                if(L4IntakeButton){
+                    currentState = State.L4_INTAKING;
+                }
+
+            break;
+
+
+            case L4_SCORING:
+                if(L1IntakeInButton){
+                    currentState = State.IDLE;
+            }
+
+                if(L4IntakeButton){
+                    currentState = State.IDLE;
+            }
+
+
+
+            break;
+
+
+   }
 
 
 

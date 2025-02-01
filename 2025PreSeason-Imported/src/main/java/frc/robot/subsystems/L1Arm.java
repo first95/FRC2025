@@ -204,6 +204,9 @@ public class L1Arm extends SubsystemBase {
     shoulder.configure(shoulderConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
+  public boolean atGoal(){
+    return Math.abs(shoulderAbsoluteEncoder.getPosition() - armGoal.getRadians()) < L1ArmConstants.TOLERANCE;
+  }
   public Rotation2d getArmAngle(){
     return Rotation2d.fromRadians(shoulderAbsoluteEncoder.getPosition());
   }
@@ -226,8 +229,8 @@ public class L1Arm extends SubsystemBase {
   }
 
   public void setArmAngle(Rotation2d angle){
-    armGoal = Rotation2d.fromDegrees(SmartDashboard.getNumber("setShoulderAngleNumber", 0));
-    if(armGoal.getRadians() > L1ArmConstants.LOWER_LIMIT.getRadians() || armGoal.getRadians() < L1ArmConstants.UPPER_LIMIT.getRadians()){
+    armGoal = angle;
+    if(armGoal.getRadians() >= L1ArmConstants.LOWER_LIMIT.getRadians() || armGoal.getRadians() <= L1ArmConstants.UPPER_LIMIT.getRadians()){
       shoulderPID.setReference(
         armGoal.getRadians(),
         ControlType.kPosition,
