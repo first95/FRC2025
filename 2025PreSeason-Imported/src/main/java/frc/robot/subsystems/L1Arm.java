@@ -92,7 +92,8 @@ public class L1Arm extends SubsystemBase {
     shoulderConfig
       .inverted(L1ArmConstants.PRIMARY_ENCODER_INVERTED)
       .idleMode(IdleMode.kBrake)
-      .smartCurrentLimit(L1ArmConstants.SMARTCURRENTLIMIT);
+      .smartCurrentLimit(L1ArmConstants.SMARTCURRENTLIMIT)
+      .openLoopRampRate(L1IntakeConstants.OPEN_LOOP_RAMP_RATE);
     shoulderConfig.signals
       .primaryEncoderPositionAlwaysOn(L1ArmConstants.PRIMARY_ENCODER_POSITION_ALWAYS_ON)
       .primaryEncoderPositionPeriodMs(L1ArmConstants.PRIMARY_ENCODER_POSITIONS_PERIOD)

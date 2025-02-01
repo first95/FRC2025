@@ -24,8 +24,11 @@ public class CoralHandlerCommand extends Command {
     }
 
     private boolean L1IntakeInButton, L1IntakeOutButton, L4IntakeButton, HandOffButton, ScoreButton, RollerTrigger;
-    private boolean coralInL1 = false; 
+    private boolean coralInL1 = false;
+    private boolean releasedCoral = false; 
+    private int releasedCoralCycles = 0;
     private double IntakeCurrent;
+    private int cyclesIntaking;
     private double L1IntakeSpeed;
     private State currentState = State.IDLE;
     
@@ -68,7 +71,7 @@ public class CoralHandlerCommand extends Command {
 
         L1arm.runIntake(L1IntakeSpeed);
 
-        coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.HOLDING_CURRENT_THRESHOULD;
+        //
         // State Machine 
         switch (currentState) {
             case IDLE:
@@ -76,17 +79,26 @@ public class CoralHandlerCommand extends Command {
                 L1arm.setArmAngle(L1ArmConstants.STOWED);
                 
                 //L4 stowed 
+                if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
+                    coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.RELEASED_CURRENT_THRESHOULD;
+                }
+                cyclesIntaking += 1;
                 
 
-                L1IntakeSpeed = 0;
+                L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
                 // change state?
-
+                //coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.HOLDING_CURRENT_THRESHOULD;
                 if(L1IntakeInButton){
                     currentState = State.L1_INTAKING;
+                    cyclesIntaking = 0;
                 }
 
                 if(L4IntakeButton){
                     currentState = State.L4_INTAKING;
+                    
+                }
+                if(coralInL1){
+                    currentState = State.L1_HOLDING;
                 }
 
 
@@ -95,11 +107,23 @@ public class CoralHandlerCommand extends Command {
 
 
             case L1_INTAKING:
+                
                 // Move L1 to intaking pos, make sure L4 is stowed
-                L1arm.setArmAngle(L1ArmConstants.LOWER_LIMIT);
+                L1arm.setArmAngle(L1ArmConstants.INTAKING);
                 // wait for spike in current that means we have coral
 
                 L1IntakeSpeed = L1IntakeInButton ? L1IntakeConstants.INTAKE_SPEED : 0;
+                if (L1IntakeInButton){
+                    if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
+                        coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.HOLDING_CURRENT_THRESHOULD;
+                    }
+                    cyclesIntaking += 1;
+                }
+                else{
+                    cyclesIntaking = 0;
+                }
+                
+                   
 
                 if(coralInL1){
                     currentState = State.L1_HOLDING;
@@ -117,6 +141,8 @@ public class CoralHandlerCommand extends Command {
                 L1arm.setArmAngle(L1ArmConstants.STOWED);
 
                 L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
+                releasedCoral = false;
+                
 
                 if(ScoreButton){
 
@@ -126,6 +152,9 @@ public class CoralHandlerCommand extends Command {
                 if(HandOffButton){
                     currentState = State.POSITIONING_HANDOFF;
                 }
+                if(!coralInL1){
+                    currentState = State.IDLE;
+                }
 
             break;
 
@@ -134,6 +163,7 @@ public class CoralHandlerCommand extends Command {
                 // Move to scoring position then stop
 
                 L1arm.setArmAngle(L1ArmConstants.SCORING);
+                
 
 
                 if(L1arm.atGoal() && ScoreButton){
@@ -146,13 +176,20 @@ public class CoralHandlerCommand extends Command {
 
             case L1_SCORING:
                 // Move the roller forward
-                
-                IntakeCurrent = L1arm.getIntakeCurrent();
-                
                 L1arm.runIntake(L1IntakeConstants.SCORE_SPEED);
+
+                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.RELEASED_CURRENT_THRESHOULD;
+                if(!coralInL1){
+                    releasedCoralCycles += 1;
+                    if(releasedCoralCycles >= L1IntakeConstants.CYCLE_RELEASED_THRESHOLD){
+                        releasedCoral = true;
+                    }
+                }
+                
                 // If current drops then return to IDLE
-                if(L1arm.getIntakeCurrent() < L1IntakeConstants.HOLDING_CURRENT_THRESHOULD){
+                if(releasedCoral){
                     currentState = State.IDLE;
+                    cyclesIntaking = 0;
                 }
 
             break;

@@ -237,8 +237,8 @@ public final class Constants {
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(167);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-25);
-        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(20);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-29);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-28);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(110);
 
@@ -255,9 +255,10 @@ public final class Constants {
     public static final class L1IntakeConstants{
         public static final int INTAKE_ID = 16;
 
-        public static final boolean INVERTED = false;
+        public static final boolean INVERTED = true;
 
         public static final int SMARTCURRENTLIMIT = 30;
+        public static final double OPEN_LOOP_RAMP_RATE = 10;
 
         public static final int FAULTS_PERIOD_MS = 20;
 
@@ -269,10 +270,13 @@ public final class Constants {
 
         public static final double MAX_SPEED = 1;
 
-        public static final double HOLDING_CURRENT_THRESHOULD = 10;
+        public static final double HOLDING_CURRENT_THRESHOULD = 15;
+        public static final double RELEASED_CURRENT_THRESHOULD = 8;
+        public static final int CYCLE_INTAKING_THRESHOLD = 100;
+        public static final int CYCLE_RELEASED_THRESHOLD = 100;
 
         public static final double HOLDING_SPEED = 0.05;
-        public static final double SCORE_SPEED = 0.5;
+        public static final double SCORE_SPEED = -1;
         public static final double INTAKE_SPEED = 0.35;
 
     }
