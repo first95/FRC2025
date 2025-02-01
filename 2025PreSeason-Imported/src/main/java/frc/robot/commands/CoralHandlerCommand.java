@@ -151,7 +151,7 @@ public class CoralHandlerCommand extends Command {
                 
                 L1arm.runIntake(L1IntakeConstants.SCORE_SPEED);
                 // If current drops then return to IDLE
-                if(IntakeCurrent > L1ArmConstants.CURRENT_OFFSET + L1arm.getIntakeCurrent()){
+                if(L1arm.getIntakeCurrent() < L1IntakeConstants.HOLDING_CURRENT_THRESHOULD){
                     currentState = State.IDLE;
                 }
 
