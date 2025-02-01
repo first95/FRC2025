@@ -103,7 +103,7 @@ public final class Constants {
         public static final double MAX_ANGULAR_ACCELERATION = MAX_ACCELERATION / Math.hypot(FRONT_LEFT_X, FRONT_LEFT_Y);
         // max speed (RPM) / gear ratio, convert to deg/min, divide by 60 for deg/s
         public static final double MAX_MODULE_ANGULAR_SPEED = Units.rotationsToDegrees(NEO_550_FREE_SPEED * 7 / 372)
-                / 60; // deg/s
+                / 60; // deg/sk
 
     // Currently does nothing
     public static final double ANGULAR_ACCELERATION_LIMIT = 100;
@@ -198,46 +198,47 @@ public final class Constants {
 
         public static final int SHOULDER_ID = 12;
 
-        public static final int SMARTCURRENTLIMIT = 80;
+        public static final int SMARTCURRENTLIMIT = 50;
 
 
         public static final boolean PRIMARY_ENCODER_POSITION_ALWAYS_ON = true;
         public static final int PRIMARY_ENCODER_POSITIONS_PERIOD = 20;
         public static final boolean PRIMARY_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int PRIMARY_ENCODER_VELOCITY_PERIOD = 20;
-        public static final boolean PRIMARY_ENCODER_INVERTED = true;
-        public static final double PRIMARY_ENCODER_OFFSET = 0;
-        public static final double SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION = 2 * Math.PI * 16/48;
+        public static final boolean PRIMARY_ENCODER_INVERTED = false;
+        public static final double PRIMARY_ENCODER_OFFSET = 0.7;
+        public static final double SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION = 2 * Math.PI/25 * 14/45;
 
         public static final boolean ABSOLUTE_ENCODER_POSITION_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_POSITIONS_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
-        public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 202;
+        public static final boolean ABSOLUTE_ENCODER_INVERTED = true;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 166;
+        public static final boolean ABSOLUTE_ENCODER_ZERO_CENTERED = true;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
-        public static final double KP = 0.0;
+        public static final double KP = 0.8;
         public static final double KI = 0.0;
-        public static final double KD = 0.0;
+        public static final double KD = 0;
         public static final double KF = 0.0;
 
-        public static final double KS = 0.0;
-        public static final double KG = 0.0;
-        public static final double KV = 0.0;
-        public static final double KA = 0.0;
+        public static final double KS = 0.113;
+        public static final double KG = 0.162;
+        public static final double KV = 1.65;
+        public static final double KA = 0;
       
         
         public static final double OutputRangeMin = -1;
         public static final double OutputRangeMax = 1;
 
-        public static final double MAX_SPEED = 10.0;
-        public static final double MAX_ACCELERATION = 10.0;
+        public static final double MAX_SPEED = 1.788;
+        public static final double MAX_ACCELERATION = 1.788;
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
-        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(17);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(227);
-        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(20);
+        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(167);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-29);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-28);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(110);
 
@@ -245,7 +246,7 @@ public final class Constants {
         public static final double DEADBAND = Math.toRadians(0.1);
 
         public static final double TOLERANCE = Math.toRadians(0.1);
-        public static final int SETTLE_TIME_LOOP_CYCLES = 10;
+        public static final int SETTLE_TIME_LOOP_CYCLES = 200;
 
         public static final double CURRENT_OFFSET = 5;
 
@@ -254,9 +255,10 @@ public final class Constants {
     public static final class L1IntakeConstants{
         public static final int INTAKE_ID = 16;
 
-        public static final boolean INVERTED = false;
+        public static final boolean INVERTED = true;
 
-        public static final int SMARTCURRENTLIMIT = 50;
+        public static final int SMARTCURRENTLIMIT = 30;
+        public static final double OPEN_LOOP_RAMP_RATE = 10;
 
         public static final int FAULTS_PERIOD_MS = 20;
 
@@ -268,10 +270,18 @@ public final class Constants {
 
         public static final double MAX_SPEED = 1;
 
+        public static final double HOLDING_CURRENT_THRESHOULD = 15;
+        public static final double RELEASED_CURRENT_THRESHOULD = 8;
+        public static final int CYCLE_INTAKING_THRESHOLD = 100;
+        public static final int CYCLE_RELEASED_THRESHOLD = 100;
+
+        public static final double HOLDING_SPEED = 0.05;
+        public static final double SCORE_SPEED = -1;
+        public static final double INTAKE_SPEED = 0.35;
+
     }
 
     public static final class L4ArmConstants {
-        //Values currently copied from L1ArmConstants, not updated 1/31/25
         public static final int SHOULDER_ID = 0;
 
         public static final int SMARTCURRENTLIMIT = 80;
