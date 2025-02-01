@@ -150,7 +150,8 @@ public class RobotContainer {
       () -> operatorController.getHID().getYButton(),    // L1IntakeOutButtonSupplier
       () -> operatorController.getHID().getBButton(),   // B = L4 intake
       () -> operatorController.getHID().getAButton(),   // A = Handoff
-      () -> operatorController.getHID().getRightBumperButton(),    // Score button
+      () -> operatorController.getHID().getRightBumperButton(), // Score button
+      () -> operatorController.getHID().getXButton(),   
       L1arm
     );
 
