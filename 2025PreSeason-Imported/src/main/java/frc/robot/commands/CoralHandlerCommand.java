@@ -171,6 +171,11 @@ public class CoralHandlerCommand extends Command {
                 L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
                 releasedCoral = false;
                 
+                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.RELEASED_CURRENT_THRESHOULD;
+                if(!coralInL1){
+
+                    currentState = State.IDLE;
+                } // probably random current spike
 
                 if(ScoreButton){
 
@@ -192,6 +197,10 @@ public class CoralHandlerCommand extends Command {
 
                 L1arm.setArmAngle(L1ArmConstants.SCORING);
                 
+                if(L1IntakeInButton){
+                    currentState = State.L1_INTAKING;
+
+                }
 
 
                 if(L1arm.atGoal() && ScoreButton){
