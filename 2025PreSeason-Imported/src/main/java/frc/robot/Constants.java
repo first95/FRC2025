@@ -271,9 +271,9 @@ public final class Constants {
 
         public static final double MAX_SPEED = 1;
 
-        public static final double HOLDING_CURRENT_THRESHOULD = 15;
+        public static final double INTAKING_CURRENT_THRESHOULD = 15;
         public static final double RELEASED_CURRENT_THRESHOULD = 10;
-        public static final double NOPICKUP_CURRENT_THRESHOULD = 0.5;
+        public static final double NOPICKUP_CURRENT_THRESHOULD = 3;
         public static final int CYCLE_INTAKING_THRESHOLD = 50;
         public static final int CYCLE_RELEASED_THRESHOLD = 50;
 

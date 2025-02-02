@@ -80,34 +80,32 @@ public class CoralHandlerCommand extends Command {
                 // L1 ~90, 
                 L1arm.setArmAngle(L1ArmConstants.STOWED);
                 
-                //L4 stowed 
-                if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                    coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD;
-                }
-                cyclesIntaking += 1;
+                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD;
                 
-
                 L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
                 // change state?
-                //coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.HOLDING_CURRENT_THRESHOULD;
                 if(L1IntakeInButton){
                     currentState = State.L1_INTAKING;
-                    cyclesIntaking = 0;
-                }
-                if(L1HumanLoadButton){
-                    currentState = State.L1_HUMAN_LOADING;
-                    cyclesIntaking = 0;
                 }
 
                 if(L4IntakeButton){
                     currentState = State.L4_INTAKING;
                     
                 }
-                if(coralInL1){
-                    currentState = State.L1_HOLDING;
+
+                if(L1HumanLoadButton){
+                    currentState = State.L1_HUMAN_LOADING;
                 }
 
-
+                if(coralInL1){
+                    cyclesIntaking += 1;
+                    if(cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
+                        currentState = State.L1_HOLDING;
+                    }
+                }
+                else{
+                    cyclesIntaking = 0;
+                }
 
             break;
 
@@ -117,7 +115,7 @@ public class CoralHandlerCommand extends Command {
                 // Move L1 to intaking pos, make sure L4 is stowed
                 L1arm.setArmAngle(L1ArmConstants.INTAKING);
                 // wait for spike in current that means we have coral
-                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.HOLDING_CURRENT_THRESHOULD;
+                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.INTAKING_CURRENT_THRESHOULD;
                 L1IntakeSpeed = L1IntakeInButton ? L1IntakeConstants.INTAKE_SPEED : 0;
                 if (coralInL1){
                     if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
@@ -128,14 +126,12 @@ public class CoralHandlerCommand extends Command {
                 else{
                     cyclesIntaking = 0;
                 }
-                
-                   
-
-                
-                
 
                 if(L4IntakeButton){
-                    currentState = State.L4_INTAKING;
+                    currentState = State.IDLE;
+                }
+                if(L1HumanLoadButton){
+                    currentState = State.L1_HUMAN_LOADING;
                 }
 
             break;
@@ -143,9 +139,11 @@ public class CoralHandlerCommand extends Command {
 
                 L1arm.setArmAngle(L1ArmConstants.HUMANLOADING);
                 L1IntakeSpeed = L1HumanLoadButton ? L1IntakeConstants.INTAKE_SPEED : 0;
-                if (L1HumanLoadButton){
+                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.INTAKING_CURRENT_THRESHOULD;
+
+                if (coralInL1){
                     if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                        coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.HOLDING_CURRENT_THRESHOULD;
+                        currentState = State.L1_HOLDING;
                     }
                     cyclesIntaking += 1;
                 }
@@ -153,11 +151,6 @@ public class CoralHandlerCommand extends Command {
                     cyclesIntaking = 0;
                 }
                  
-
-                if(coralInL1){
-                    currentState = State.L1_HOLDING;
-                    cyclesIntaking = 0;
-                }
                 if(!L1HumanLoadButton){
                     currentState = State.IDLE;
                 }
@@ -168,15 +161,8 @@ public class CoralHandlerCommand extends Command {
                 L1arm.setArmAngle(L1ArmConstants.STOWED);
 
                 L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
-                releasedCoral = false;
                 
-                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD;
-                if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                    if(!coralInL1){
-                        currentState = State.IDLE;
-                    } // probably random current spike
-                }
-                cyclesIntaking += 1;
+                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD;                
                 
 
                 if(ScoreButton){
@@ -187,8 +173,15 @@ public class CoralHandlerCommand extends Command {
                 if(HandOffButton){
                     currentState = State.POSITIONING_HANDOFF;
                 }
+
                 if(!coralInL1){
-                    currentState = State.IDLE;
+                    cyclesIntaking += 1;
+                    if(cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
+                        currentState = State.IDLE;
+                    }
+                }
+                else{
+                    cyclesIntaking = 0;
                 }
 
             break;
@@ -198,15 +191,20 @@ public class CoralHandlerCommand extends Command {
                 // Move to scoring position then stop
 
                 L1arm.setArmAngle(L1ArmConstants.SCORING);
-                
-                if(L1IntakeInButton){
-                    currentState = State.L1_INTAKING;
 
-                }
-
+                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD; 
 
                 if(L1arm.atGoal() && ScoreButton){
                     currentState = State.L1_SCORING;
+                }
+                if(!coralInL1){
+                    cyclesIntaking += 1;
+                    if(cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
+                        currentState = State.IDLE;
+                    }
+                }
+                else{
+                    cyclesIntaking = 0;
                 }
                 
 
@@ -221,14 +219,15 @@ public class CoralHandlerCommand extends Command {
                 if(!coralInL1){
                     releasedCoralCycles += 1;
                     if(releasedCoralCycles >= L1IntakeConstants.CYCLE_RELEASED_THRESHOLD){
-                        releasedCoral = true;
+                        currentState = State.IDLE;
                     }
                 }
+                else{
+                    releasedCoralCycles = 0;
+                }
                 
-                // If current drops then return to IDLE
-                if(releasedCoral || !ScoreButton){
-                    currentState = State.IDLE;
-                    cyclesIntaking = 0;
+                if(!ScoreButton){
+                    currentState = State.L1_SCORE_POSITIONING;
                 }
 
             break;
