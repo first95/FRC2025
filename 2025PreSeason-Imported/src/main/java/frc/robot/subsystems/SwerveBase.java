@@ -410,6 +410,10 @@ public class SwerveBase extends SubsystemBase {
       sample.vy + autonYController.calculate(pose.getY(), sample.y),
       sample.omega + autonHeadingController.calculate(pose.getRotation().getRadians(), sample.heading)
     );
+    SmartDashboard.putNumber("AutonXSetpoint", autonXController.calculate(pose.getX(), sample.x));
+    SmartDashboard.putNumber("AutonYSetpoint", autonYController.calculate(pose.getY(), sample.y));
+    SmartDashboard.putNumber("AutonHeadingSetpoint", autonHeadingController.calculate(pose.getRotation().getRadians(), sample.heading));
+
     setChassisSpeeds(speeds);
    
   }
