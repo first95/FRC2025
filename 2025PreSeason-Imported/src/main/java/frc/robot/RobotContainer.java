@@ -146,12 +146,13 @@ public class RobotContainer {
 
 
     coralHandler = new CoralHandlerCommand(
-      () -> driveController.getHID().getRawButton(1),    // L1IntakeInButtonSupplier
-      () -> operatorController.getHID().getRightBumperButton(),    // L1IntakeOutButtonSupplier
-      () -> operatorController.getHID().getBButton(),   // B = L4 intake
-      () -> operatorController.getHID().getAButton(),   // A = Handoff
-      () -> headingController.getHID().getRawButton(1), // Score button
-      () -> operatorController.getHID().getXButton(),   
+      () -> driveController.getHID().getRawButton(1),    // L1Intake
+      () -> operatorController.getHID().getRightBumperButton(),    // L1Eject
+      () -> operatorController.getHID().getBButton(),   // L4 intake
+      () -> operatorController.getHID().getAButton(),   // Handoff
+      () -> headingController.getHID().getRawButton(1), //Score
+      () -> operatorController.getHID().getYButton(), //Stow
+      () -> operatorController.getHID().getXButton(), //L1 HumanLoading
       L1arm
     );
 
@@ -201,12 +202,14 @@ public class RobotContainer {
     new InstantCommand(
       () -> L1arm.setGains()
     ).ignoringDisable(true));
+    
     SmartDashboard.putData("addPosToAuto",
       new InstantCommand(
         () -> addToModularAuto()
       )
       .ignoringDisable(true)
       );
+
     SmartDashboard.putData("setArmAngle",
       new InstantCommand(
         () -> L1arm.setArmAngle(Rotation2d.fromDegrees(0))

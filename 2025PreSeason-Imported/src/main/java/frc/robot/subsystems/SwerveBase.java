@@ -52,6 +52,7 @@ public class SwerveBase extends SubsystemBase {
   private final PIDController autonXController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
   private final PIDController autonYController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
   private final PIDController autonHeadingController = new PIDController(Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
+  private SwerveSample autonSetpoint;
 
   private final SwerveModule[] swerveModules;
   private SwerveModulePosition[] currentModulePositions = new SwerveModulePosition[Drivebase.NUM_MODULES];
@@ -91,7 +92,7 @@ public class SwerveBase extends SubsystemBase {
    * This subsytem also handles odometry.
   */
   public SwerveBase() {
-    autonHeadingController.enableContinuousInput(-Math.PI, Math.PI);
+    
 
     // Create an integrator for angle if the robot is being simulated to emulate an IMU
     // If the robot is real, instantiate the IMU instead.
@@ -178,6 +179,8 @@ public class SwerveBase extends SubsystemBase {
           .angularVelocity(RadiansPerSecond.of(getRobotVelocity().omegaRadiansPerSecond));
         },
         this));
+
+    autonHeadingController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   /**
@@ -264,6 +267,28 @@ public class SwerveBase extends SubsystemBase {
         Constants.LOOP_CYCLE,
         Drivebase.SKEW_CORRECTION_FACTOR),
       currentPose.getRotation()));
+  }
+
+  public void followTrajectory(SwerveSample sample) {
+    
+    Pose2d pose = getPose();
+    autonSetpoint = sample;
+
+    ChassisSpeeds speeds = new ChassisSpeeds(
+      sample.vx + autonXController.calculate(pose.getX(), sample.x),
+      sample.vy + autonYController.calculate(pose.getY(), sample.y),
+      sample.omega + autonHeadingController.calculate(pose.getRotation().getRadians(), sample.heading)
+    );
+    SmartDashboard.putNumber("AutonXSetpoint", autonXController.calculate(pose.getX(), sample.x));
+    SmartDashboard.putNumber("AutonYSetpoint", autonYController.calculate(pose.getY(), sample.y));
+    SmartDashboard.putNumber("AutonHeadingSetpoint", autonHeadingController.calculate(pose.getRotation().getRadians(), sample.heading));
+    SmartDashboard.putNumber("CurrentRobotX", pose.getX());
+    SmartDashboard.putNumber("CurrentRobotY", pose.getY());
+    SmartDashboard.putNumber("CurrentRobotHeading", pose.getRotation().getRadians());
+    
+
+    setChassisSpeeds(speeds);
+   
   }
 
   
@@ -401,22 +426,7 @@ public class SwerveBase extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     odometry.resetPosition(getYaw(), getCurrentModulePositions(), pose);
   }
-  public void followTrajectory(SwerveSample sample) {
-    
-    Pose2d pose = currentPose;
 
-    ChassisSpeeds speeds = new ChassisSpeeds(
-      sample.vx + autonXController.calculate(pose.getX(), sample.x),
-      sample.vy + autonYController.calculate(pose.getY(), sample.y),
-      sample.omega + autonHeadingController.calculate(pose.getRotation().getRadians(), sample.heading)
-    );
-    SmartDashboard.putNumber("AutonXSetpoint", autonXController.calculate(pose.getX(), sample.x));
-    SmartDashboard.putNumber("AutonYSetpoint", autonYController.calculate(pose.getY(), sample.y));
-    SmartDashboard.putNumber("AutonHeadingSetpoint", autonHeadingController.calculate(pose.getRotation().getRadians(), sample.heading));
-
-    setChassisSpeeds(speeds);
-   
-  }
   public void clearOdometrySeed() {
     wasOdometrySeeded = false;
   }
@@ -490,6 +500,7 @@ public class SwerveBase extends SubsystemBase {
   public void periodic() {
     // Read active flags
     debugFlags = (int)SmartDashboard.getNumber(CommandDebugFlags.FLAGS_KEY, 0);
+    
 
     // Update odometry and current pose/velocity
     for (SwerveModule module : swerveModules) {
@@ -597,7 +608,15 @@ public class SwerveBase extends SubsystemBase {
       SmartDashboard.putNumber("Robot Y Vel", currentRobotVelocity.vyMetersPerSecond);
       SmartDashboard.putNumber("Robot Ang Vel", currentRobotVelocity.omegaRadiansPerSecond);
     }
-
+    if(autonSetpoint != null){
+      SmartDashboard.putNumber("AutonXSetpoint", autonSetpoint.x);
+      SmartDashboard.putNumber("AutonYSetpoint", autonSetpoint.y);
+      SmartDashboard.putNumber("AutonHeadingSetpoint", autonSetpoint.heading);
+      
+    } 
+    SmartDashboard.putNumber("CurrentRobotX", currentPose.getX());
+    SmartDashboard.putNumber("CurrentRobotY", currentPose.getY());
+    SmartDashboard.putNumber("CurrentRobotHeading", currentPose.getRotation().getRadians());
   }
 
   @Override

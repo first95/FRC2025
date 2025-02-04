@@ -47,9 +47,11 @@ public final class Autos {
       this.swerve = swerve;
   }
   public Command Diamond(){
-    return Commands.sequence(
-      autoFactory.resetOdometry("Diamond"),
-      autoFactory.trajectoryCmd("Diamond"));
+    Command diamondAuto = autoFactory.trajectoryCmd("Diamond");
+
+    Command fullAuto = Commands.sequence(autoFactory.resetOdometry("Diamond"),diamondAuto);
+    
+    return fullAuto;
   }
   
   public AutoRoutine testModularAuto(){
