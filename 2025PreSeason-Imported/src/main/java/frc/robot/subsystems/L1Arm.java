@@ -112,13 +112,13 @@ public class L1Arm extends SubsystemBase {
       .outputRange(L1ArmConstants.OutputRangeMin, L1ArmConstants.OutputRangeMax);
     shoulderConfig.absoluteEncoder
       .positionConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION)
-      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION)
+      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION/60)
       .zeroOffset(L1ArmConstants.ABSOLUTE_ENCODER_OFFSET/360)
       .inverted(L1ArmConstants.ABSOLUTE_ENCODER_INVERTED)
       .zeroCentered(L1ArmConstants.ABSOLUTE_ENCODER_ZERO_CENTERED);     
     shoulderConfig.encoder
       .positionConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION)
-      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION);
+      .velocityConversionFactor(L1ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION/60);
     
   
     armGoal = L1ArmConstants.STOWED;

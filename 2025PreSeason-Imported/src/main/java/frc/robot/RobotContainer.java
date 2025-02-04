@@ -146,11 +146,11 @@ public class RobotContainer {
 
 
     coralHandler = new CoralHandlerCommand(
-      () -> operatorController.getHID().getLeftBumperButton(),    // L1IntakeInButtonSupplier
-      () -> operatorController.getHID().getYButton(),    // L1IntakeOutButtonSupplier
+      () -> driveController.getHID().getRawButton(1),    // L1IntakeInButtonSupplier
+      () -> operatorController.getHID().getRightBumperButton(),    // L1IntakeOutButtonSupplier
       () -> operatorController.getHID().getBButton(),   // B = L4 intake
       () -> operatorController.getHID().getAButton(),   // A = Handoff
-      () -> operatorController.getHID().getRightBumperButton(), // Score button
+      () -> headingController.getHID().getRawButton(1), // Score button
       () -> operatorController.getHID().getXButton(),   
       L1arm
     );

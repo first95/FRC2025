@@ -57,7 +57,7 @@ public final class Constants {
         // Hold time on motor brakes when disabled
         public static final double WHEEL_LOCK_TIME = 10; // seconds
 
-        public static final int SWERVE_MODULE_CURRENT_LIMIT = 60;
+        public static final int SWERVE_MODULE_CURRENT_LIMIT = 50;
 
         public static final double HEADING_TOLERANCE = Math.toRadians(1.5);
 
@@ -246,7 +246,7 @@ public final class Constants {
 
         public static final double DEADBAND = Math.toRadians(0.1);
 
-        public static final double TOLERANCE = Math.toRadians(0.1);
+        public static final double TOLERANCE = Math.toRadians(6);
         public static final int SETTLE_TIME_LOOP_CYCLES = 200;
 
         public static final double CURRENT_OFFSET = 5;
@@ -274,8 +274,8 @@ public final class Constants {
         public static final double INTAKING_CURRENT_THRESHOULD = 15;
         public static final double RELEASED_CURRENT_THRESHOULD = 10;
         public static final double NOPICKUP_CURRENT_THRESHOULD = 3;
-        public static final int CYCLE_INTAKING_THRESHOLD = 50;
-        public static final int CYCLE_RELEASED_THRESHOLD = 50;
+        public static final int CYCLE_INTAKING_THRESHOLD = 20;
+        public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
         public static final double HOLDING_SPEED = 0.05;
         public static final double SCORE_SPEED = -1;
@@ -287,7 +287,7 @@ public final class Constants {
         //Values currently copied from L1ArmConstants, not updated 1/31/25
         public static final int SHOULDER_ID = 0;
 
-        public static final int SMARTCURRENTLIMIT = 80;
+        public static final int SMARTCURRENTLIMIT = 0;
 
 
         public static final boolean PRIMARY_ENCODER_POSITION_ALWAYS_ON = true;
@@ -390,7 +390,7 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints ANGULAR_CONSTRAINTS = new TrapezoidProfile.Constraints(
             ANGULAR_VELOCITY_LIMIT, ANGULAR_ACCELERATION_LIMIT);
         
-        public static final double DRIVE_KP = 2;
+        public static final double DRIVE_KP = 20;
         public static final double DRIVE_KI = 0;
         public static final double DRIVE_KD = 0;
 
