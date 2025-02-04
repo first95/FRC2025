@@ -14,11 +14,11 @@
 
 ## Static IPs used so far
 
-| IP         | Device           |
-|------------|------------------|
-| 10.0.95.13 | LimeLight 2+     |
-| 10.0.95.14 | 1st LimeLight 3G |
-| 10.0.95.15 | 2nd LimeLight 3G |
+| IP         | Device           | Position            |
+|------------|------------------|---------------------|
+| 10.0.95.13 | LimeLight 2+     | None                |
+| 10.0.95.14 | 1st LimeLight 3G | Lower, scoring side |
+| 10.0.95.15 | 2nd LimeLight 3G | Upper, loading side |
 
 All three LimeLights are on Firmware 2025.0 and are configured with AprilTag localization pipelines.  We did get a couple Google Coral TPUs to try Machine Learning game piece recognition
 as well.
