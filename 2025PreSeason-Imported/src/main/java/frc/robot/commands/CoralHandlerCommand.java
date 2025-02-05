@@ -10,15 +10,19 @@ import frc.robot.subsystems.L1Arm;
 import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.L1IntakeConstants;
 
+import frc.robot.subsystems.L4Arm;
+import frc.robot.Constants.L4ArmConstants;
+
 
 public class CoralHandlerCommand extends Command {
     
     private final BooleanSupplier L1IntakeButtonSupplier, L1EjectButtonSupplier, L4IntakeButtonSupplier, HandOffButtonSupplier, ScoreButtonSupplier, L1HumanLoadingSupplier;
     private final L1Arm L1arm;
+    private final L4Arm L4arm;
     private enum State{
         IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
         POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
-        L4_INTAKING, L4_HOLDING, L4_SCORING, L1_HUMAN_LOADING;
+        L4_INTAKING, L4_HOLDING, L4_SCORING, L1_HUMAN_LOADING, L4_SCORE_POSITIONING;
     }
 
     private boolean L1IntakeButton, L1EjectButton, L4IntakeButton, HandOffButton, ScoreButton, RollerTrigger, L1HumanLoadButton;
@@ -28,12 +32,13 @@ public class CoralHandlerCommand extends Command {
     private double IntakeCurrent;
     private int cyclesIntaking;
     private double L1IntakeSpeed;
+    private boolean L4_Holding;
     private State currentState = State.IDLE;
     
 
         public CoralHandlerCommand(BooleanSupplier L1IntakeButtonSupplier, BooleanSupplier L1EjectButtonSupplier, BooleanSupplier L4IntakeButtonSupplier, 
                                    BooleanSupplier HandOffButtonSupplier, BooleanSupplier ScoreButtonSupplier,  BooleanSupplier L1HumanLoadingSupplier,
-                                   L1Arm L1arm){
+                                   L1Arm L1arm, L4Arm L4arm){
             
     
     
@@ -48,6 +53,9 @@ public class CoralHandlerCommand extends Command {
 
             this.L1arm = L1arm;
             addRequirements(L1arm);
+
+            this.L4arm = L4arm;
+            addRequirements(L4arm);
 
     }
 
@@ -91,6 +99,7 @@ public class CoralHandlerCommand extends Command {
                 }
 
                 if(L4IntakeButton){
+                    cyclesIntaking = 0;
                     currentState = State.L4_INTAKING;
                     
                 }
@@ -252,7 +261,6 @@ public class CoralHandlerCommand extends Command {
             case PERFORMING_HANDOFF:
                 // Less resistance then go to L4 holding
 
-                
 
             break;
 
@@ -262,12 +270,21 @@ public class CoralHandlerCommand extends Command {
                 // L1 backstop ~95 deg
                 L1arm.setArmAngle(L1ArmConstants.STOWED);
 
+
+
                 if(L1IntakeButton){
                     currentState = State.IDLE;
 
                 }
 
                 // if holding coral go to L4_HOLDING
+
+                L4_Holding = false;
+
+                if(L4_Holding){
+                    currentState = State.L4_HOLDING;
+
+                }
 
 
 
@@ -276,33 +293,59 @@ public class CoralHandlerCommand extends Command {
 
             case L4_HOLDING:
 
+        
                 if(ScoreButton){
-                    currentState = State.L4_SCORING;
+                    currentState = State.L4_SCORE_POSITIONING;
                 }
 
                 // Handoff fail or misclick
-                if(L1IntakeButton){
-                    currentState = State.L1_INTAKING;
-                }
+                // if(L1IntakeButton){
+                //     currentState = State.L1_INTAKING;
+                // }
 
                 if(L4IntakeButton){
                     currentState = State.L4_INTAKING;
                 }
 
+                if(L1IntakeButton){
+                    currentState = State.IDLE;
+                }
+
             break;
+
+            case L4_SCORE_POSITIONING:
+
+                L4arm.setArmAngle(L4ArmConstants.SCORING);
+
+                
+                if(L1IntakeButton){
+                currentState = State.IDLE;
+            }  
+
+                if(L4IntakeButton){
+                currentState = State.IDLE;
+            }
+
+            if(ScoreButton){
+                currentState = State.L4_SCORING;
+
+            }
+
+
 
 
             case L4_SCORING:
-                if(L1IntakeButton){
-                    currentState = State.IDLE;
+
+
+                if(!ScoreButton){
+                    if(releasedCoralCycles >= L4ArmConstants.CYCLE_RELEASED_THRESHOLD){
+                        currentState = State.IDLE;  // Assume you dropped the thing, and can return
+                    }
             }
 
-                if(L4IntakeButton){
-                    currentState = State.IDLE;
-            }
+                
 
-
-
+                
             break;
 
 

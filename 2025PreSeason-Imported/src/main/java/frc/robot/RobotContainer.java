@@ -14,6 +14,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.CoralHandlerCommand;
 import frc.robot.commands.drivebase.AbsoluteDrive;
 import frc.robot.subsystems.L1Arm;
+import frc.robot.subsystems.L4Arm;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.drivebase.TeleopDrive;
 import frc.robot.subsystems.SwerveBase;
@@ -67,6 +68,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveBase drivebase = new SwerveBase();
   private final L1Arm L1arm = new L1Arm();
+  private final L4Arm L4arm = new L4Arm();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
   private final CoralHandlerCommand coralHandler;
@@ -152,7 +154,7 @@ public class RobotContainer {
       () -> operatorController.getHID().getAButton(),   // A = Handoff
       () -> headingController.getHID().getRawButton(1), // Score button
       () -> operatorController.getHID().getXButton(),   
-      L1arm
+      L1arm, L4arm
     );
 
     L1arm.setDefaultCommand(coralHandler);

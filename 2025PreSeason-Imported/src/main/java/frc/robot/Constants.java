@@ -338,6 +338,9 @@ public final class Constants {
 
         public static final double CURRENT_OFFSET = 5;
 
+        public static final int CYCLE_INTAKING_THRESHOLD = 20;
+        public static final int CYCLE_RELEASED_THRESHOLD = 10;
+
     }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
