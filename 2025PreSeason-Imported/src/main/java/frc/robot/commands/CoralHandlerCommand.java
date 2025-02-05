@@ -16,7 +16,15 @@ import frc.robot.Constants.L4ArmConstants;
 
 public class CoralHandlerCommand extends Command {
     
-    private final BooleanSupplier L1IntakeButtonSupplier, L1EjectButtonSupplier, L4IntakeButtonSupplier, HandOffButtonSupplier, ScoreButtonSupplier, L1HumanLoadingSupplier;
+    private final BooleanSupplier 
+        L1IntakeButtonSupplier, 
+        L1EjectButtonSupplier, 
+        L4IntakeButtonSupplier, 
+        HandOffButtonSupplier, 
+        ScoreButtonSupplier,
+        StowButtonSupplier, 
+        L1HumanLoadingSupplier;
+
     private final L1Arm L1arm;
     private final L4Arm L4arm;
     private enum State{
@@ -25,7 +33,15 @@ public class CoralHandlerCommand extends Command {
         L4_INTAKING, L4_HOLDING, L4_SCORING, L1_HUMAN_LOADING, L4_SCORE_POSITIONING;
     }
 
-    private boolean L1IntakeButton, L1EjectButton, L4IntakeButton, HandOffButton, ScoreButton, RollerTrigger, L1HumanLoadButton;
+    private boolean 
+        L1IntakeButton, 
+        L1EjectButton, 
+        L4IntakeButton, 
+        HandOffButton, 
+        ScoreButton, 
+        StowButton, 
+        L1HumanLoadButton;
+
     private boolean coralInL1 = false;
     private boolean releasedCoral = false; 
     private int releasedCoralCycles = 0;
@@ -37,19 +53,26 @@ public class CoralHandlerCommand extends Command {
     
 
         public CoralHandlerCommand(BooleanSupplier L1IntakeButtonSupplier, BooleanSupplier L1EjectButtonSupplier, BooleanSupplier L4IntakeButtonSupplier, 
+<<<<<<< HEAD
                                    BooleanSupplier HandOffButtonSupplier, BooleanSupplier ScoreButtonSupplier,  BooleanSupplier L1HumanLoadingSupplier,
                                    L1Arm L1arm, L4Arm L4arm){
+=======
+                                   BooleanSupplier HandOffButtonSupplier, BooleanSupplier ScoreButtonSupplier, BooleanSupplier StowButtonSupplier, BooleanSupplier L1HumanLoadingSupplier,
+                                   L1Arm L1arm){
+>>>>>>> main
             
     
     
     
             this.L1IntakeButtonSupplier = L1IntakeButtonSupplier;
             this.L1EjectButtonSupplier = L1EjectButtonSupplier;
+            this.L1HumanLoadingSupplier = L1HumanLoadingSupplier;
+            this.StowButtonSupplier = StowButtonSupplier;
             this.L4IntakeButtonSupplier = L4IntakeButtonSupplier;
 
             this.HandOffButtonSupplier = HandOffButtonSupplier;
             this.ScoreButtonSupplier = ScoreButtonSupplier;
-            this.L1HumanLoadingSupplier = L1HumanLoadingSupplier;
+           
 
             this.L1arm = L1arm;
             addRequirements(L1arm);
@@ -71,13 +94,18 @@ public class CoralHandlerCommand extends Command {
 
         L1IntakeButton = L1IntakeButtonSupplier.getAsBoolean();
         L1EjectButton = L1EjectButtonSupplier.getAsBoolean();
-        L4IntakeButton = L4IntakeButtonSupplier.getAsBoolean();
         L1HumanLoadButton = L1HumanLoadingSupplier.getAsBoolean();
+        StowButton = StowButtonSupplier.getAsBoolean();
 
+        L4IntakeButton = L4IntakeButtonSupplier.getAsBoolean();
+        
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         ScoreButton = ScoreButtonSupplier.getAsBoolean();
 
         L1arm.runIntake(L1IntakeSpeed);
+        if(StowButton){
+            currentState = State.IDLE;
+        }
 
         if(L1EjectButton){
             L1IntakeSpeed = L1IntakeConstants.SCORE_SPEED;
