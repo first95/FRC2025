@@ -188,6 +188,7 @@ public class RobotContainer {
 
 
     autoChooser.addRoutine("diamond",autos :: Diamond);
+    autoChooser.addRoutine("L1HumanLoadAndScore", autos :: L1HumanLoadAndScore);
     autoChooser.addRoutine("TestModularAuto",autos :: testModularAuto);
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
