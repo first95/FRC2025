@@ -80,6 +80,7 @@ public class RobotContainer {
   public AutoChooser autoChooser;
   private final SendableChooser<String> modularAutoTargetChooser = new SendableChooser<>();
   private String[] modularAutoTargets = {};
+  String currentModularAuto = "";
   private final Autos autos;
 
   SendableChooser<Integer> debugMode = new SendableChooser<>();
@@ -186,8 +187,8 @@ public class RobotContainer {
     autos = new Autos(drivebase);
 
 
-    autoChooser.addCmd("diamond",autos :: Diamond);
-    autoChooser.addRoutine("TestModularAuto",() -> autos.testModularAuto());
+    autoChooser.addRoutine("diamond",autos :: Diamond);
+    autoChooser.addRoutine("TestModularAuto",autos :: testModularAuto);
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
 
@@ -196,7 +197,9 @@ public class RobotContainer {
     modularAutoTargetChooser.addOption("L1", "L1");
     
     SmartDashboard.putData("AutoChooser",autoChooser);
+    
     SmartDashboard.putData("ModularAutoChooser",modularAutoTargetChooser);
+    SmartDashboard.putString("currentModularAuto", "");
     
     SmartDashboard.putData("setShoulderGains",
     new InstantCommand(
@@ -275,20 +278,24 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return autoCommand;
+    return autoChooser.selectedCommand();
   }
   
   public void addToModularAuto(){
     final int N = modularAutoTargets.length;
     modularAutoTargets = Arrays.copyOf(modularAutoTargets,N + 1);
     modularAutoTargets[N] = modularAutoTargetChooser.getSelected();
+    currentModularAuto += "- " + modularAutoTargetChooser.getSelected();
     SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
+    SmartDashboard.putString("currentModularAuto",currentModularAuto);
   }
   public void removeFromModularAuto(){
     final int N = modularAutoTargets.length;
-    if (N >= 1){
+    if (N > 0){
       modularAutoTargets = Arrays.copyOf(modularAutoTargets,N - 1);
+      currentModularAuto = currentModularAuto.substring(0,currentModularAuto.length() - 4);
       SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
+      SmartDashboard.putString("currentModularAuto", currentModularAuto);
     }
   }
 

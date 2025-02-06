@@ -13,6 +13,8 @@ import frc.robot.subsystems.SwerveBase;
 import java.sql.Driver;
 import java.util.Map;
 
+import com.pathplanner.lib.auto.CommandUtil;
+
 import choreo.trajectory.Trajectory;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
@@ -25,11 +27,24 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
   private final AutoFactory autoFactory;
   private final SwerveBase swerve;
+  private final Command L1HumanLoad = Commands.sequence(
+    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1HUMANLOAD_KEY, true)),
+    new WaitCommand(Constants.Auton.HUMANLOAD_TIMEOUT),
+    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1HUMANLOAD_KEY, false))
+    );
+  private final Command l1Score = Commands.sequence(
+    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1SCORE_KEY, true)),
+    new WaitCommand(Constants.Auton.SCORE_TIMEOUT),
+    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1SCORE_KEY, false)
+  ));
+  String runningAuto;
   
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
@@ -46,21 +61,54 @@ public final class Autos {
       swerve);
       this.swerve = swerve;
   }
-  public Command Diamond(){
-    Command diamondAuto = autoFactory.trajectoryCmd("Diamond");
 
-    Command fullAuto = Commands.sequence(autoFactory.resetOdometry("Diamond"),diamondAuto);
-    
-    return fullAuto;
+  public AutoRoutine Diamond(){
+    AutoRoutine routine = autoFactory.newRoutine("Diamond");
+
+    AutoTrajectory Diamond = routine.trajectory("Diamond");
+    routine.active().onTrue(
+        Commands.sequence(
+            Diamond.resetOdometry(),
+            Diamond.cmd()
+        )
+    );
+    return routine;
   }
+  
+  public AutoRoutine L1HumanLoadAndScore(){
+    AutoRoutine routine = autoFactory.newRoutine("L1HumanLoadAndScore");
+
+    AutoTrajectory humanLoadAndScore = routine.trajectory("L1HumanLoadAndScore");
+
+
+    routine.active().onTrue(
+      Commands.sequence(
+        humanLoadAndScore.resetOdometry(),
+        L1HumanLoad,
+        humanLoadAndScore.cmd()
+      )
+    );
+    Trigger scoreTrigger = humanLoadAndScore.atTime("Score");
+    scoreTrigger.onTrue(l1Score);
+
+
+    return routine;
+  }
+  
   
   public AutoRoutine testModularAuto(){
     AutoRoutine routine = autoFactory.newRoutine("TestModularAuto");
-    String [] posTargets = SmartDashboard.getStringArray("modularAutoTargets", null);
-    if (posTargets.length > 2){
-      AutoTrajectory[] trajectories = {};
+    String[] posTargets = SmartDashboard.getStringArray("modularAutoTargets", null);
+    
+    
+    
+    if (posTargets != null && posTargets.length > 2){
+      for (String Target : posTargets) {
+        runningAuto += "- " + Target;
+      }
+      SmartDashboard.putString("runningAuto",runningAuto);
+      AutoTrajectory[] trajectories = new AutoTrajectory[posTargets.length - 1];
 
-      
 
       //load trajectorys based on posTargets
       for(int n = 0; n < trajectories.length; n++){
@@ -76,7 +124,7 @@ public final class Autos {
       );
       
       //go through all trajectorys and run them one after another
-      for(int n = 0; n < trajectories.length; n++){
+      for(int n = 0; n < trajectories.length - 1; n++){
         trajectories[n].done().onTrue(trajectories[n+1].cmd());
       }
       

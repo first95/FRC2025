@@ -1,0 +1,48 @@
+{
+ "name":"L1HumanLoadAndScore",
+ "version":1,
+ "snapshot":{
+  "waypoints":[
+    {"x":0.0, "y":0.0, "heading":0.0, "intervals":13, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":2.0, "y":0.0, "heading":0.0, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+  "constraints":[
+    {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true}],
+  "targetDt":0.05
+ },
+ "params":{
+  "waypoints":[
+    {"x":{"exp":"0 m", "val":0.0}, "y":{"exp":"-0 mm", "val":0.0}, "heading":{"exp":"-0 rad", "val":0.0}, "intervals":13, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"2 m", "val":2.0}, "y":{"exp":"0 mm", "val":0.0}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+  "constraints":[
+    {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true}],
+  "targetDt":{
+   "exp":"0.05 s",
+   "val":0.05
+  }
+ },
+ "trajectory":{
+  "sampleType":"Swerve",
+  "waypoints":[0.0,0.62137],
+  "samples":[
+    {"t":0.0, "x":0.0, "y":0.0, "heading":0.0, "vx":0.0, "vy":0.0, "omega":0.0, "ax":22.5337, "ay":0.0, "alpha":0.0, "fx":[148.20618,148.20618,148.20618,148.20618], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.0478, "x":0.02574, "y":0.0, "heading":0.0, "vx":1.07706, "vy":0.0, "omega":0.0, "ax":22.52661, "ay":0.0, "alpha":0.0, "fx":[148.15953,148.15953,148.15953,148.15953], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.0956, "x":0.10295, "y":0.0, "heading":0.0, "vx":2.15378, "vy":0.0, "omega":0.0, "ax":22.51246, "ay":0.0, "alpha":0.0, "fx":[148.06645,148.06645,148.06645,148.06645], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.14339, "x":0.23162, "y":0.0, "heading":0.0, "vx":3.22983, "vy":0.0, "omega":0.0, "ax":22.47031, "ay":0.0, "alpha":0.0, "fx":[147.78924,147.78924,147.78924,147.78924], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.19119, "x":0.41166, "y":0.0, "heading":0.0, "vx":4.30386, "vy":0.0, "omega":0.0, "ax":16.20555, "ay":0.0, "alpha":0.0, "fx":[106.58537,106.58537,106.58537,106.58537], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.23899, "x":0.63589, "y":0.0, "heading":0.0, "vx":5.07845, "vy":0.0, "omega":0.0, "ax":0.00097, "ay":0.0, "alpha":0.0, "fx":[0.00639,0.00639,0.00639,0.00639], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.28679, "x":0.87863, "y":0.0, "heading":0.0, "vx":5.0785, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.33458, "x":1.12137, "y":0.0, "heading":0.0, "vx":5.0785, "vy":0.0, "omega":0.0, "ax":-0.00097, "ay":0.0, "alpha":0.0, "fx":[-0.00639,-0.00639,-0.00639,-0.00639], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.38238, "x":1.36411, "y":0.0, "heading":0.0, "vx":5.07845, "vy":0.0, "omega":0.0, "ax":-16.20555, "ay":0.0, "alpha":0.0, "fx":[-106.58537,-106.58537,-106.58537,-106.58537], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.43018, "x":1.58834, "y":0.0, "heading":0.0, "vx":4.30386, "vy":0.0, "omega":0.0, "ax":-22.47031, "ay":0.0, "alpha":0.0, "fx":[-147.78924,-147.78924,-147.78924,-147.78924], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.47798, "x":1.76838, "y":0.0, "heading":0.0, "vx":3.22983, "vy":0.0, "omega":0.0, "ax":-22.51246, "ay":0.0, "alpha":0.0, "fx":[-148.06645,-148.06645,-148.06645,-148.06645], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.52578, "x":1.89705, "y":0.0, "heading":0.0, "vx":2.15378, "vy":0.0, "omega":0.0, "ax":-22.52661, "ay":0.0, "alpha":0.0, "fx":[-148.15953,-148.15953,-148.15953,-148.15953], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.57357, "x":1.97426, "y":0.0, "heading":0.0, "vx":1.07706, "vy":0.0, "omega":0.0, "ax":-22.5337, "ay":0.0, "alpha":0.0, "fx":[-148.20618,-148.20618,-148.20618,-148.20618], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.62137, "x":2.0, "y":0.0, "heading":0.0, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
+  "splits":[0]
+ },
+ "events":[
+   {"name":"Score", "from":{"target":1, "targetTimestamp":0.62137, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"HumanLoad", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+}

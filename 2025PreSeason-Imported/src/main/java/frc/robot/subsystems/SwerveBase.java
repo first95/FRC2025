@@ -53,6 +53,7 @@ public class SwerveBase extends SubsystemBase {
   private final PIDController autonYController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
   private final PIDController autonHeadingController = new PIDController(Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
   private SwerveSample autonSetpoint;
+  
 
   private final SwerveModule[] swerveModules;
   private SwerveModulePosition[] currentModulePositions = new SwerveModulePosition[Drivebase.NUM_MODULES];
@@ -181,6 +182,9 @@ public class SwerveBase extends SubsystemBase {
         this));
 
     autonHeadingController.enableContinuousInput(-Math.PI, Math.PI);
+    autonXController.setTolerance(Constants.Auton.DRIVE_POSITIONAL_TOLERANCE);
+    autonYController.setTolerance(Constants.Auton.DRIVE_POSITIONAL_TOLERANCE);
+    autonHeadingController.setTolerance(Constants.Drivebase.HEADING_TOLERANCE);
   }
 
   /**

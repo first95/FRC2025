@@ -3,12 +3,13 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.L1Arm;
 import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.L1IntakeConstants;
+import frc.robot.Constants;
 
 
 public class CoralHandlerCommand extends Command {
@@ -37,6 +38,11 @@ public class CoralHandlerCommand extends Command {
         ScoreButton, 
         StowButton, 
         L1HumanLoadButton;
+    
+    private boolean 
+        AutoL1HumanLoadTrigger,
+        autoScoreTrigger;
+
 
     private boolean coralInL1 = false;
     private boolean releasedCoral = false; 
@@ -89,6 +95,9 @@ public class CoralHandlerCommand extends Command {
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         ScoreButton = ScoreButtonSupplier.getAsBoolean();
 
+        AutoL1HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L1HUMANLOAD_KEY, false);
+        autoScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L1SCORE_KEY, false);
+
         L1arm.runIntake(L1IntakeSpeed);
         if(StowButton){
             currentState = State.IDLE;
@@ -118,7 +127,7 @@ public class CoralHandlerCommand extends Command {
                     
                 }
 
-                if(L1HumanLoadButton){
+                if(L1HumanLoadButton || AutoL1HumanLoadTrigger){
                     currentState = State.L1_HUMAN_LOADING;
                 }
 
@@ -179,7 +188,7 @@ public class CoralHandlerCommand extends Command {
                     cyclesIntaking = 0;
                 }
                  
-                if(!L1HumanLoadButton){
+                if(!L1HumanLoadButton || !AutoL1HumanLoadTrigger){
                     currentState = State.IDLE;
                 }
             break;
@@ -193,7 +202,7 @@ public class CoralHandlerCommand extends Command {
                 coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD;                
                 
 
-                if(ScoreButton){
+                if(ScoreButton || autoScoreTrigger){
 
                     currentState = State.L1_SCORE_POSITIONING;
                 }

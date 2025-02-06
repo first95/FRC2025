@@ -369,9 +369,9 @@ public final class Constants {
 
     public static final class Auton {
         // Plumbing via SmartDashboard
-        public static final String ARM_ANGLE_KEY = "AutoArmAngleRadians";
+        public static final String L1HUMANLOAD_KEY = "AutoL1HumanLoad";
         public static final String ON_TARGET_KEY = "AutoOnTarget";
-        public static final String AUTO_SHOOTING_KEY = "AutoShootingRequested";
+        public static final String L1SCORE_KEY = "AutoL1Score";
         public static final String PORT_SPEED_KEY = "PortSpeed";
         public static final String STARBOARD_SPEED_KEY = "StarboardSpeed";
         public static final String AUTO_AMP_ALIGN_KEY = "AutoAligningAmp";
@@ -423,7 +423,8 @@ public final class Constants {
         // Added to final autoshoot calculations-- remember that we shoot from the back
         public static final Rotation2d AUTO_SHOOT_AZIMUTH_ADJUSTMENT = Rotation2d.fromDegrees(4);
 
-        public static final double AUTO_INTAKE_SPEED = 1;
+        public static final double HUMANLOAD_TIMEOUT = 2;
+        public static final double SCORE_TIMEOUT = 3;
     }
     public static final class CommandDebugFlags {
         public static final int ALIGN_TO_POSE = 0b1000000;
