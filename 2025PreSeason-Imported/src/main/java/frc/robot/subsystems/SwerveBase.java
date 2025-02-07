@@ -616,6 +616,7 @@ public class SwerveBase extends SubsystemBase {
       SmartDashboard.putNumber("AutonXSetpoint", autonSetpoint.x);
       SmartDashboard.putNumber("AutonYSetpoint", autonSetpoint.y);
       SmartDashboard.putNumber("AutonHeadingSetpoint", autonSetpoint.heading);
+      field.getObject("AutonPoseSetPoint").setPose(autonSetpoint.getPose());
       
     } 
     SmartDashboard.putNumber("CurrentRobotX", currentPose.getX());

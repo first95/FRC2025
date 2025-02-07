@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import java.util.Arrays;
 
 
@@ -40,6 +41,7 @@ import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -233,13 +235,14 @@ public class RobotContainer {
       )
       .ignoringDisable(true)
     );
+
     RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
   }
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
    * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} coSnstructor with
    * an arbitrary
    * predicate, or via the named factories in {@link
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
