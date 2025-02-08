@@ -15,6 +15,7 @@ import frc.robot.commands.CoralHandlerCommand;
 import frc.robot.commands.drivebase.AbsoluteDrive;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.L1Arm;
+import frc.robot.subsystems.L4Arm;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.drivebase.TeleopDrive;
 import frc.robot.subsystems.SwerveBase;
@@ -70,6 +71,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveBase drivebase = new SwerveBase();
   private final L1Arm L1arm = new L1Arm();
+  private final L4Arm l4arm = new L4Arm();
   private final Climber climber = new Climber();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
@@ -271,10 +273,10 @@ public class RobotContainer {
     // }
     // operatorController.a().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(0.001)));
     // operatorController.b().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(-0.001)));
-    // operatorController.a().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
-    // operatorController.b().whileTrue(L1arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
-    // operatorController.x().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
-    // operatorController.y().whileTrue(L1arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
+    // operatorController.a().whileTrue(L4arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
+    // operatorController.b().whileTrue(L4arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
+    // operatorController.x().whileTrue(L4arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
+    // operatorController.y().whileTrue(L4arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
     /*driveController.button(2).whileTrue(new AutoAmp(drivebase)).onFalse(new InstantCommand(() -> {
       SmartDashboard.putBoolean(Auton.AUTO_AMP_SCORE_KEY, false);
       SmartDashboard.putBoolean(Auton.AUTO_AMP_ALIGN_KEY, falSse);

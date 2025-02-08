@@ -45,7 +45,8 @@ public class L4Arm extends SubsystemBase {
   private final SparkMax shoulder;
   private final SparkMaxConfig shoulderConfig;
   private final SparkClosedLoopController shoulderPID;
-  private final SparkAbsoluteEncoder shoulderEncoder;
+  private final SparkAbsoluteEncoder shoulderAbsoluteEncoder;
+  private final SysIdRoutine L4Characterizer;
 
   private final TrapezoidProfile shoulderProfile;
   private Rotation2d armGoal; 
@@ -85,22 +86,25 @@ public class L4Arm extends SubsystemBase {
             L4ArmConstants.KF)
       .outputRange(L4ArmConstants.OutputRangeMin, L4ArmConstants.OutputRangeMax);
     
+    
     shoulderConfig.absoluteEncoder
       .positionConversionFactor(L4ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION)
       .velocityConversionFactor(L4ArmConstants.SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION/ 60)
-      .zeroOffset(L4ArmConstants.ABSOLUTE_ENCODER_INVERTED ? -1 * L4ArmConstants.ABSOLUTE_ENCODER_OFFSET/360 : L4ArmConstants.ABSOLUTE_ENCODER_OFFSET/360)
+      .zeroOffset(L4ArmConstants.ABSOLUTE_ENCODER_OFFSET/360)
       .inverted(L4ArmConstants.ABSOLUTE_ENCODER_INVERTED);  
 
     shoulderConfig.encoder
       .positionConversionFactor(L4ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION)
       .velocityConversionFactor(L4ArmConstants.SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION/60);
 
+
+    shoulderAbsoluteEncoder = shoulder.getAbsoluteEncoder();
     shoulderProfile = new TrapezoidProfile(
       new TrapezoidProfile.Constraints(
         L4ArmConstants.MAX_SPEED, 
         L4ArmConstants.MAX_ACCELERATION));
-    //armGoal = L4ArmConstants.STOWED
-    //profileStart = new TrapezoidProfile.State(shoulder.getEncoder().getPosition(),0);
+    armGoal = L4ArmConstants.STOWED;
+    profileStart = new TrapezoidProfile.State(shoulderAbsoluteEncoder.getPosition(),0);
     lastShoulderVelocitySetpoint = 0;
     armAccel = 0;
 
@@ -113,12 +117,25 @@ public class L4Arm extends SubsystemBase {
     shoulderFeedforwardValue = 0;
 
     shoulder.configure(shoulderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    shoulderEncoder = shoulder.getAbsoluteEncoder();
+    
 
     timer = new Timer();
     timer.start();
 
     cyclesSinceShoulderNotAtGoal = 0;
+    L4Characterizer = new SysIdRoutine(
+        new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(
+            volatage -> {
+              shoulder.setVoltage(volatage);
+            },
+            log -> {
+              log.motor("L4Shoulder")
+                  .voltage(Volts.of(shoulder.getAppliedOutput() * shoulder.getBusVoltage()))
+                  .angularPosition(Rotations.of(shoulderAbsoluteEncoder.getPosition()))
+                  .angularVelocity(RotationsPerSecond.of(shoulderAbsoluteEncoder.getVelocity()));
+            },
+            this));
   }
 
 
@@ -151,7 +168,7 @@ public class L4Arm extends SubsystemBase {
   }
 
   public Rotation2d getArmAngle(){
-    return Rotation2d.fromRadians(shoulderEncoder.getPosition());
+    return Rotation2d.fromRadians(shoulderAbsoluteEncoder.getPosition());
   }
 
   public double getArmCurrent(){
@@ -161,7 +178,7 @@ public class L4Arm extends SubsystemBase {
   public void setArmAngle(Rotation2d angle){
     if(angle.getRadians() != armGoal.getRadians()){
       armGoal = angle;
-      profileStart = new TrapezoidProfile.State(shoulderEncoder.getPosition(),shoulderEncoder.getVelocity());
+      profileStart = new TrapezoidProfile.State(shoulderAbsoluteEncoder.getPosition(),shoulderAbsoluteEncoder.getVelocity());
       cyclesSinceShoulderNotAtGoal = 0;
       timer.stop();
       timer.reset();
@@ -171,45 +188,45 @@ public class L4Arm extends SubsystemBase {
   @Override
   public void periodic() {
 
-    // if(armGoal.getRadians() >= L4ArmConstants.UPPER_LIMIT.getRadians()){
-    //   armGoal = L4ArmConstants.UPPER_LIMIT;
-    // }
-    // shoulderSetpoint = shoulderProfile.calculate(
-    //   timer.get(), 
-    //   profileStart,
-    //   new TrapezoidProfile.State(armGoal.getRadians(),0));
+    if(armGoal.getRadians() >= L4ArmConstants.UPPER_LIMIT.getRadians()){
+      armGoal = L4ArmConstants.UPPER_LIMIT;
+    }
+    shoulderSetpoint = shoulderProfile.calculate(
+      timer.get(), 
+      new TrapezoidProfile.State(shoulderAbsoluteEncoder.getPosition(),shoulderAbsoluteEncoder.getVelocity()),
+      new TrapezoidProfile.State(armGoal.getRadians(),0));
 
-    //   if (shoulderSetpoint.velocity > lastShoulderVelocitySetpoint) {
-    //     armAccel = L4ArmConstants.MAX_ACCELERATION;
-    //   } else if (shoulderSetpoint.velocity < lastShoulderVelocitySetpoint) {
-    //     armAccel = -L4ArmConstants.MAX_ACCELERATION;
-    //   } else {
-    //     armAccel = 0;
-    //   }
-    // lastShoulderVelocitySetpoint = shoulderSetpoint.velocity;
+      if (shoulderSetpoint.velocity > lastShoulderVelocitySetpoint) {
+        armAccel = L4ArmConstants.MAX_ACCELERATION;
+      } else if (shoulderSetpoint.velocity < lastShoulderVelocitySetpoint) {
+        armAccel = -L4ArmConstants.MAX_ACCELERATION;
+      } else {
+        armAccel = 0;
+      }
+    lastShoulderVelocitySetpoint = shoulderSetpoint.velocity;
 
-    // if (!armAtGoal() && ((Math.abs(shoulderSetpoint.position - L4ArmConstants.LOWER_LIMIT.getRadians()) <= L4ArmConstants.DEADBAND) ||
-    //                     (Math.abs(shoulderSetpoint.position - L4ArmConstants.UPPER_LIMIT.getRadians()) <= L4ArmConstants.DEADBAND))) {
-    //   shoulder.set(0);
-    //   shoulderFeedforwardValue = 0;
-    // } else {
-    //   shoulderFeedforwardValue = shoulderFeedforward.calculate(shoulderSetpoint.position, shoulderSetpoint.velocity, armAccel);
-    //   shoulderPID.setReference(
-    //       shoulderSetpoint.position,
-    //       ControlType.kPosition,
-    //       ClosedLoopSlot.kSlot0,
-    //       shoulderFeedforwardValue,
-    //       ArbFFUnits.kVoltage);
-    // }
-    // cyclesSinceShoulderNotAtGoal = Math.abs(armGoal.getRadians() - shoulderEncoder.getPosition()) <= L4ArmConstants.TOLERANCE ?
-    //   cyclesSinceShoulderNotAtGoal + 1 :
-    //   0;
+    if (!armAtGoal() && Math.abs(shoulderSetpoint.position - L4ArmConstants.LOWER_LIMIT.getRadians()) <= L4ArmConstants.DEADBAND) {
+      shoulder.set(0);
+      shoulderFeedforwardValue = 0;
+    } else {
+      shoulderFeedforwardValue = shoulderFeedforward.calculate(shoulderSetpoint.position, shoulderSetpoint.velocity, armAccel);
+      shoulderPID.setReference(
+          shoulderSetpoint.position,
+          ControlType.kPosition,
+          ClosedLoopSlot.kSlot0,
+          shoulderFeedforwardValue,
+          ArbFFUnits.kVoltage);
+    }
+    cyclesSinceShoulderNotAtGoal = Math.abs(armGoal.getRadians() - shoulderAbsoluteEncoder.getPosition()) <= L4ArmConstants.TOLERANCE ?
+      cyclesSinceShoulderNotAtGoal + 1 :
+      0;
     
     
-    //SmartDashboard.putNumber("ShoulderGoal", armGoal.getDegrees());
-    //SmartDashboard.putNumber("ShoulderSetpoint", Math.toDegrees(shoulderSetpoint.position));
-   // SmartDashboard.putNumber("ShoulderSetpointVel", Math.toDegrees(shoulderSetpoint.velocity));
+    SmartDashboard.putNumber("L4ShoulderGoal", armGoal.getDegrees());
+    SmartDashboard.putNumber("L4ShoulderSetpoint", Math.toDegrees(shoulderSetpoint.position));
+    SmartDashboard.putNumber("L4ShoulderSetpointVel", Math.toDegrees(shoulderSetpoint.velocity));
     SmartDashboard.putNumber("L4ShoulderPos", getArmAngle().getDegrees());
+    SmartDashboard.putNumber("L4ShoulderVelocity", shoulderAbsoluteEncoder.getVelocity());
     SmartDashboard.putNumber("L4ShoulderControlEffort", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
     SmartDashboard.putBoolean("L4ShoulderAtGoal", armAtGoal());
     SmartDashboard.putNumber("L4CycleCounter", cyclesSinceShoulderNotAtGoal);
@@ -218,4 +235,13 @@ public class L4Arm extends SubsystemBase {
     SmartDashboard.putNumber("L4PrimaryEncoderPos",shoulder.getEncoder().getPosition());
 
   }
+
+  public Command sysIdDynShoulder(SysIdRoutine.Direction direction) {
+    return L4Characterizer.dynamic(direction);
+  }
+  public Command sysIdQuasiShoulder(SysIdRoutine.Direction direction) {
+    return L4Characterizer.quasistatic(direction);
+  }
+
+
 }
