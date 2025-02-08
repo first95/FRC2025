@@ -39,6 +39,7 @@ public class Climber extends SubsystemBase {
   public void setClimberSpeed(double speed){
     winch.set(speed/ClimberConstants.MAX_SPEED);
   }
+  
   /**
    * Example command factory method.
    *

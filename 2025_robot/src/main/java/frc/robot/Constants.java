@@ -339,6 +339,14 @@ public final class Constants {
         public static final double CURRENT_OFFSET = 5;
 
     }
+    public static final class ClimberConstants{
+        public static final int ClIMBER_ID = ;
+
+        public static final boolean INVERTED = false; 
+        public static final int SMARTCURRENTLIMIT = 80;
+
+        public static final double MAX_SPEED = 1;
+    }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
 

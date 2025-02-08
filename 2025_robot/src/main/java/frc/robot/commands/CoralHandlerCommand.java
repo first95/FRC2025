@@ -5,7 +5,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.L1Arm;
 import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.L1IntakeConstants;
@@ -21,9 +21,12 @@ public class CoralHandlerCommand extends Command {
         HandOffButtonSupplier, 
         ScoreButtonSupplier,
         StowButtonSupplier, 
-        L1HumanLoadingSupplier;
+        L1HumanLoadingSupplier,
+        climberOutButtonBooleanSupplier,
+        climberInButtonBooleanSupplier;
 
     private final L1Arm L1arm;
+    private final Climber climber;
     private enum State{
         IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
         POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
@@ -37,7 +40,9 @@ public class CoralHandlerCommand extends Command {
         HandOffButton, 
         ScoreButton, 
         StowButton, 
-        L1HumanLoadButton;
+        L1HumanLoadButton,
+        climberOutButton,
+        climberInButton;
     
     private boolean 
         AutoL1HumanLoadTrigger,
@@ -61,7 +66,10 @@ public class CoralHandlerCommand extends Command {
             BooleanSupplier ScoreButtonSupplier, 
             BooleanSupplier StowButtonSupplier, 
             BooleanSupplier L1HumanLoadingSupplier,
-            L1Arm L1arm){
+            BooleanSupplier climberOutButtonBooleanSupplier,
+            BooleanSupplier climberInButtonBooleanSupplier,
+            L1Arm L1arm,
+            Climber climber){
             
     
     
@@ -72,12 +80,16 @@ public class CoralHandlerCommand extends Command {
             this.StowButtonSupplier = StowButtonSupplier;
             this.L4IntakeButtonSupplier = L4IntakeButtonSupplier;
 
+            this.climberOutButtonBooleanSupplier = climberOutButtonBooleanSupplier;
+            this.climberInButtonBooleanSupplier = climberInButtonBooleanSupplier;
+
             this.HandOffButtonSupplier = HandOffButtonSupplier;
             this.ScoreButtonSupplier = ScoreButtonSupplier;
-           
 
+        
+            this.climber = climber;
             this.L1arm = L1arm;
-            addRequirements(L1arm);
+            addRequirements(L1arm, climber);
 
     }
 
@@ -101,6 +113,9 @@ public class CoralHandlerCommand extends Command {
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         ScoreButton = ScoreButtonSupplier.getAsBoolean();
 
+        climberOutButton = climberOutButtonBooleanSupplier.getAsBoolean();
+        climberInButton = climberInButtonBooleanSupplier.getAsBoolean();
+
         AutoL1HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L1HUMANLOAD_KEY, false);
         autoScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L1SCORE_KEY, false);
 
@@ -115,6 +130,15 @@ public class CoralHandlerCommand extends Command {
         else{
             L1arm.runIntake(L1IntakeSpeed);
         }
+        
+        if(climberOutButton){
+            climber.setClimberSpeed(1);
+        }
+        if(climberInButton){
+            climber.setClimberSpeed(1);
+        }
+        
+        climber.setClimberSpeed((climberOutButton ? 1 : 0) + (climberInButton ? -1 : 0));
 
         //
         // State Machine 

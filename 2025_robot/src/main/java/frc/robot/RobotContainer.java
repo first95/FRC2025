@@ -13,6 +13,7 @@ import frc.robot.Constants.Vision;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CoralHandlerCommand;
 import frc.robot.commands.drivebase.AbsoluteDrive;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.L1Arm;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.drivebase.TeleopDrive;
@@ -69,6 +70,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveBase drivebase = new SwerveBase();
   private final L1Arm L1arm = new L1Arm();
+  private final Climber climber = new Climber();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
   private final CoralHandlerCommand coralHandler;
@@ -156,10 +158,14 @@ public class RobotContainer {
       () -> headingController.getHID().getRawButton(1), //Score
       () -> operatorController.getHID().getYButton(), //Stow
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
-      L1arm
+      () -> operatorController.getHID().getRawButton(0),
+      () -> operatorController.getHID().getRawButton(0),
+      L1arm,
+      climber
     );
 
     L1arm.setDefaultCommand(coralHandler);
+    climber.setDefaultCommand(coralHandler);
 
     // Configure the trigger bindings
     configureBindings();
