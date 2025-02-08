@@ -57,7 +57,7 @@ public final class Constants {
         // Hold time on motor brakes when disabled
         public static final double WHEEL_LOCK_TIME = 10; // seconds
 
-        public static final int SWERVE_MODULE_CURRENT_LIMIT = 60/6;
+        public static final int SWERVE_MODULE_CURRENT_LIMIT = 50;
 
         public static final double HEADING_TOLERANCE = Math.toRadians(1.5);
 
@@ -87,7 +87,7 @@ public final class Constants {
 
         // IMU Mounting. CCW Positive
         public static final double IMU_MOUNT_YAW = 0;
-        public static final double IMU_MOUNT_PITCH = 0;
+        public static final double IMU_MOUNT_PITCH = 180;
         public static final double IMU_MOUNT_ROLL = 0;
 
         // Drivetrain limitations
@@ -109,21 +109,21 @@ public final class Constants {
     public static final double ANGULAR_ACCELERATION_LIMIT = 100;
     public static final double ANGULAR_VELOCITY_LIMIT = 5;
 
-        // Robot heading control gains
-        public static final double HEADING_KP = 5.7766;
+        // Robot control gains
+        public static final double HEADING_KP = 2;
         public static final double HEADING_KI = 0;
-        public static final double HEADING_KD = 0.094;//0.94272;
+        public static final double HEADING_KD = 0;
 
-    public static final double HEADING_MIN_ANGULAR_CONTROL_EFFORT = 0.005; // rad/s— Prevent oscillation by cancelling rotational commands less than this
+    public static final double HEADING_MIN_ANGULAR_CONTROL_EFFORT = 0.05; // rad/s— Prevent oscillation by cancelling rotational commands less than this
 
         // Swerve base kinematics object
         public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_LOCATIONS);
 
-    public static final double SKEW_CORRECTION_FACTOR = 6;
+    public static final double SKEW_CORRECTION_FACTOR = 0;
 
         // Module PIDF gains
         public static final double MODULE_KP = 0.06;
-        public static final double MODULE_KI = 0;
+        public static final double MODULE_KI = 0.0;
         public static final double MODULE_KD = 0.0005;
         public static final double MODULE_IZ = 0;
         public static final double MODULE_KF = 0;
@@ -131,8 +131,8 @@ public final class Constants {
         // (maxMotorSpeedRPM / gearRatio) * (minutesPerSecond))
         public static final double MODULE_KV = 12 / MAX_MODULE_ANGULAR_SPEED;
 
-        public static final double VELOCITY_KP = 0.07;
-        public static final double VELOCITY_KI = 0; // Leave all of these zero to disable them
+        public static final double VELOCITY_KP = 0.06;
+        public static final double VELOCITY_KI = 0.001; // Leave all of these zero to disable them
         public static final double VELOCITY_KD = 0;
         public static final double VELOCITY_IZ = 0;
         public static final double VELOCITY_KF = 0;
@@ -163,7 +163,7 @@ public final class Constants {
         public static final class Mod0 {
             public static final int DRIVE_MOTOR_ID = 3;
             public static final int ANGLE_MOTOR_ID = 2;
-            public static final double ANGLE_OFFSET = 360 - 213.5;
+            public static final double ANGLE_OFFSET = 180+360 - 213.5;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(0, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, FRONT_LEFT_X, FRONT_LEFT_Y);
         }
@@ -171,7 +171,7 @@ public final class Constants {
         public static final class Mod1 {
             public static final int DRIVE_MOTOR_ID = 5;
             public static final int ANGLE_MOTOR_ID = 4;
-            public static final double ANGLE_OFFSET = 360 - 53.7;
+            public static final double ANGLE_OFFSET = 180 - 53.7;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(1, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, FRONT_RIGHT_X, FRONT_RIGHT_Y);
         }
@@ -179,7 +179,7 @@ public final class Constants {
         public static final class Mod2 {
             public static final int DRIVE_MOTOR_ID = 7;
             public static final int ANGLE_MOTOR_ID = 6;
-            public static final double ANGLE_OFFSET = 360 - 168.6;
+            public static final double ANGLE_OFFSET = 180 - 168.6;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(2, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, BACK_LEFT_X, BACK_LEFT_Y);
         }
@@ -187,7 +187,7 @@ public final class Constants {
         public static final class Mod3 {
             public static final int DRIVE_MOTOR_ID = 9;
             public static final int ANGLE_MOTOR_ID = 8;
-            public static final double ANGLE_OFFSET = 360 - 310.3;
+            public static final double ANGLE_OFFSET = 360 - 310.3 + 180;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(3, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, BACK_RIGHT_X, BACK_RIGHT_Y);
         }
@@ -214,7 +214,7 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = true;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 166;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 146;
         public static final boolean ABSOLUTE_ENCODER_ZERO_CENTERED = true;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
@@ -237,15 +237,16 @@ public final class Constants {
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(167);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-29);
-        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-28);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-39);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-38);
+        public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(110);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
 
-        public static final double TOLERANCE = Math.toRadians(0.1);
+        public static final double TOLERANCE = Math.toRadians(6);
         public static final int SETTLE_TIME_LOOP_CYCLES = 200;
 
         public static final double CURRENT_OFFSET = 5;
@@ -270,10 +271,11 @@ public final class Constants {
 
         public static final double MAX_SPEED = 1;
 
-        public static final double HOLDING_CURRENT_THRESHOULD = 15;
-        public static final double RELEASED_CURRENT_THRESHOULD = 8;
-        public static final int CYCLE_INTAKING_THRESHOLD = 100;
-        public static final int CYCLE_RELEASED_THRESHOLD = 100;
+        public static final double INTAKING_CURRENT_THRESHOULD = 15;
+        public static final double RELEASED_CURRENT_THRESHOULD = 10;
+        public static final double NOPICKUP_CURRENT_THRESHOULD = 3;
+        public static final int CYCLE_INTAKING_THRESHOLD = 20;
+        public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
         public static final double HOLDING_SPEED = 0.05;
         public static final double SCORE_SPEED = -1;
@@ -282,9 +284,10 @@ public final class Constants {
     }
 
     public static final class L4ArmConstants {
+        //Values currently copied from L1ArmConstants, not updated 1/31/25
         public static final int SHOULDER_ID = 0;
 
-        public static final int SMARTCURRENTLIMIT = 80;
+        public static final int SMARTCURRENTLIMIT = 0;
 
 
         public static final boolean PRIMARY_ENCODER_POSITION_ALWAYS_ON = true;
@@ -366,9 +369,9 @@ public final class Constants {
 
     public static final class Auton {
         // Plumbing via SmartDashboard
-        public static final String ARM_ANGLE_KEY = "AutoArmAngleRadians";
+        public static final String L1HUMANLOAD_KEY = "AutoL1HumanLoad";
         public static final String ON_TARGET_KEY = "AutoOnTarget";
-        public static final String AUTO_SHOOTING_KEY = "AutoShootingRequested";
+        public static final String L1SCORE_KEY = "AutoL1Score";
         public static final String PORT_SPEED_KEY = "PortSpeed";
         public static final String STARBOARD_SPEED_KEY = "StarboardSpeed";
         public static final String AUTO_AMP_ALIGN_KEY = "AutoAligningAmp";
@@ -387,7 +390,7 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints ANGULAR_CONSTRAINTS = new TrapezoidProfile.Constraints(
             ANGULAR_VELOCITY_LIMIT, ANGULAR_ACCELERATION_LIMIT);
         
-        public static final double DRIVE_KP = 2;
+        public static final double DRIVE_KP = 20;
         public static final double DRIVE_KI = 0;
         public static final double DRIVE_KD = 0;
 
@@ -420,7 +423,8 @@ public final class Constants {
         // Added to final autoshoot calculations-- remember that we shoot from the back
         public static final Rotation2d AUTO_SHOOT_AZIMUTH_ADJUSTMENT = Rotation2d.fromDegrees(4);
 
-        public static final double AUTO_INTAKE_SPEED = 1;
+        public static final double HUMANLOAD_TIMEOUT = 2;
+        public static final double SCORE_TIMEOUT = 3;
     }
     public static final class CommandDebugFlags {
         public static final int ALIGN_TO_POSE = 0b1000000;

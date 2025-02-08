@@ -133,12 +133,12 @@ public class AbsoluteDrive extends Command {
       // Make the robot move
       swerve.drive(translation, omega, true, isOpenLoop);
 
-      if ((debugFlags & CommandDebugFlags.ABS_DRIVE) != 0) {
-        SmartDashboard.putNumber("HeadingSetpoint", angle);
-        SmartDashboard.putNumber("CommandedOmega", omega);
-        SmartDashboard.putNumber("DriveInputX", translation.getX());
-        SmartDashboard.putNumber("DriveInputY", translation.getY());
-      }
+      SmartDashboard.putNumber("HeadingSetpoint", angle);
+      SmartDashboard.putNumber("CommandedOmega", omega);
+      SmartDashboard.putNumber("currentHeading", swerve.getTelePose().getRotation().getRadians());
+      SmartDashboard.putNumber("DriveInputX", translation.getX());
+      SmartDashboard.putNumber("DriveInputY", translation.getY());
+
       
     }
     

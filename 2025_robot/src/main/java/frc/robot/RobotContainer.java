@@ -14,7 +14,6 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.CoralHandlerCommand;
 import frc.robot.commands.drivebase.AbsoluteDrive;
 import frc.robot.subsystems.L1Arm;
-import frc.robot.subsystems.L4Arm;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.drivebase.TeleopDrive;
 import frc.robot.subsystems.SwerveBase;
@@ -31,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import java.util.Arrays;
 
 
@@ -41,6 +41,7 @@ import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -68,7 +69,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveBase drivebase = new SwerveBase();
   private final L1Arm L1arm = new L1Arm();
-  private final L4Arm L4arm = new L4Arm();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
   private final CoralHandlerCommand coralHandler;
@@ -82,6 +82,7 @@ public class RobotContainer {
   public AutoChooser autoChooser;
   private final SendableChooser<String> modularAutoTargetChooser = new SendableChooser<>();
   private String[] modularAutoTargets = {};
+  String currentModularAuto = "";
   private final Autos autos;
 
   SendableChooser<Integer> debugMode = new SendableChooser<>();
@@ -148,13 +149,14 @@ public class RobotContainer {
 
 
     coralHandler = new CoralHandlerCommand(
-      () -> operatorController.getHID().getLeftBumperButton(),    // L1IntakeInButtonSupplier
-      () -> operatorController.getHID().getYButton(),    // L1IntakeOutButtonSupplier
-      () -> operatorController.getHID().getBButton(),   // B = L4 intake
-      () -> operatorController.getHID().getAButton(),   // A = Handoff
-      () -> operatorController.getHID().getRightBumperButton(),    // Score button
-      L1arm,
-      L4arm
+      () -> driveController.getHID().getRawButton(1),    // L1Intake
+      () -> operatorController.getHID().getRightBumperButton(),    // L1Eject
+      () -> operatorController.getHID().getBButton(),   // L4 intake
+      () -> operatorController.getHID().getAButton(),   // Handoff
+      () -> headingController.getHID().getRawButton(1), //Score
+      () -> operatorController.getHID().getYButton(), //Stow
+      () -> operatorController.getHID().getXButton(), //L1 HumanLoading
+      L1arm
     );
 
     L1arm.setDefaultCommand(coralHandler);
@@ -187,8 +189,9 @@ public class RobotContainer {
     autos = new Autos(drivebase);
 
 
-    autoChooser.addCmd("diamond",() -> autos.Diamond());
-    autoChooser.addRoutine("TestModularAuto",() -> autos.testModularAuto());
+    autoChooser.addRoutine("diamond",autos :: Diamond);
+    autoChooser.addRoutine("L1HumanLoadAndScore", autos :: L1HumanLoadAndScore);
+    autoChooser.addRoutine("TestModularAuto",autos :: testModularAuto);
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
 
@@ -197,18 +200,22 @@ public class RobotContainer {
     modularAutoTargetChooser.addOption("L1", "L1");
     
     SmartDashboard.putData("AutoChooser",autoChooser);
+    
     SmartDashboard.putData("ModularAutoChooser",modularAutoTargetChooser);
+    SmartDashboard.putString("currentModularAuto", "");
     
     SmartDashboard.putData("setShoulderGains",
     new InstantCommand(
       () -> L1arm.setGains()
     ).ignoringDisable(true));
+    
     SmartDashboard.putData("addPosToAuto",
       new InstantCommand(
         () -> addToModularAuto()
       )
       .ignoringDisable(true)
       );
+
     SmartDashboard.putData("setArmAngle",
       new InstantCommand(
         () -> L1arm.setArmAngle(Rotation2d.fromDegrees(0))
@@ -229,6 +236,7 @@ public class RobotContainer {
       .ignoringDisable(true)
     );
 
+    RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
   }
 
   /**
@@ -274,20 +282,24 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return autoCommand;
+    return autoChooser.selectedCommand();
   }
   
   public void addToModularAuto(){
     final int N = modularAutoTargets.length;
     modularAutoTargets = Arrays.copyOf(modularAutoTargets,N + 1);
     modularAutoTargets[N] = modularAutoTargetChooser.getSelected();
+    currentModularAuto += "- " + modularAutoTargetChooser.getSelected();
     SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
+    SmartDashboard.putString("currentModularAuto",currentModularAuto);
   }
   public void removeFromModularAuto(){
     final int N = modularAutoTargets.length;
-    if (N >= 1){
+    if (N > 0){
       modularAutoTargets = Arrays.copyOf(modularAutoTargets,N - 1);
+      currentModularAuto = currentModularAuto.substring(0,currentModularAuto.length() - 4);
       SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
+      SmartDashboard.putString("currentModularAuto", currentModularAuto);
     }
   }
 
