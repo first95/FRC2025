@@ -39,6 +39,7 @@ import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.L4ArmConstants;
 
 public class L4Arm extends SubsystemBase {
@@ -106,8 +107,8 @@ public class L4Arm extends SubsystemBase {
         L4ArmConstants.MAX_SPEED, 
         L4ArmConstants.MAX_ACCELERATION));
     armGoal = L4ArmConstants.STOWED;
-    profileStart = new TrapezoidProfile.State(shoulderAbsoluteEncoder.getPosition(),0);
-    lastShoulderVelocitySetpoint = 0;
+    // profileStart = new TrapezoidProfile.State(shoulderAbsoluteEncoder.getPosition(),0);
+    // lastShoulderVelocitySetpoint = 0;
     armAccel = 0;
 
     shoulderFeedforward = new ArmFeedforward(
@@ -165,8 +166,11 @@ public class L4Arm extends SubsystemBase {
     return false;
   }
 
-  public boolean armAtGoal() {
-    return cyclesSinceShoulderNotAtGoal >= L4ArmConstants.SETTLE_TIME_LOOP_CYCLES;
+  // public boolean armAtGoal() {
+  //   return cyclesSinceShoulderNotAtGoal >= L4ArmConstants.SETTLE_TIME_LOOP_CYCLES;
+  // }
+  public boolean atGoal(){
+    return Math.abs(shoulderAbsoluteEncoder.getPosition() - armGoal.getRadians()) < L4ArmConstants.TOLERANCE;
   }
 
   public Rotation2d getArmAngle(){
@@ -213,6 +217,9 @@ public class L4Arm extends SubsystemBase {
       shoulderFeedforward.calculate(shoulderAbsoluteEncoder.getPosition(),0),
       ArbFFUnits.kVoltage);
     } 
+    if (armGoal == L4ArmConstants.STOWED && atGoal()) {
+      shoulder.set(0);
+    }
 
     // if(armGoal.getRadians() >= L4ArmConstants.UPPER_LIMIT.getRadians()){
     //   armGoal = L4ArmConstants.UPPER_LIMIT;
@@ -254,7 +261,7 @@ public class L4Arm extends SubsystemBase {
     SmartDashboard.putNumber("L4ShoulderPos", getArmAngle().getDegrees());
     SmartDashboard.putNumber("L4ShoulderVelocity", shoulderAbsoluteEncoder.getVelocity());
     SmartDashboard.putNumber("L4ShoulderControlEffort", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
-    SmartDashboard.putBoolean("L4ShoulderAtGoal", armAtGoal());
+    SmartDashboard.putBoolean("L4ShoulderAtGoal", atGoal());
     SmartDashboard.putNumber("L4CycleCounter", cyclesSinceShoulderNotAtGoal);
     SmartDashboard.putNumber("L4SetpointAccel", Math.toDegrees(armAccel));
     SmartDashboard.putNumber("L4ShoulderCurrentDraw", getArmCurrent());

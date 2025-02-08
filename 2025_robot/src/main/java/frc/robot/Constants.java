@@ -325,8 +325,8 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 10.0;
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(-47);
-        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(135);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-55);
+        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(130);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-48);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-35);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(110);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-35);
@@ -334,7 +334,7 @@ public final class Constants {
 
         public static final double DEADBAND = Math.toRadians(0.1);
 
-        public static final double TOLERANCE = Math.toRadians(0.1);
+        public static final double TOLERANCE = Math.toRadians(2);
         public static final int SETTLE_TIME_LOOP_CYCLES = 10;
 
         public static final double CURRENT_OFFSET = 5;
