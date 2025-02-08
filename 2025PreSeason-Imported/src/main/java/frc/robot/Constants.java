@@ -87,7 +87,7 @@ public final class Constants {
 
         // IMU Mounting. CCW Positive
         public static final double IMU_MOUNT_YAW = 0;
-        public static final double IMU_MOUNT_PITCH = 0;
+        public static final double IMU_MOUNT_PITCH = 180;
         public static final double IMU_MOUNT_ROLL = 0;
 
         // Drivetrain limitations

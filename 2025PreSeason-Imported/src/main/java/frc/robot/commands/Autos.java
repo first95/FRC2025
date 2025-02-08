@@ -100,7 +100,7 @@ public final class Autos {
       )
     );
 
-    Trigger scoreTrigger = humanLoadAndScore.atTime("Score");
+    Trigger scoreTrigger = humanLoadAndScore.done();
     scoreTrigger.onTrue(l1Score);
 
     return routine;
