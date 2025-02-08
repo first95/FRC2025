@@ -316,10 +316,10 @@ public final class Constants {
         public static final double KV = 0;
         public static final double KA = 0.0;
 
-        public static final double CLOSEDLOOPRAMPRATE = 100; 
+        public static final double CLOSEDLOOPRAMPRATE = 0.2; 
         
-        public static final double OutputRangeMin = -1;
-        public static final double OutputRangeMax = 1;
+        public static final double OutputRangeMin = -0.25;
+        public static final double OutputRangeMax = 0.5;
 
         public static final double MAX_SPEED = 10.0;
         public static final double MAX_ACCELERATION = 10.0;
@@ -346,7 +346,7 @@ public final class Constants {
         public static final boolean INVERTED = false; 
         public static final int SMARTCURRENTLIMIT = 80;
 
-        public static final double MAX_SPEED = 1;
+        public static final double MAX_SPEED = 0.1;
     }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
