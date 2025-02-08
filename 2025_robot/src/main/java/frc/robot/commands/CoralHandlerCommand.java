@@ -34,7 +34,7 @@ public class CoralHandlerCommand extends Command {
     private enum State{
         IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
         POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
-        L4_INTAKING, L4_HOLDING, L4_SCORING, L1_HUMAN_LOADING;
+        L4_INTAKING, L4_SCORING, L1_HUMAN_LOADING;
     }
 
     private boolean 
@@ -358,7 +358,7 @@ public class CoralHandlerCommand extends Command {
             break;
 
             case L4_SCORING:
-            
+
                 if(!L4ScoreButton){
                     currentState = State.IDLE;
                 }
