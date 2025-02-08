@@ -5,9 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.Auton;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.CommandDebugFlags;
 import frc.robot.Constants.Drivebase;
 import frc.robot.Constants.L1ArmConstants;
+import frc.robot.Constants.L4ArmConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Vision;
 import frc.robot.commands.Autos;
@@ -70,12 +72,12 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final SwerveBase drivebase = new SwerveBase();
-  private final L1Arm L1arm = new L1Arm();
+  //private final L1Arm L1arm = new L1Arm();
   private final L4Arm l4arm = new L4Arm();
   private final Climber climber = new Climber();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
-  private final CoralHandlerCommand coralHandler;
+  //private final CoralHandlerCommand coralHandler;
 
   private final CommandJoystick driveController = new CommandJoystick(OperatorConstants.driveControllerPort);
   private final CommandJoystick headingController = new CommandJoystick(OperatorConstants.headingControllerPort);
@@ -152,22 +154,22 @@ public class RobotContainer {
         drivebase.setDefaultCommand(absoluteDrive);
 
 
-    coralHandler = new CoralHandlerCommand(
-      () -> driveController.getHID().getRawButton(1),    // L1Intake
-      () -> operatorController.getHID().getRightBumperButton(),    // L1Eject
-      () -> operatorController.getHID().getBButton(),   // L4 intake
-      () -> operatorController.getHID().getAButton(),   // Handoff
-      () -> headingController.getHID().getRawButton(1), //Score
-      () -> operatorController.getHID().getYButton(), //Stow
-      () -> operatorController.getHID().getXButton(), //L1 HumanLoading
-      () -> operatorController.getHID().getRawButton(0),
-      () -> operatorController.getHID().getRawButton(0),
-      L1arm,
-      climber
-    );
+    // coralHandler = new CoralHandlerCommand(
+    //   () -> driveController.getHID().getRawButton(1),    // L1Intake
+    //   () -> operatorController.getHID().getRightBumperButton(),    // L1Eject
+    //   () -> operatorController.getHID().getBButton(),   // L4 intake
+    //   () -> operatorController.getHID().getAButton(),   // Handoff
+    //   () -> headingController.getHID().getRawButton(1), //Score
+    //   () -> operatorController.getHID().getYButton(), //Stow
+    //   () -> operatorController.getHID().getXButton(), //L1 HumanLoading
+    //   () -> operatorController.getHID().getYButton(),
+    //   () -> operatorController.getHID().getAButton(),
+    //   L1arm,
+    //   climber
+    // );
 
-    L1arm.setDefaultCommand(coralHandler);
-    climber.setDefaultCommand(coralHandler);
+    // L1arm.setDefaultCommand(coralHandler);
+    // climber.setDefaultCommand(coralHandler);
 
     // Configure the trigger bindings
     configureBindings();
@@ -180,15 +182,15 @@ public class RobotContainer {
     SmartDashboard.putNumber("KI", 0);
     SmartDashboard.putNumber("KD", 0);
 
-    // SmartDashboard.putNumber("shoulderKP", 0);
-    // SmartDashboard.putNumber("shoulderKI", 0);
-    // SmartDashboard.putNumber("shoulderKD", 0);
-    // SmartDashboard.putNumber("shoulderKF", 0);
+    SmartDashboard.putNumber("shoulderKP", L4ArmConstants.KP);
+    SmartDashboard.putNumber("shoulderKI", 0);
+    SmartDashboard.putNumber("shoulderKD", 0);
+    SmartDashboard.putNumber("shoulderKF", 0);
 
-    // SmartDashboard.putNumber("shoulderKS",  0.113);
-    // SmartDashboard.putNumber("shoulderKG", 0.16200);
-    // SmartDashboard.putNumber("shoulderKV", 1.650000);
-    // SmartDashboard.putNumber("shoulderKA", 0);
+    SmartDashboard.putNumber("shoulderKS",  0);
+    SmartDashboard.putNumber("shoulderKG", L4ArmConstants.KG);
+    SmartDashboard.putNumber("shoulderKV", 0);
+    SmartDashboard.putNumber("shoulderKA", 0);
 
     SmartDashboard.putNumber("setShoulderAngleNumber", 0);
 
@@ -214,7 +216,7 @@ public class RobotContainer {
     
     SmartDashboard.putData("setShoulderGains",
     new InstantCommand(
-      () -> L1arm.setGains()
+      () -> l4arm.setGains()
     ).ignoringDisable(true));
     
     SmartDashboard.putData("addPosToAuto",
@@ -226,7 +228,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("setArmAngle",
       new InstantCommand(
-        () -> L1arm.setArmAngle(Rotation2d.fromDegrees(0))
+        () -> l4arm.setArmAngle(Rotation2d.fromDegrees(0))
       ).ignoringDisable(true));
     
     SmartDashboard.putData("removePosFromAuto",
@@ -264,7 +266,9 @@ public class RobotContainer {
   private void configureBindings() {
    
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
-    
+    operatorController.povDown().onTrue(climber.runWinch(-1));
+    operatorController.povUp().onTrue(climber.runWinch(1));
+    operatorController.povCenter().onTrue(climber.runWinch(0));
     // if(operatorController.a().getAsBoolean() == true){
     //   L1arm.incrementArmVoltage(0.01);   
     // }  
@@ -273,10 +277,10 @@ public class RobotContainer {
     // }
     // operatorController.a().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(0.001)));
     // operatorController.b().whileTrue(new InstantCommand(() -> L1arm.incrementArmVoltage(-0.001)));
-    // operatorController.a().whileTrue(L4arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
-    // operatorController.b().whileTrue(L4arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
-    // operatorController.x().whileTrue(L4arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
-    // operatorController.y().whileTrue(L4arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
+    // operatorController.a().whileTrue(l4arm.sysIdDynShoulder(SysIdRoutine.Direction.kForward));
+    // operatorController.b().whileTrue(l4arm.sysIdDynShoulder(SysIdRoutine.Direction.kReverse));
+    // operatorController.x().whileTrue(l4arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kForward));
+    // operatorController.y().whileTrue(l4arm.sysIdQuasiShoulder(SysIdRoutine.Direction.kReverse));
     /*driveController.button(2).whileTrue(new AutoAmp(drivebase)).onFalse(new InstantCommand(() -> {
       SmartDashboard.putBoolean(Auton.AUTO_AMP_SCORE_KEY, false);
       SmartDashboard.putBoolean(Auton.AUTO_AMP_ALIGN_KEY, falSse);
