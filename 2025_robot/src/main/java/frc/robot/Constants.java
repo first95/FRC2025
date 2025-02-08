@@ -69,14 +69,14 @@ public final class Constants {
 
         // Module locations, in meters, as distances to the center of the robot.
         // Positive x is torwards the robot front, and +y is torwards robot left.
-        public static final double FRONT_LEFT_X = Units.inchesToMeters(10.25);
-        public static final double FRONT_LEFT_Y = Units.inchesToMeters(10.25);
-        public static final double FRONT_RIGHT_X = Units.inchesToMeters(10.25);
-        public static final double FRONT_RIGHT_Y = Units.inchesToMeters(-10.25);
-        public static final double BACK_LEFT_X = Units.inchesToMeters(-10.25);
-        public static final double BACK_LEFT_Y = Units.inchesToMeters(10.25);
-        public static final double BACK_RIGHT_X = Units.inchesToMeters(-10.25);
-        public static final double BACK_RIGHT_Y = Units.inchesToMeters(-10.25);
+        public static final double FRONT_LEFT_X = Units.inchesToMeters(25.5/2);
+        public static final double FRONT_LEFT_Y = Units.inchesToMeters(25.5/2);
+        public static final double FRONT_RIGHT_X = Units.inchesToMeters(25.5/2);
+        public static final double FRONT_RIGHT_Y = Units.inchesToMeters(-25.5/2);
+        public static final double BACK_LEFT_X = Units.inchesToMeters(-25.5/2);
+        public static final double BACK_LEFT_Y = Units.inchesToMeters(25.5/2);
+        public static final double BACK_RIGHT_X = Units.inchesToMeters(-25.5/2);
+        public static final double BACK_RIGHT_Y = Units.inchesToMeters(-25.5/2);
 
         public static final Translation2d[] MODULE_LOCATIONS = {
                 new Translation2d(Drivebase.FRONT_LEFT_X, Drivebase.FRONT_LEFT_Y),
@@ -87,7 +87,7 @@ public final class Constants {
 
         // IMU Mounting. CCW Positive
         public static final double IMU_MOUNT_YAW = 0;
-        public static final double IMU_MOUNT_PITCH = 180;
+        public static final double IMU_MOUNT_PITCH = 0;
         public static final double IMU_MOUNT_ROLL = 0;
 
         // Drivetrain limitations
@@ -159,11 +159,11 @@ public final class Constants {
         public static final double DEGREES_PER_STEERING_ROTATION = 360;
         // degrees per rotation / gear ratio between module and motor
 
-        // Module specific constants
+        // Module specific constants'
         public static final class Mod0 {
             public static final int DRIVE_MOTOR_ID = 3;
             public static final int ANGLE_MOTOR_ID = 2;
-            public static final double ANGLE_OFFSET = 180+360 - 213.5;
+            public static final double ANGLE_OFFSET = 360 - 257.12;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(0, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, FRONT_LEFT_X, FRONT_LEFT_Y);
         }
@@ -171,7 +171,7 @@ public final class Constants {
         public static final class Mod1 {
             public static final int DRIVE_MOTOR_ID = 5;
             public static final int ANGLE_MOTOR_ID = 4;
-            public static final double ANGLE_OFFSET = 180 - 53.7;
+            public static final double ANGLE_OFFSET = 360 - 4.58;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(1, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, FRONT_RIGHT_X, FRONT_RIGHT_Y);
         }
@@ -179,7 +179,7 @@ public final class Constants {
         public static final class Mod2 {
             public static final int DRIVE_MOTOR_ID = 7;
             public static final int ANGLE_MOTOR_ID = 6;
-            public static final double ANGLE_OFFSET = 180 - 168.6;
+            public static final double ANGLE_OFFSET = 136.98 - 90;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(2, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, BACK_LEFT_X, BACK_LEFT_Y);
         }
@@ -187,7 +187,7 @@ public final class Constants {
         public static final class Mod3 {
             public static final int DRIVE_MOTOR_ID = 9;
             public static final int ANGLE_MOTOR_ID = 8;
-            public static final double ANGLE_OFFSET = 360 - 310.3 + 180;
+            public static final double ANGLE_OFFSET = 310.15 - 90;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(3, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, BACK_RIGHT_X, BACK_RIGHT_Y);
         }
@@ -285,16 +285,16 @@ public final class Constants {
 
     public static final class L4ArmConstants {
         //Values currently copied from L1ArmConstants, not updated 1/31/25
-        public static final int SHOULDER_ID = 0;
+        public static final int SHOULDER_ID = 10;
 
-        public static final int SMARTCURRENTLIMIT = 0;
+        public static final int SMARTCURRENTLIMIT = 35;
 
 
         public static final boolean PRIMARY_ENCODER_POSITION_ALWAYS_ON = true;
         public static final int PRIMARY_ENCODER_POSITIONS_PERIOD = 20;
         public static final boolean PRIMARY_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int PRIMARY_ENCODER_VELOCITY_PERIOD = 20;
-        public static final boolean PRIMARY_ENCODER_INVERTED = true;
+        public static final boolean PRIMARY_ENCODER_INVERTED = false;
         public static final double PRIMARY_ENCODER_OFFSET = 0;
         public static final double SHOULDER_RADIANS_PER_PRIMARY_ENCODER_ROTATION = 2 * Math.PI * 16/48;
 
@@ -303,19 +303,20 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 202;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 153.67;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
-        public static final double KP = 0.0;
+        public static final double KP = 1;
         public static final double KI = 0.0;
         public static final double KD = 0.0;
         public static final double KF = 0.0;
 
         public static final double KS = 0.0;
-        public static final double KG = 0.0;
-        public static final double KV = 0.0;
+        public static final double KG = 0.49039;
+        public static final double KV = 0;
         public static final double KA = 0.0;
-      
+
+        public static final double CLOSEDLOOPRAMPRATE = 100; 
         
         public static final double OutputRangeMin = -1;
         public static final double OutputRangeMax = 1;
@@ -323,7 +324,7 @@ public final class Constants {
         public static final double MAX_SPEED = 10.0;
         public static final double MAX_ACCELERATION = 10.0;
 
-        public static final Rotation2d STOWED = Rotation2d.fromDegrees(-50);
+        public static final Rotation2d STOWED = Rotation2d.fromDegrees(-47);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(135);
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-55);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-35);
@@ -340,7 +341,7 @@ public final class Constants {
 
     }
     public static final class ClimberConstants{
-        public static final int ClIMBER_ID = ;
+        public static final int CLIMBER_ID = 13;
 
         public static final boolean INVERTED = false; 
         public static final int SMARTCURRENTLIMIT = 80;

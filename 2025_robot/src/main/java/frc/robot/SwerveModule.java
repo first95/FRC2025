@@ -6,10 +6,12 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -31,8 +33,8 @@ public class SwerveModule {
     private final double angleOffset;
     private final SparkMax angleMotor;
     private final SparkMaxConfig angleMotorConfig;
-    private final SparkMax driveMotor;
-    private final SparkMaxConfig driveMotorConfig;
+    private final SparkFlex driveMotor;
+    private final SparkFlexConfig driveMotorConfig;
     private final SparkAbsoluteEncoder absoluteEncoder;
     private final RelativeEncoder driveEncoder;
     private final SparkClosedLoopController angleController, driveController;
@@ -82,8 +84,8 @@ public class SwerveModule {
             
             
         // Config drive motor/controller
-        driveMotor = new SparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
-        driveMotorConfig = new SparkMaxConfig();
+        driveMotor = new SparkFlex(moduleConstants.driveMotorID, MotorType.kBrushless);
+        driveMotorConfig = new SparkFlexConfig();
         driveEncoder = driveMotor.getEncoder();
         driveController = driveMotor.getClosedLoopController();
             
