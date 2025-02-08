@@ -57,7 +57,7 @@ public final class Constants {
         // Hold time on motor brakes when disabled
         public static final double WHEEL_LOCK_TIME = 10; // seconds
 
-        public static final int SWERVE_MODULE_CURRENT_LIMIT = 50;
+        public static final int SWERVE_MODULE_CURRENT_LIMIT = 30;
 
         public static final double HEADING_TOLERANCE = Math.toRadians(1.5);
 
@@ -369,6 +369,7 @@ public final class Constants {
 
     public static final class Auton {
         // Plumbing via SmartDashboard
+        public static final String IN_AUTO_KEY = "Auto";
         public static final String L1HUMANLOAD_KEY = "AutoL1HumanLoad";
         public static final String ON_TARGET_KEY = "AutoOnTarget";
         public static final String L1SCORE_KEY = "AutoL1Score";
