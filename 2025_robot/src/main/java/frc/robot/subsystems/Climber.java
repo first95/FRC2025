@@ -13,7 +13,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.cscore.VideoCamera.WhiteBalance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
  
@@ -39,21 +42,16 @@ public class Climber extends SubsystemBase {
   public void setClimberSpeed(double speed){
     winch.set(speed/ClimberConstants.MAX_SPEED);
   }
-  
+
   /**
    * Example command factory method.
    *
    * @return a command
    */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+  public Command runWinch(double speed) {
+    return new InstantCommand(() -> setClimberSpeed(speed));
   }
-
+  
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *
@@ -67,6 +65,7 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
   }
 
   @Override

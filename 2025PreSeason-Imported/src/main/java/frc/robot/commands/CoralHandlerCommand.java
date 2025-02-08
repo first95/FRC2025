@@ -198,7 +198,7 @@ public class CoralHandlerCommand extends Command {
                     cyclesIntaking = 0;
                 }
                  
-                if(!L1HumanLoadButton || !AutoL1HumanLoadTrigger){
+                if(!L1HumanLoadButton){
                     currentState = State.IDLE;
                 }
             break;
