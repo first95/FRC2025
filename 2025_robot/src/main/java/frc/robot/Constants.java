@@ -340,7 +340,7 @@ public final class Constants {
 
     }
     public static final class ClimberConstants{
-        public static final int ClIMBER_ID = ;
+        public static final int CLIMBER_ID = ;
 
         public static final boolean INVERTED = false; 
         public static final int SMARTCURRENTLIMIT = 80;
