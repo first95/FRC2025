@@ -72,12 +72,12 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final SwerveBase drivebase = new SwerveBase();
-  //private final L1Arm L1arm = new L1Arm();
-  private final L4Arm l4arm = new L4Arm();
+  private final L1Arm L1arm = new L1Arm();
+  private final L4Arm L4arm = new L4Arm();
   private final Climber climber = new Climber();
   //private final TeleopDrive openRobotRel, closedRobotRel, openFieldRel, closedFieldRel;
   private final AbsoluteDrive absoluteDrive;
-  //private final CoralHandlerCommand coralHandler;
+  private final CoralHandlerCommand coralHandler;
 
   private final CommandJoystick driveController = new CommandJoystick(OperatorConstants.driveControllerPort);
   private final CommandJoystick headingController = new CommandJoystick(OperatorConstants.headingControllerPort);
@@ -154,22 +154,24 @@ public class RobotContainer {
         drivebase.setDefaultCommand(absoluteDrive);
 
 
-    // coralHandler = new CoralHandlerCommand(
-    //   () -> driveController.getHID().getRawButton(1),    // L1Intake
-    //   () -> operatorController.getHID().getRightBumperButton(),    // L1Eject
-    //   () -> operatorController.getHID().getBButton(),   // L4 intake
-    //   () -> operatorController.getHID().getAButton(),   // Handoff
-    //   () -> headingController.getHID().getRawButton(1), //Score
-    //   () -> operatorController.getHID().getYButton(), //Stow
-    //   () -> operatorController.getHID().getXButton(), //L1 HumanLoading
-    //   () -> operatorController.getHID().getYButton(),
-    //   () -> operatorController.getHID().getAButton(),
-    //   L1arm,
-    //   climber
-    // );
+    coralHandler = new CoralHandlerCommand(
+      () -> driveController.getHID().getRawButton(1),    // L1Intake
+      () -> operatorController.getHID().getRightBumperButton(),    // L1Eject
+      () -> driveController.getHID().getRawButton(1),   // L4 intake
+      () -> headingController.getHID().getRawButton(1), // L4 Score
+      () -> operatorController.getHID().getAButton(),   // Handoff
+      () -> headingController.getHID().getRawButton(1), //L1Score
+      () -> operatorController.getHID().getYButton(), //Stow
+      () -> operatorController.getHID().getXButton(), //L1 HumanLoading
+      
+      L1arm,
+      L4arm,
+      climber
+    );
 
-    // L1arm.setDefaultCommand(coralHandler);
-    // climber.setDefaultCommand(coralHandler);
+    L1arm.setDefaultCommand(coralHandler);
+    climber.setDefaultCommand(coralHandler);
+    L4arm.setDefaultCommand(coralHandler);
 
     // Configure the trigger bindings
     configureBindings();
@@ -216,7 +218,7 @@ public class RobotContainer {
     
     SmartDashboard.putData("setShoulderGains",
     new InstantCommand(
-      () -> l4arm.setGains()
+      () -> L4arm.setGains()
     ).ignoringDisable(true));
     
     SmartDashboard.putData("addPosToAuto",
@@ -228,7 +230,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("setArmAngle",
       new InstantCommand(
-        () -> l4arm.setArmAngle(Rotation2d.fromDegrees(0))
+        () -> L4arm.setArmAngle(Rotation2d.fromDegrees(0))
       ).ignoringDisable(true));
     
     SmartDashboard.putData("removePosFromAuto",

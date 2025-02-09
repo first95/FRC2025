@@ -192,8 +192,8 @@ public class L4Arm extends SubsystemBase {
   //   }
   // }
   public void setArmAngle(Rotation2d angle){
-    armGoal = Rotation2d.fromDegrees(SmartDashboard.getNumber("setShoulderAngleNumber", 0));
-    //armGoal = angle;
+    //armGoal = Rotation2d.fromDegrees(SmartDashboard.getNumber("setShoulderAngleNumber", 0));
+    armGoal = angle;
   }
   public void setGains(){
     shoulderFeedforward = new ArmFeedforward(

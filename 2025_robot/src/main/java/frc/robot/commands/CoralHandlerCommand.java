@@ -22,11 +22,9 @@ public class CoralHandlerCommand extends Command {
         L4IntakeButtonSupplier,
         L4ScoreButtonSupplier, 
         HandOffButtonSupplier, 
-       L1ScoreButtonSupplier,
+        L1ScoreButtonSupplier,
         StowButtonSupplier, 
-        L1HumanLoadingSupplier,
-        climberOutButtonBooleanSupplier,
-        climberInButtonBooleanSupplier;
+        L1HumanLoadingSupplier;
 
     private final L1Arm L1arm;
     private final L4Arm L4arm;
@@ -72,8 +70,6 @@ public class CoralHandlerCommand extends Command {
             BooleanSupplier L1ScoreButtonSupplier, 
             BooleanSupplier StowButtonSupplier, 
             BooleanSupplier L1HumanLoadingSupplier,
-            BooleanSupplier climberOutButtonBooleanSupplier,
-            BooleanSupplier climberInButtonBooleanSupplier,
             L1Arm L1arm,
             L4Arm L4arm,
             Climber climber){
@@ -86,9 +82,6 @@ public class CoralHandlerCommand extends Command {
             this.L1HumanLoadingSupplier = L1HumanLoadingSupplier;
             this.StowButtonSupplier = StowButtonSupplier;
             this.L4IntakeButtonSupplier = L4IntakeButtonSupplier;
-
-            this.climberOutButtonBooleanSupplier = climberOutButtonBooleanSupplier;
-            this.climberInButtonBooleanSupplier = climberInButtonBooleanSupplier;
 
             this.HandOffButtonSupplier = HandOffButtonSupplier;
             this.L1ScoreButtonSupplier =L1ScoreButtonSupplier;
@@ -123,9 +116,6 @@ public class CoralHandlerCommand extends Command {
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         L1ScoreButton=L1ScoreButtonSupplier.getAsBoolean();
 
-        climberOutButton = climberOutButtonBooleanSupplier.getAsBoolean();
-        climberInButton = climberInButtonBooleanSupplier.getAsBoolean();
-
         AutoL1HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L1HUMANLOAD_KEY, false);
         autoScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L1SCORE_KEY, false);
 
@@ -140,15 +130,6 @@ public class CoralHandlerCommand extends Command {
         else{
             L1arm.runIntake(L1IntakeSpeed);
         }
-        
-        if(climberOutButton){
-            climber.setClimberSpeed(1);
-        }
-        if(climberInButton){
-            climber.setClimberSpeed(1);
-        }
-        
-        climber.setClimberSpeed((climberOutButton ? 1 : 0) + (climberInButton ? -1 : 0));
 
         //
         // State Machine 
