@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Driver;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -48,6 +49,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -271,6 +273,27 @@ public class RobotContainer {
     operatorController.povDown().onTrue(climber.runWinch(-1));
     operatorController.povUp().onTrue(climber.runWinch(1));
     operatorController.povCenter().onTrue(climber.runWinch(0));
+    driveController.button(2).whileTrue( //align to humanload
+      drivebase.getAlliance() == Alliance.Blue ? //if alliance blue
+        drivebase.getPose().getY() >= Constants.FIELD_WIDTH/2 ?  
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(180 - Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : 
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-180 + Constants.Auton.LINEUP_TO_HUMANLOADANGLE)))
+      : //if alliance is red
+        drivebase.getPose().getY() >= Constants.FIELD_WIDTH/2 ? 
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : //if on the top half of the field point towards the top humanload
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) //if on the bottom half of the field point towards the bottom humanload
+    );
+    headingController.button(2).whileTrue( // point to center of reef
+        new InstantCommand(
+          () -> absoluteDrive.setHeading(
+            Rotation2d.fromRadians(Math.atan2(
+              drivebase.getPose().getY() - Constants.Auton.POSE_MAP.get(drivebase.getAlliance()).get("Reef").getY(), 
+              drivebase.getPose().getX() - Constants.Auton.POSE_MAP.get(drivebase.getAlliance()).get("Reef").getX()
+              )
+            )    
+          )
+        )
+    );
     // if(operatorController.a().getAsBoolean() == true){
     //   L1arm.incrementArmVoltage(0.01);   
     // }  
