@@ -91,7 +91,7 @@ public final class Constants {
         public static final double IMU_MOUNT_ROLL = 0;
 
         // Drivetrain limitations
-        public static final double MAX_SPEED = (VORTEX_FREE_SPEED * Units.inchesToMeters(3 * Math.PI)) / (60 * 4.71); // meters per second NOT A LIMIT!!! DO NOT TOUCH!!!
+        public static final double MAX_SPEED = (VORTEX_FREE_SPEED * Units.inchesToMeters(3 * Math.PI)) / (60 * 5.08); // meters per second NOT A LIMIT!!! DO NOT TOUCH!!!
         public static final double MAX_ANGULAR_VELOCITY = MAX_SPEED / Math.hypot(FRONT_LEFT_X, FRONT_LEFT_Y); // rad/s
         // Theoretical max acceleration should be as follows:
         // (NEO stall torque * module gearing * number of modules) / (wheel radius *
@@ -102,8 +102,7 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 1 * GRAVITY; // COF is 1.1 but careful
         public static final double MAX_ANGULAR_ACCELERATION = MAX_ACCELERATION / Math.hypot(FRONT_LEFT_X, FRONT_LEFT_Y);
         // max speed (RPM) / gear ratio, convert to deg/min, divide by 60 for deg/s
-        public static final double MAX_MODULE_ANGULAR_SPEED = Units.rotationsToDegrees(NEO_550_FREE_SPEED * 7 / 372)
-                / 60; // deg/sk
+        public static final double MAX_MODULE_ANGULAR_SPEED = Units.rotationsToDegrees(NEO_550_FREE_SPEED * 7 / 372)/ 60; // deg/sk
 
     // Currently does nothing
     public static final double ANGULAR_ACCELERATION_LIMIT = 100;
@@ -132,7 +131,7 @@ public final class Constants {
         public static final double MODULE_KV = 12 / MAX_MODULE_ANGULAR_SPEED;
 
         public static final double VELOCITY_KP = 0.06;
-        public static final double VELOCITY_KI = 0.001; // Leave all of these zero to disable them
+        public static final double VELOCITY_KI = 0.0; // Leave all of these zero to disable them
         public static final double VELOCITY_KD = 0;
         public static final double VELOCITY_IZ = 0;
         public static final double VELOCITY_KF = 0;
@@ -146,9 +145,8 @@ public final class Constants {
 
         // Drive feedforward gains
         public static final double KS = 0.12392; // Volts
-        public static final double KV = 2.0891; // Volt-seconds per meter (max voltage divided by max speed)
-        public static final double KA = 0.26159; // Volt-seconds^2 per meter (max voltage
-                                                                               // divided by max accel)
+        public static final double KV = 2.2533; // Volt-seconds per meter (max voltage divided by max speed)
+        public static final double KA = 1.223;///0.26159; // Volt-seconds^2 per meter (max voltage/ divided by max accel)
         public static final double KG = (KA / KV);
 
         // Encoder conversion values. Drive converts motor rotations to linear wheel
