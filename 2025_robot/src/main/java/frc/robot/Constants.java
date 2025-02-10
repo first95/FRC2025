@@ -337,6 +337,11 @@ public final class Constants {
 
         public static final double CURRENT_OFFSET = 5;
 
+        public static final Translation3d SHOULDER_LOCATION = new Translation3d();
+        public static final double ARM_LENGTH = 5;
+        public static final double MAX_SCORING_Z = Units.feetToMeters(6);
+        public static final Rotation2d MAX_SCORING_Z_ANGLE = Rotation2d.fromRadians(Math.asin(MAX_SCORING_Z/ARM_LENGTH));
+
     }
     public static final class ClimberConstants{
         public static final int CLIMBER_ID = 13;

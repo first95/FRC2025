@@ -1,13 +1,20 @@
 package frc.robot.commands;
 
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.L1Arm;
 import frc.robot.subsystems.L4Arm;
+import frc.robot.subsystems.SwerveBase;
 import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.L1IntakeConstants;
 import frc.robot.Constants.L4ArmConstants;
@@ -29,6 +36,7 @@ public class CoralHandlerCommand extends Command {
     private final L1Arm L1arm;
     private final L4Arm L4arm;
     private final Climber climber;
+    private final SwerveBase swerve;
     private enum State{
         IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
         POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
@@ -43,19 +51,18 @@ public class CoralHandlerCommand extends Command {
         L1ScoreButton, 
         L4ScoreButton, 
         StowButton, 
-        L1HumanLoadButton,
-        climberOutButton,
-        climberInButton;
+        L1HumanLoadButton;
     
     private boolean 
-        AutoL1HumanLoadTrigger,
-        autoScoreTrigger;
+        autoL4HumanLoadTrigger,
+        autoL4ScoreTrigger;
 
 
     private boolean coralInL1 = false;
     private boolean releasedCoral = false; 
     private int releasedCoralCycles = 0;
     private double IntakeCurrent;
+    private Rotation2d L4ScoreAngle;
     private int cyclesIntaking;
     private double L1IntakeSpeed;
     private State currentState = State.IDLE;
@@ -72,7 +79,8 @@ public class CoralHandlerCommand extends Command {
             BooleanSupplier L1HumanLoadingSupplier,
             L1Arm L1arm,
             L4Arm L4arm,
-            Climber climber){
+            Climber climber,
+            SwerveBase swerve){
             
     
     
@@ -92,6 +100,7 @@ public class CoralHandlerCommand extends Command {
             this.climber = climber;
             this.L1arm = L1arm;
             this.L4arm = L4arm;
+            this.swerve = swerve;
             addRequirements(L1arm, L4arm, climber);
 
     }
@@ -116,8 +125,11 @@ public class CoralHandlerCommand extends Command {
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         L1ScoreButton=L1ScoreButtonSupplier.getAsBoolean();
 
-        AutoL1HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L1HUMANLOAD_KEY, false);
-        autoScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L1SCORE_KEY, false);
+        autoL4HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L4HUMANLOAD_KEY, false);
+        autoL4ScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L4SCORE_KEY, false);
+
+        L4ScoreAngle = calculateL4ScoreAngle(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"), swerve.getPose());
+
 
         
         if(StowButton){
@@ -223,7 +235,7 @@ public class CoralHandlerCommand extends Command {
                     cyclesIntaking = 0;
                 }
                  
-                if(!L1HumanLoadButton || !AutoL1HumanLoadTrigger){
+                if(!L1HumanLoadButton){
                     currentState = State.IDLE;
                 }
             break;
@@ -346,10 +358,22 @@ public class CoralHandlerCommand extends Command {
             
             break;
 
+    }
+    }
 
-   }
-
-
+    private Rotation2d calculateL4ScoreAngle(Pose2d target, Pose2d robotPose){
+        Translation2d shoulderFieldPose = new Translation2d(
+            robotPose.getX() + L4ArmConstants.SHOULDER_LOCATION.getX() * Math.cos(robotPose.getRotation().getRadians()), 
+            robotPose.getY() + L4ArmConstants.SHOULDER_LOCATION.getY() * Math.sin(robotPose.getRotation().getRadians()));
+        double armDistanceFromTarget = Math.hypot(target.getX() - shoulderFieldPose.getX(), target.getY() -shoulderFieldPose.getY());
+        
+        Rotation2d L4ScoreAngle = Rotation2d.fromRadians(Math.PI - Math.acos(armDistanceFromTarget/L4ArmConstants.ARM_LENGTH));
+        if(L4ScoreAngle.getSin() + L4ArmConstants.SHOULDER_LOCATION.getZ() < L4ArmConstants.MAX_SCORING_Z){
+            return L4ScoreAngle;
+        }
+        else{
+            return L4ArmConstants.MAX_SCORING_Z_ANGLE;
+        }
 
 
 
