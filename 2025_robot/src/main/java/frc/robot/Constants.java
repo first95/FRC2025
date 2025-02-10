@@ -39,8 +39,8 @@ public final class Constants {
   public static final double VORTEX_STALL_TORQUE = 3.6; // N * m
 
     public static final double GRAVITY = 9.81; // m/s/s
-    public static final double FIELD_WIDTH = 8.0137;
-    public static final double FIELD_LENGTH = 16.5410515;
+    public static final double FIELD_WIDTH = 8.0518;
+    public static final double FIELD_LENGTH = 17.548225;
 
   public static final double LOOP_CYCLE = 0.02; // 20ms
 
@@ -152,7 +152,7 @@ public final class Constants {
         // Encoder conversion values. Drive converts motor rotations to linear wheel
         // distance
         // and steering converts motor rotations to module azimuth
-        public static final double METERS_PER_MOTOR_ROTATION = (Math.PI * Units.inchesToMeters(3)) / 4.71;
+        public static final double METERS_PER_MOTOR_ROTATION = (Math.PI * Units.inchesToMeters(3)) / 5.08;
         // Calculation: 3in diameter wheels * pi [circumfrence] / gear ratio
         public static final double DEGREES_PER_STEERING_ROTATION = 360;
         // degrees per rotation / gear ratio between module and motor
@@ -341,7 +341,7 @@ public final class Constants {
     public static final class ClimberConstants{
         public static final int CLIMBER_ID = 13;
 
-        public static final boolean INVERTED = false; 
+        public static final boolean INVERTED = true; 
         public static final int SMARTCURRENTLIMIT = 80;
 
         public static final double MAX_SPEED = 0.1;
@@ -376,9 +376,9 @@ public final class Constants {
 
     public static final class Auton {
         // Plumbing via SmartDashboard
-        public static final String L1HUMANLOAD_KEY = "AutoL1HumanLoad";
+        public static final String L4HUMANLOAD_KEY = "AutoL1HumanLoad";
         public static final String ON_TARGET_KEY = "AutoOnTarget";
-        public static final String L1SCORE_KEY = "AutoL1Score";
+        public static final String L4SCORE_KEY = "AutoL1Score";
         public static final String PORT_SPEED_KEY = "PortSpeed";
         public static final String STARBOARD_SPEED_KEY = "StarboardSpeed";
         public static final String AUTO_AMP_ALIGN_KEY = "AutoAligningAmp";
@@ -386,6 +386,7 @@ public final class Constants {
         public static final String AUTO_INTAKE_SPEED_KEY = "AutoIntakeSpeed";
         public static final String EJECT_MODE_KEY = "PurgeModeRequested";
 
+        public static final double LINEUP_TO_HUMANLOADANGLE = 53; //degrees
         // Trapezoidal drive PID constants
         public static final double DRIVE_ACCELERATION_LIMIT = 2.1; // m/s/s
         public static final double DRIVE_VELOCITY_LIMIT = 6; // m/s
@@ -404,7 +405,7 @@ public final class Constants {
         public static final double DRIVE_POSITIONAL_TOLERANCE = 0.05; // m
 
         private static final Map<String, Pose2d> BLUE_MAP = Map.ofEntries(
-           
+            Map.entry("Reef", new Pose2d(new Translation2d(0,0), Rotation2d.fromDegrees(0)))
         );
         // Iterates through every element in the pose map and mirrors them for the red alliance
         private static final Map<String, Pose2d> RED_MAP =
@@ -413,11 +414,11 @@ public final class Constants {
                 entry -> new Pose2d(
                     new Translation2d(
                         FIELD_LENGTH - entry.getValue().getX(),
-                        entry.getValue().getY()
+                        FIELD_WIDTH - entry.getValue().getY()
                     ),
                     new Rotation2d(
                         -entry.getValue().getRotation().getCos(),
-                        entry.getValue().getRotation().getSin()
+                        -entry.getValue().getRotation().getSin()
                     )
                 )
             ));

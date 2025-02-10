@@ -14,6 +14,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Vision;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CoralHandlerCommand;
+import frc.robot.commands.autocommands.AlignToPose;
 import frc.robot.commands.drivebase.AbsoluteDrive;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.L1Arm;
@@ -50,6 +51,7 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -58,6 +60,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 //import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
@@ -165,14 +168,12 @@ public class RobotContainer {
       () -> headingController.getHID().getRawButton(1), //L1Score
       () -> operatorController.getHID().getYButton(), //Stow
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
-      
       L1arm,
       L4arm,
       climber
     );
 
     L1arm.setDefaultCommand(coralHandler);
-    climber.setDefaultCommand(coralHandler);
     L4arm.setDefaultCommand(coralHandler);
 
     // Configure the trigger bindings
@@ -213,9 +214,9 @@ public class RobotContainer {
     modularAutoTargetChooser.addOption("R1", "R1");
     modularAutoTargetChooser.addOption("L1", "L1");
     
-    SmartDashboard.putData("AutoChooser",autoChooser);
+    SmartDashboard.putData("autoChooser",autoChooser);
     
-    SmartDashboard.putData("ModularAutoChooser",modularAutoTargetChooser);
+    SmartDashboard.putData("modularAutoChooser",modularAutoTargetChooser);
     SmartDashboard.putString("currentModularAuto", "");
     
     SmartDashboard.putData("setShoulderGains",
@@ -249,6 +250,7 @@ public class RobotContainer {
       )
       .ignoringDisable(true)
     );
+    SmartDashboard.putBoolean("bool", false);
 
     RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
   }
@@ -294,7 +296,11 @@ public class RobotContainer {
           )
         )
     );
-    // if(operatorController.a().getAsBoolean() == true){
+    headingController.button(3).whileTrue(
+      new AlignToPose("Reef", drivebase)//align to scoring position
+      .andThen(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble,1)))//when aligned vibrate the controller
+    )
+    .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
     //   L1arm.incrementArmVoltage(0.01);   
     // }  
     // if (operatorController.b().getAsBoolean() == true){
