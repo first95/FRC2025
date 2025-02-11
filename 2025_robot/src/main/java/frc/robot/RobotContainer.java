@@ -45,7 +45,9 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.util.sendable.Sendable;
@@ -175,7 +177,7 @@ public class RobotContainer {
       drivebase,
       absoluteDrive
     );
-
+    
     L1arm.setDefaultCommand(coralHandler);
     L4arm.setDefaultCommand(coralHandler);
 
@@ -289,7 +291,7 @@ public class RobotContainer {
           new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-180 + Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : //if on the top half of the field point towards the top humanload
           new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(180 - Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) //if on the bottom half of the field point towards the bottom humanload
     );
-    headingController.button(3).onTrue(
+    headingController.button(3).whileTrue(
       new AlignToPose("Reef", drivebase)//align to scoring position
       .andThen(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble,1)))//when aligned vibrate the controller
     )

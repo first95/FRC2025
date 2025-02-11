@@ -143,14 +143,7 @@ public class CoralHandlerCommand extends Command {
         pointToReefButton = pointToReefButtonSupplier.getAsBoolean();
         
         if(pointToReefButton){
-            absDrive.setHeading(
-                Rotation2d.fromRadians(
-                    Math.atan2(
-                        swerve.getPose().getY() - Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef").getY(),
-                        swerve.getPose().getX() - Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef").getX()
-                    )
-                )
-            ); 
+            absDrive.setHeading(calculatePointToCenterOfReefHeading()); 
         }
 
         L4ScoreAngle = calculateL4ScoreAngle(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"), swerve.getPose());
@@ -396,8 +389,8 @@ public class CoralHandlerCommand extends Command {
 
             case L4_SCORING:
                 L1arm.setArmAngle(L1ArmConstants.STOWED);
-                L4arm.setArmAngle(L4ArmConstants.SCORING);
-                //L4arm.setArmAngle(L4ScoreAngle);
+                //L4arm.setArmAngle(L4ArmConstants.SCORING);
+                L4arm.setArmAngle(L4ScoreAngle);
 
                 
                 if(inAuto){
@@ -420,10 +413,10 @@ public class CoralHandlerCommand extends Command {
         Translation2d shoulderFieldPose = new Translation2d(
             robotPose.getX() + L4ArmConstants.SHOULDER_LOCATION.getX() * Math.cos(robotPose.getRotation().getRadians()), 
             robotPose.getY() + L4ArmConstants.SHOULDER_LOCATION.getY() * Math.sin(robotPose.getRotation().getRadians()));
-        double armDistanceFromTarget = Math.hypot(target.getX() - shoulderFieldPose.getX(), target.getY() -shoulderFieldPose.getY());
+        double armDistanceFromTarget = Math.hypot(target.getX() - shoulderFieldPose.getX(), target.getY() - shoulderFieldPose.getY());
         
         Rotation2d L4ScoreAngle = Rotation2d.fromRadians(Math.PI - Math.acos(armDistanceFromTarget/L4ArmConstants.ARM_LENGTH));
-        if(L4ScoreAngle.getSin() + L4ArmConstants.SHOULDER_LOCATION.getZ() < L4ArmConstants.MAX_SCORING_Z){
+        if(L4ScoreAngle.getSin() * L4ArmConstants.ARM_LENGTH + L4ArmConstants.SHOULDER_LOCATION.getZ() < L4ArmConstants.MAX_SCORING_Z){
             return L4ScoreAngle;
         }
         else{
