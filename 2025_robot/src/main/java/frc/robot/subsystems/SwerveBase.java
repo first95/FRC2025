@@ -49,8 +49,8 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 public class SwerveBase extends SubsystemBase {
-  private final PIDController autonXController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
-  private final PIDController autonYController = new PIDController(Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+  private final PIDController autonXController = new PIDController(Auton.FOLLOW_TRAJECTORY_KP, Auton.FOLLOW_TRAJECTORY_KI, Auton.FOLLOW_TRAJECTORY_KD);
+  private final PIDController autonYController = new PIDController(Auton.FOLLOW_TRAJECTORY_KP, Auton.FOLLOW_TRAJECTORY_KI, Auton.FOLLOW_TRAJECTORY_KD);
   private final PIDController autonHeadingController = new PIDController(Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
   private SwerveSample autonSetpoint;
   

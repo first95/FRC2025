@@ -35,9 +35,9 @@ public class AlignToPose extends Command {
     this.swerve = swerve;
     driveProfile = new TrapezoidProfile(Auton.DRIVE_CONSTRAINTS);
     xController = new PIDController(
-      Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+      Auton.ALIGN_TO_POSE_KP, Auton.ALIGN_TO_POSE_KI, Auton.ALIGN_TO_POSE_KD);
     yController = new PIDController(
-      Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+      Auton.ALIGN_TO_POSE_KP, Auton.ALIGN_TO_POSE_KI, Auton.ALIGN_TO_POSE_KD);
     thetaController = new PIDController(
       Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -52,9 +52,9 @@ public class AlignToPose extends Command {
     this.swerve = swerve;
     driveProfile = new TrapezoidProfile(Auton.DRIVE_CONSTRAINTS);
     xController = new PIDController(
-      Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+      Auton.ALIGN_TO_POSE_KP, Auton.ALIGN_TO_POSE_KI, Auton.ALIGN_TO_POSE_KD);
     yController = new PIDController(
-      Auton.DRIVE_KP, Auton.DRIVE_KI, Auton.DRIVE_KD);
+      Auton.ALIGN_TO_POSE_KP, Auton.ALIGN_TO_POSE_KI, Auton.ALIGN_TO_POSE_KD);
     thetaController = new PIDController(
       Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
