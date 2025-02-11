@@ -121,6 +121,7 @@ public class CoralHandlerCommand extends Command {
         StowButton = StowButtonSupplier.getAsBoolean();
 
         L4IntakeButton = L4IntakeButtonSupplier.getAsBoolean();
+        L4ScoreButton = L4ScoreButtonSupplier.getAsBoolean();
         
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         L1ScoreButton=L1ScoreButtonSupplier.getAsBoolean();
@@ -351,6 +352,8 @@ public class CoralHandlerCommand extends Command {
             break;
 
             case L4_SCORING:
+                L4arm.setArmAngle(L4ArmConstants.SCORING);
+                //L4arm.setArmAngle(L4ScoreAngle);
 
                 if(!L4ScoreButton){
                     currentState = State.IDLE;

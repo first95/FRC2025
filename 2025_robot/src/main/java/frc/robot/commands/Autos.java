@@ -38,14 +38,14 @@ public final class Autos {
   private final AutoFactory autoFactory;
   private final SwerveBase swerve;
   private final Command L1HumanLoad =
-    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1HUMANLOAD_KEY, true)).andThen(
+    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, true)).andThen(
     new WaitCommand(Constants.Auton.HUMANLOAD_TIMEOUT)).andThen(
-    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1HUMANLOAD_KEY, false))
+    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false))
     );
   private final Command l1Score = Commands.sequence(
-    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1SCORE_KEY, true)),
+    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
     new WaitCommand(Constants.Auton.SCORE_TIMEOUT),
-    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1SCORE_KEY, false)
+    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)
   ));
   String runningAuto;
   
@@ -93,9 +93,9 @@ public final class Autos {
     routine.active().onTrue(
       Commands.sequence(
         humanLoadAndScore.resetOdometry(),
-        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1HUMANLOAD_KEY, true)),
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, true)),
         new WaitCommand(Constants.Auton.HUMANLOAD_TIMEOUT),
-        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1HUMANLOAD_KEY, false)),
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
         humanLoadAndScore.cmd()
       )
     );
