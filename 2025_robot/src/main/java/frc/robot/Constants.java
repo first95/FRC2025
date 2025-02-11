@@ -338,8 +338,8 @@ public final class Constants {
         public static final double CURRENT_OFFSET = 5;
 
         public static final Translation3d SHOULDER_LOCATION = new Translation3d(
-            Units.inchesToMeters(-29/2 - 4 + 1),
-            Units.inchesToMeters(-29/2 - 10.25),
+            Units.inchesToMeters(-29/2 + 4 - 1),
+            Units.inchesToMeters(29/2 - 10.25),
             Units.inchesToMeters(-34.749)
             );
         public static final double ARM_LENGTH = 0.927;
@@ -408,9 +408,13 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints ANGULAR_CONSTRAINTS = new TrapezoidProfile.Constraints(
             ANGULAR_VELOCITY_LIMIT, ANGULAR_ACCELERATION_LIMIT);
         
-        public static final double DRIVE_KP = 20;
-        public static final double DRIVE_KI = 0;
-        public static final double DRIVE_KD = 0;
+        public static final double FOLLOW_TRAJECTORY_KP = 20;
+        public static final double FOLLOW_TRAJECTORY_KI = 0;
+        public static final double FOLLOW_TRAJECTORY_KD = 0;
+
+        public static final double ALIGN_TO_POSE_KP = 2;
+        public static final double ALIGN_TO_POSE_KI = 0;
+        public static final double ALIGN_TO_POSE_KD = 0;
 
         public static final double DRIVE_POSITIONAL_TOLERANCE = 0.05; // m
 
