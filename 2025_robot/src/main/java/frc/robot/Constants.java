@@ -337,7 +337,11 @@ public final class Constants {
 
         public static final double CURRENT_OFFSET = 5;
 
-        public static final Translation3d SHOULDER_LOCATION = new Translation3d();
+        public static final Translation3d SHOULDER_LOCATION = new Translation3d(
+            Units.inchesToMeters(-29/2 - 4 + 1),
+            Units.inchesToMeters(-29/2 - 10.25),
+            Units.inchesToMeters(-34.749)
+            );
         public static final double ARM_LENGTH = 0.927;
         public static final double MAX_SCORING_Z = Units.feetToMeters(6);
         public static final Rotation2d MAX_SCORING_Z_ANGLE = Rotation2d.fromRadians(Math.asin(MAX_SCORING_Z/ARM_LENGTH));
