@@ -63,6 +63,27 @@ public final class Autos {
       true,
       swerve);
       this.swerve = swerve;
+    autoFactory.bind(
+      "L4ScoringPosition", 
+      Commands.sequence(
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true))
+      )
+    );
+    autoFactory.bind(
+      "L4Intake",
+      Commands.sequence(
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, true)),
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))
+      )
+    );
+    autoFactory.bind(
+      "Stow",
+      Commands.sequence(
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))
+      )
+    );
   }
 
   public AutoRoutine Diamond(){
@@ -83,25 +104,39 @@ public final class Autos {
     );
     return routine;
   }
-  
-  public AutoRoutine L1HumanLoadAndScore(){
-    AutoRoutine routine = autoFactory.newRoutine("L1HumanLoadAndScore");
+  public AutoRoutine Diamond2(){
+    AutoRoutine routine = autoFactory.newRoutine("Diamond 2");
+    
 
-    AutoTrajectory humanLoadAndScore = routine.trajectory("L1HumanLoadAndScore");
+    AutoTrajectory Diamond2 = routine.trajectory("Diamond 2");
+
+    //print trajectory
+    swerve.field.getObject("autoTrajectory").setPoses(Diamond2.getRawTrajectory().getPoses());
+    
+
+    routine.active().onTrue(
+        Commands.sequence(
+            Diamond2.resetOdometry(),
+            Diamond2.cmd()
+        )
+    );
+    return routine;
+  }
+  
+  public AutoRoutine L4HumanLoadAndScore(){
+    AutoRoutine routine = autoFactory.newRoutine("L4HumanLoadAndScore");
+
+    AutoTrajectory humanLoadAndScore = routine.trajectory("L4HumanLoadAndScore");
 
     swerve.field.getObject("autoTrajectory").setPoses(humanLoadAndScore.getRawTrajectory().getPoses());
     routine.active().onTrue(
       Commands.sequence(
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
         humanLoadAndScore.resetOdometry(),
-        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, true)),
-        new WaitCommand(Constants.Auton.HUMANLOAD_TIMEOUT),
-        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-        humanLoadAndScore.cmd()
+        humanLoadAndScore.cmd(),
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false))
       )
     );
-
-    Trigger scoreTrigger = humanLoadAndScore.done();
-    scoreTrigger.onTrue(l1Score);
 
     return routine;
   }

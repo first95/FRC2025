@@ -168,7 +168,7 @@ public class RobotContainer {
       () -> headingController.getHID().getRawButton(9), //L1Score
       () -> operatorController.getHID().getYButton(), //Stow
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
-      () -> headingController.getHID().getRawButton(2),
+      () -> headingController.getHID().getRawButton(2), // point to Reef
       L1arm,
       L4arm,
       climber,
@@ -208,7 +208,8 @@ public class RobotContainer {
 
 
     autoChooser.addRoutine("diamond",autos :: Diamond);
-    autoChooser.addRoutine("L1HumanLoadAndScore", autos :: L1HumanLoadAndScore);
+    autoChooser.addRoutine("diamond 2", autos:: Diamond2);
+    autoChooser.addRoutine("L1HumanLoadAndScore", autos :: L4HumanLoadAndScore);
     autoChooser.addRoutine("TestModularAuto",autos :: testModularAuto);
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);

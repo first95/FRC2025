@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.L1Arm;
 import frc.robot.subsystems.L4Arm;
@@ -59,7 +60,8 @@ public class CoralHandlerCommand extends Command {
     
     private boolean 
         autoL4HumanLoadTrigger,
-        autoL4ScoreTrigger;
+        autoL4ScoreTrigger,
+        inAuto;
 
 
     private boolean coralInL1 = false;
@@ -134,6 +136,7 @@ public class CoralHandlerCommand extends Command {
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         L1ScoreButton=L1ScoreButtonSupplier.getAsBoolean();
 
+        inAuto = SmartDashboard.getBoolean(Constants.Auton.AUTO_ENABLED_KEY, false);
         autoL4HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L4HUMANLOAD_KEY, false);
         autoL4ScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L4SCORE_KEY, false);
 
@@ -178,25 +181,36 @@ public class CoralHandlerCommand extends Command {
                 
                 L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
                 // change state?
-                if(L1arm.atGoal() && L4arm.atGoal()){
-                    if(L1IntakeButton){
-                        currentState = State.L1_INTAKING;
-                    }
-    
-                    if(L4IntakeButton){
+                if(inAuto){
+                    if(autoL4HumanLoadTrigger){
                         currentState = State.L4_INTAKING;
-                        
                     }
-                    if(L1HumanLoadButton){
-                        currentState = State.L1_HUMAN_LOADING;
-                    }
-    
-                    if(L1ScoreButton){
-                        currentState = State.L1_SCORE_POSITIONING;
-                    }
-    
-                    if(L4ScoreButton){
+                    if(autoL4ScoreTrigger){
                         currentState = State.L4_SCORING;
+                    }
+                }
+                else{
+
+                    if(L1arm.atGoal() && L4arm.atGoal()){
+                        if(L1IntakeButton){
+                            currentState = State.L1_INTAKING;
+                        }
+        
+                        if(L4IntakeButton){
+                            currentState = State.L4_INTAKING;
+                            
+                        }
+                        if(L1HumanLoadButton){
+                            currentState = State.L1_HUMAN_LOADING;
+                        }
+        
+                        if(L1ScoreButton){
+                            currentState = State.L1_SCORE_POSITIONING;
+                        }
+        
+                        if(L4ScoreButton){
+                            currentState = State.L4_SCORING;
+                        }
                     }
                 }
                 
@@ -364,20 +378,37 @@ public class CoralHandlerCommand extends Command {
                 // L1 backstop ~95 deg
                 L1arm.setArmAngle(L1ArmConstants.STOWED);
                 L4arm.setArmAngle(L4ArmConstants.INTAKING);
-
-                if(!L4IntakeButton){
-                    currentState = State.IDLE;
-
+                
+                if(inAuto){
+                    if(!autoL4HumanLoadTrigger){
+                        currentState = State.IDLE;
+                    }
                 }
+                else{
+                    if(!L4IntakeButton){
+                        currentState = State.IDLE;
+    
+                    }
+                }
+               
 
             break;
 
             case L4_SCORING:
+                L1arm.setArmAngle(L1ArmConstants.STOWED);
                 L4arm.setArmAngle(L4ArmConstants.SCORING);
                 //L4arm.setArmAngle(L4ScoreAngle);
 
-                if(!L4ScoreButton){
-                    currentState = State.IDLE;
+                
+                if(inAuto){
+                    if(!autoL4ScoreTrigger){
+                        currentState = State.IDLE;
+                    }
+                }
+                else{
+                    if(!L4ScoreButton){
+                        currentState = State.IDLE;
+                    }
                 }
             
             break;
@@ -406,5 +437,6 @@ public class CoralHandlerCommand extends Command {
                     );
               
     }
+   
 
 }

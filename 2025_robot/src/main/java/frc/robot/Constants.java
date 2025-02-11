@@ -382,6 +382,7 @@ public final class Constants {
     public static final class Auton {
         // Plumbing via SmartDashboard
         public static final String L4HUMANLOAD_KEY = "AutoL1HumanLoad";
+        public static final String AUTO_ENABLED_KEY = "Auto_ENABLED_KEY";
         public static final String ON_TARGET_KEY = "AutoOnTarget";
         public static final String L4SCORE_KEY = "AutoL1Score";
         public static final String PORT_SPEED_KEY = "PortSpeed";
