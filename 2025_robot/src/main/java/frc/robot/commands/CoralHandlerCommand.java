@@ -18,6 +18,7 @@ import frc.robot.subsystems.SwerveBase;
 import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.L1IntakeConstants;
 import frc.robot.Constants.L4ArmConstants;
+import frc.robot.commands.drivebase.AbsoluteDrive;
 import frc.robot.Constants;
 
 
@@ -31,12 +32,14 @@ public class CoralHandlerCommand extends Command {
         HandOffButtonSupplier, 
         L1ScoreButtonSupplier,
         StowButtonSupplier, 
-        L1HumanLoadingSupplier;
+        L1HumanLoadingSupplier,
+        pointToReefButtonSupplier;
 
     private final L1Arm L1arm;
     private final L4Arm L4arm;
     private final Climber climber;
     private final SwerveBase swerve;
+    private final AbsoluteDrive absDrive;
     private enum State{
         IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
         POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
@@ -51,7 +54,8 @@ public class CoralHandlerCommand extends Command {
         L1ScoreButton, 
         L4ScoreButton, 
         StowButton, 
-        L1HumanLoadButton;
+        L1HumanLoadButton,
+        pointToReefButton;
     
     private boolean 
         autoL4HumanLoadTrigger,
@@ -77,10 +81,12 @@ public class CoralHandlerCommand extends Command {
             BooleanSupplier L1ScoreButtonSupplier, 
             BooleanSupplier StowButtonSupplier, 
             BooleanSupplier L1HumanLoadingSupplier,
+            BooleanSupplier pointToReefButtonSupplier,
             L1Arm L1arm,
             L4Arm L4arm,
             Climber climber,
-            SwerveBase swerve){
+            SwerveBase swerve,
+            AbsoluteDrive absDrive){
             
     
     
@@ -95,12 +101,14 @@ public class CoralHandlerCommand extends Command {
             this.L1ScoreButtonSupplier =L1ScoreButtonSupplier;
 
             this.L4ScoreButtonSupplier = L4ScoreButtonSupplier;
+            this.pointToReefButtonSupplier = pointToReefButtonSupplier;
 
         
             this.climber = climber;
             this.L1arm = L1arm;
             this.L4arm = L4arm;
             this.swerve = swerve;
+            this.absDrive = absDrive;
             addRequirements(L1arm, L4arm, climber);
 
     }
@@ -128,6 +136,19 @@ public class CoralHandlerCommand extends Command {
 
         autoL4HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L4HUMANLOAD_KEY, false);
         autoL4ScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L4SCORE_KEY, false);
+
+        pointToReefButton = pointToReefButtonSupplier.getAsBoolean();
+        
+        if(pointToReefButton){
+            absDrive.setHeading(
+                Rotation2d.fromRadians(
+                    Math.atan2(
+                        swerve.getPose().getY() - Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef").getY(),
+                        swerve.getPose().getX() - Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef").getX()
+                    )
+                )
+            ); 
+        }
 
         L4ScoreAngle = calculateL4ScoreAngle(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"), swerve.getPose());
 
@@ -377,9 +398,13 @@ public class CoralHandlerCommand extends Command {
         else{
             return L4ArmConstants.MAX_SCORING_Z_ANGLE;
         }
-
-
-
+    }
+    private Rotation2d calculatePointToCenterOfReefHeading(){
+        return Rotation2d.fromRadians(Math.atan2(
+                    swerve.getPose().getY() - Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef").getY(), 
+                    swerve.getPose().getX() - Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef").getX())
+                    );
+              
     }
 
 }
