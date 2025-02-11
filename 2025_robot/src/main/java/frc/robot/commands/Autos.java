@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import frc.robot.Constants.Auton;
 import frc.robot.commands.autocommands.AlignToPose;
-import frc.robot.commands.autocommands.FollowTrajectory;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveBase;
 

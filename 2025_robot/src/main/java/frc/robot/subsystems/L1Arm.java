@@ -68,7 +68,7 @@ public class L1Arm extends SubsystemBase {
 
   public L1Arm() {
     // configure intake motor parameters
-    intake = new SparkMax(L1IntakeConstants.INTAKE_ID, MotorType.kBrushless);
+    intake = new SparkMax(L1IntakeConstants.INTAKE_ID, MotorType.kBrushed);
     intakeConfig = new SparkMaxConfig();
 
     intakeConfig
