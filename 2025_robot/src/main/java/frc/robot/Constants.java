@@ -323,7 +323,7 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 10.0;
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(-47);
-        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(130);
+        public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(114.69);
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-48);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-35);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(110);
@@ -338,7 +338,7 @@ public final class Constants {
         public static final double CURRENT_OFFSET = 5;
 
         public static final Translation3d SHOULDER_LOCATION = new Translation3d();
-        public static final double ARM_LENGTH = 5;
+        public static final double ARM_LENGTH = 0.927;
         public static final double MAX_SCORING_Z = Units.feetToMeters(6);
         public static final Rotation2d MAX_SCORING_Z_ANGLE = Rotation2d.fromRadians(Math.asin(MAX_SCORING_Z/ARM_LENGTH));
 
