@@ -121,7 +121,7 @@ public final class Constants {
     public static final double SKEW_CORRECTION_FACTOR = 0;
 
         // Module PIDF gains
-        public static final double MODULE_KP = 0.06;
+        public static final double MODULE_KP = 0.02;
         public static final double MODULE_KI = 0.0;
         public static final double MODULE_KD = 0.0005;
         public static final double MODULE_IZ = 0;
@@ -130,7 +130,7 @@ public final class Constants {
         // (maxMotorSpeedRPM / gearRatio) * (minutesPerSecond))
         public static final double MODULE_KV = 12 / MAX_MODULE_ANGULAR_SPEED;
 
-        public static final double VELOCITY_KP = 0.09;
+        public static final double VELOCITY_KP = 0.06;
         public static final double VELOCITY_KI = 0.0; // Leave all of these zero to disable them
         public static final double VELOCITY_KD = 0;
         public static final double VELOCITY_IZ = 0;
@@ -301,7 +301,7 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 153.67;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 360 - 116.97 - 90;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
         public static final double KP = 1;
@@ -317,7 +317,7 @@ public final class Constants {
         public static final double CLOSEDLOOPRAMPRATE = 0.2; 
         
         public static final double OutputRangeMin = -0.25;
-        public static final double OutputRangeMax = 1;
+        public static final double OutputRangeMax = 0.5;
 
         public static final double MAX_SPEED = 10.0;
         public static final double MAX_ACCELERATION = 10.0;
