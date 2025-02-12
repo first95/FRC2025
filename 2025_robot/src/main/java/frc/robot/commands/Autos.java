@@ -126,20 +126,23 @@ public final class Autos {
     AutoRoutine routine = autoFactory.newRoutine("L4HumanLoadAndScore");
 
     AutoTrajectory humanLoadAndScore = routine.trajectory("L4HumanLoadAndScore");
-    AutoTrajectory ScoreToHumanLoad = routine.trajectory("scoreToHumanLoad");
+    AutoTrajectory ScoreToHumanLoad = routine.trajectory("L4ScoreandHumanLoad");
 
     swerve.field.getObject("autoTrajectory").setPoses(humanLoadAndScore.getRawTrajectory().getPoses());
     routine.active().onTrue(
       Commands.sequence(
         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
-        new AlignToPose( humanLoadAndScore.getInitialPose().get() , swerve),
+        humanLoadAndScore.resetOdometry(),
         humanLoadAndScore.cmd()
       )
     );
     
 
     Trigger atHumanLoad = ScoreToHumanLoad.done();
-    atHumanLoad.onTrue(new WaitCommand(2));
+    atHumanLoad.onTrue(new WaitCommand(10).andThen(humanLoadAndScore.cmd()));
+
+    Trigger atScoring = humanLoadAndScore.done();
+    atScoring.onTrue(new WaitCommand(1).andThen(ScoreToHumanLoad.cmd()));
 
     routine.active().onFalse(new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)));
     return routine;

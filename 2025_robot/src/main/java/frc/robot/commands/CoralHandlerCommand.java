@@ -389,8 +389,8 @@ public class CoralHandlerCommand extends Command {
 
             case L4_SCORING:
                 L1arm.setArmAngle(L1ArmConstants.STOWED);
-                //L4arm.setArmAngle(L4ArmConstants.SCORING);
-                L4arm.setArmAngle(L4ScoreAngle);
+                L4arm.setArmAngle(L4ArmConstants.SCORING);
+                //L4arm.setArmAngle(L4ScoreAngle);
 
                 
                 if(inAuto){
