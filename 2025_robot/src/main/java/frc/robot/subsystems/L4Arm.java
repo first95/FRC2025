@@ -209,7 +209,7 @@ public class L4Arm extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    if(armGoal.getRadians() >= L4ArmConstants.LOWER_LIMIT.getRadians() || armGoal.getRadians() <= L4ArmConstants.UPPER_LIMIT.getRadians()){
+    if(armGoal.getRadians() >= L4ArmConstants.LOWER_LIMIT.getRadians() && armGoal.getRadians() <= L4ArmConstants.UPPER_LIMIT.getRadians()){
       shoulderPID.setReference(
       armGoal.getRadians(),
       ControlType.kPosition,

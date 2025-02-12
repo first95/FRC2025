@@ -256,7 +256,7 @@ public final class Constants {
     public static final class L1IntakeConstants{
         public static final int INTAKE_ID = 16;
 
-        public static final boolean INVERTED = true;
+        public static final boolean INVERTED = false;
 
         public static final int SMARTCURRENTLIMIT = 30;
         public static final double OPEN_LOOP_RAMP_RATE = 10;
@@ -269,17 +269,17 @@ public final class Constants {
         public static final boolean OUTPUT_CURRENT_ALWAYS_ON = true;
         public static final int OUTPUT_CURRENT_PERIODMS = 20;
 
-        public static final double MAX_SPEED = 1;
+        public static final double MAX_SPEED = 0.6;
 
-        public static final double INTAKING_CURRENT_THRESHOULD = 15;
-        public static final double RELEASED_CURRENT_THRESHOULD = 10;
-        public static final double NOPICKUP_CURRENT_THRESHOULD = 3;
+        public static final double INTAKING_CURRENT_THRESHOULD = 18;
+        public static final double RELEASED_CURRENT_THRESHOULD = 18;
+        public static final double NOPICKUP_CURRENT_THRESHOULD = 18;
         public static final int CYCLE_INTAKING_THRESHOLD = 20;
         public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
-        public static final double HOLDING_SPEED = 0.05;
-        public static final double SCORE_SPEED = -1;
-        public static final double INTAKE_SPEED = 0.35;
+        public static final double HOLDING_SPEED = 0.5;
+        public static final double SCORE_SPEED = -0.5;
+        public static final double INTAKE_SPEED = 0.5;
 
     }
 

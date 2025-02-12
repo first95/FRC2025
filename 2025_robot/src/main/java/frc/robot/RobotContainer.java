@@ -282,14 +282,14 @@ public class RobotContainer {
     operatorController.povUp().onTrue(climber.runWinch(1));
     operatorController.povCenter().onTrue(climber.runWinch(0));
     driveController.button(2).whileTrue( //align to humanload
-      drivebase.getAlliance() == Alliance.Blue ? //if alliance blue
-        drivebase.getPose().getY() >= Constants.FIELD_WIDTH/2 ?  
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees( Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : 
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(  -Constants.Auton.LINEUP_TO_HUMANLOADANGLE)))
-      : //if alliance is red
+      drivebase.getAlliance() == Alliance.Blue ? //if alliance red
+        (drivebase.getPose().getY() >= Constants.FIELD_WIDTH/2 ?  
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : 
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees( -Constants.Auton.LINEUP_TO_HUMANLOADANGLE ))))
+      : //if alliance is blue
         drivebase.getPose().getY() >= Constants.FIELD_WIDTH/2 ? 
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-180 + Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : //if on the top half of the field point towards the top humanload
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(180 - Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) //if on the bottom half of the field point towards the bottom humanload
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(180 - Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : //if on the top half of the field point towards the top humanload
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-180 + Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) //if on the bottom half of the field point towards the bottom humanload
     );
     headingController.button(3).whileTrue(
       new AlignToPose("Reef", drivebase)//align to scoring position
@@ -351,6 +351,7 @@ public class RobotContainer {
 
   public void setIsAuto(boolean isAuto) {
     drivebase.isAuto = isAuto;
+    SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, isAuto);
   }
 
   private Map<String, Optional<Trajectory<SwerveSample>>> loadTrajectories() {
