@@ -419,7 +419,7 @@ public final class Constants {
         public static final double DRIVE_POSITIONAL_TOLERANCE = 0.05; // m
 
         private static final Map<String, Pose2d> BLUE_MAP = Map.ofEntries(
-            Map.entry("Reef", new Pose2d(new Translation2d(0,0), Rotation2d.fromDegrees(0)))
+            Map.entry("Reef", new Pose2d(new Translation2d(1.0,1.0), Rotation2d.fromDegrees(0.0)))
         );
         // Iterates through every element in the pose map and mirrors them for the red alliance
         private static final Map<String, Pose2d> RED_MAP =

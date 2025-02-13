@@ -170,7 +170,7 @@ public class RobotContainer {
       () -> headingController.getHID().getRawButton(9), //L1Score
       () -> operatorController.getHID().getYButton(), //Stow
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
-      () -> headingController.getHID().getRawButton(2), // point to Reef
+      () -> driveController.getHID().getRawButton(4), // point to Reef
       L1arm,
       L4arm,
       climber,
@@ -276,20 +276,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-   
+    operatorController.start().onTrue(new InstantCommand(() -> drivebase.resetOdometry(new Pose2d(new Translation2d(),new Rotation2d()))).ignoringDisable(true));
+    //operatorController.start().onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     operatorController.povDown().onTrue(climber.runWinch(-1));
     operatorController.povUp().onTrue(climber.runWinch(1));
     operatorController.povCenter().onTrue(climber.runWinch(0));
     driveController.button(2).whileTrue( //align to humanload
-      drivebase.getAlliance() == Alliance.Blue ? //if alliance red
+      drivebase.getAlliance() == Alliance.Blue ? //if alliance blue
         (drivebase.getPose().getY() >= Constants.FIELD_WIDTH/2 ?  
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : 
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees( -Constants.Auton.LINEUP_TO_HUMANLOADANGLE ))))
-      : //if alliance is blue
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(180 - Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : 
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-180 + Constants.Auton.LINEUP_TO_HUMANLOADANGLE ))))
+      : //if alliance is red
         drivebase.getPose().getY() >= Constants.FIELD_WIDTH/2 ? 
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(180 - Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : //if on the top half of the field point towards the top humanload
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-180 + Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) //if on the bottom half of the field point towards the bottom humanload
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : //if on the top half of the field point towards the top humanload
+          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) //if on the bottom half of the field point towards the bottom humanload
     );
     headingController.button(3).whileTrue(
       new AlignToPose("Reef", drivebase)//align to scoring position

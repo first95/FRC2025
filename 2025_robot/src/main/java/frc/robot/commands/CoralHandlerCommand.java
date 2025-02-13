@@ -3,12 +3,15 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Rotation;
 
+import java.security.spec.ECPublicKeySpec;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -143,12 +146,14 @@ public class CoralHandlerCommand extends Command {
         pointToReefButton = pointToReefButtonSupplier.getAsBoolean();
         
         if(pointToReefButton){
-            absDrive.setHeading(calculatePointToCenterOfReefHeading()); 
+            //absDrive.setHeading(calculatePointToCenterOfReefHeading());
+            swerve.field.getObject("Reef").setPose(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"));
+            absDrive.setHeading(calculatePointToTargetHeading(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"))); 
         }
 
-        L4ScoreAngle = calculateL4ScoreAngle(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"), swerve.getPose());
-
-
+        calculateL4ScoreAngle(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"), swerve.getPose());
+        // absDrive.setHeading(calculatePointToTargetHeading(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef")));
+        // swerve.setFieldRelChassisSpeedsAndSkewCorrect(new ChassisSpeeds(1,0,0));
         
         if(StowButton){
             currentState = State.IDLE;
@@ -411,10 +416,11 @@ public class CoralHandlerCommand extends Command {
 
     private Rotation2d calculateL4ScoreAngle(Pose2d target, Pose2d robotPose){
         Translation2d shoulderFieldPose = new Translation2d(
-            robotPose.getX() + L4ArmConstants.SHOULDER_LOCATION.getX() * Math.cos(robotPose.getRotation().getRadians()), 
-            robotPose.getY() + L4ArmConstants.SHOULDER_LOCATION.getY() * Math.sin(robotPose.getRotation().getRadians()));
+            robotPose.getX() + Math.cos(robotPose.getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()),
+            robotPose.getY() + Math.sin(robotPose.getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()));
         double armDistanceFromTarget = Math.hypot(target.getX() - shoulderFieldPose.getX(), target.getY() - shoulderFieldPose.getY());
         
+        swerve.field.getObject("ShoulderPositon").setPose(new Pose2d(shoulderFieldPose,Rotation2d.fromRadians(swerve.getPose().getRotation().getRadians() + Math.PI)));
         Rotation2d L4ScoreAngle = Rotation2d.fromRadians(Math.PI - Math.acos(armDistanceFromTarget/L4ArmConstants.ARM_LENGTH));
         if(L4ScoreAngle.getSin() * L4ArmConstants.ARM_LENGTH + L4ArmConstants.SHOULDER_LOCATION.getZ() < L4ArmConstants.MAX_SCORING_Z){
             return L4ScoreAngle;
@@ -422,6 +428,7 @@ public class CoralHandlerCommand extends Command {
         else{
             return L4ArmConstants.MAX_SCORING_Z_ANGLE;
         }
+        
     }
     private Rotation2d calculatePointToCenterOfReefHeading(){
         return Rotation2d.fromRadians(Math.atan2(
@@ -429,6 +436,28 @@ public class CoralHandlerCommand extends Command {
                     swerve.getPose().getX() - Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef").getX())
                     );
               
+    }
+    private Rotation2d calculatePointToTargetHeading(Pose2d target){
+        
+        double distanceFromTarget = Math.hypot(swerve.getPose().getX() - target.getX(), swerve.getPose().getY() - target.getY());
+        Rotation2d heading = new Rotation2d();
+        if (distanceFromTarget > L4ArmConstants.SHOULDER_LOCATION.getY()){
+            if(swerve.getAlliance() == Alliance.Blue){
+                heading = Rotation2d.fromRadians(
+                Math.atan2(target.getY() - swerve.getPose().getY(), target.getX() - swerve.getPose().getX()) - Math.asin((-L4ArmConstants.SHOULDER_LOCATION.getY())/(Math.hypot(target.getX() - swerve.getPose().getX(), target.getY() - swerve.getPose().getY()))) + Math.PI
+                );
+            }
+            else{
+                heading = Rotation2d.fromRadians(
+                Math.atan2(target.getY() - swerve.getPose().getY(), target.getX() - swerve.getPose().getX()) - Math.asin((L4ArmConstants.SHOULDER_LOCATION.getY())/(Math.hypot(target.getX() - swerve.getPose().getX(), target.getY() - swerve.getPose().getY())))
+                );
+            }
+
+
+        }
+        
+        
+        return heading;
     }
    
 
