@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.L1Arm;
 import frc.robot.subsystems.L4Arm;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.SwerveBase;
 import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.L1IntakeConstants;
 import frc.robot.Constants.L4ArmConstants;
+import frc.robot.commands.autocommands.AlignToPose;
 import frc.robot.commands.drivebase.AbsoluteDrive;
 import frc.robot.Constants;
 
@@ -39,7 +41,8 @@ public class CoralHandlerCommand extends Command {
         StowButtonSupplier, 
         L1HumanLoadingSupplier,
         pointToReefButtonSupplier,
-        alignWithHumanLoadButtonSupplier;
+        alignWithHumanLoadButtonSupplier,
+        autoAlignToScoreButtonSupplier;
 
     private final L1Arm L1arm;
     private final L4Arm L4arm;
@@ -78,7 +81,7 @@ public class CoralHandlerCommand extends Command {
     private int cyclesIntaking;
     private double L1IntakeSpeed;
     private State currentState = State.IDLE;
-    private Pose2d L4Target;
+    private Pose2d L4Target,L4ScorePose;
     
 
         public CoralHandlerCommand(
@@ -92,6 +95,7 @@ public class CoralHandlerCommand extends Command {
             BooleanSupplier L1HumanLoadingSupplier,
             BooleanSupplier pointToReefButtonSupplier,
             BooleanSupplier alignWithHumanLoadButtonSupplier, 
+            BooleanSupplier autoAlignToScoreButtonSupplier,
             L1Arm L1arm,
             L4Arm L4arm,
             Climber climber,
@@ -113,6 +117,7 @@ public class CoralHandlerCommand extends Command {
             this.L4ScoreButtonSupplier = L4ScoreButtonSupplier;
             this.pointToReefButtonSupplier = pointToReefButtonSupplier;
             this.alignWithHumanLoadButtonSupplier = alignWithHumanLoadButtonSupplier;
+            this.autoAlignToScoreButtonSupplier = autoAlignToScoreButtonSupplier;
 
         
             this.climber = climber;
@@ -151,7 +156,11 @@ public class CoralHandlerCommand extends Command {
         autoL4ScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L4SCORE_KEY, false);
 
         pointToReefButton = pointToReefButtonSupplier.getAsBoolean();
+
         
+        
+        
+       
         
         if(pointToReefButton){
             //absDrive.setHeading(calculatePointToCenterOfReefHeading());
@@ -160,16 +169,16 @@ public class CoralHandlerCommand extends Command {
         }
         else{
             L4Target = findClosestL4Target();
+            L4ScorePose = findScoringPose(L4Target);
             L4ScoreAngle = L4ArmConstants.SCORING;
             swerve.field.getObject("Target").setPose(L4Target);
-            swerve.field.getObject("Scoring").setPose(
-                new Pose2d(
-                    new Translation2d(
-                        L4Target.getX() - L4Target.getRotation().getCos()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getCos() * L4ArmConstants.SHOULDER_LOCATION.getY(),
-                        L4Target.getY() - L4Target.getRotation().getSin()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getSin() * L4ArmConstants.SHOULDER_LOCATION.getY()),
-                        L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(0))));
+            swerve.field.getObject("Scoring").setPose(L4ScorePose);
 
         }
+
+        new Trigger(autoAlignToScoreButtonSupplier).whileTrue(
+            new AlignToPose(L4ScorePose, swerve)//align to scoring position
+        );
 
         if(alignWithHumanLoadButton){
             absDrive.setHeading(Rotation2d.fromDegrees((swerve.getAlliance() == Alliance.Blue ? 1:-1)*(swerve.getPose().getY() < Constants.FIELD_WIDTH/2 ? 1 : -1) * Constants.Auton.LINEUP_TO_HUMANLOADANGLE + 180) );
@@ -498,6 +507,13 @@ public class CoralHandlerCommand extends Command {
         }
         return closestL4Pole;
         
+    }
+    private Pose2d findScoringPose(Pose2d L4Target){
+       return new Pose2d(
+                    new Translation2d(
+                        L4Target.getX() - L4Target.getRotation().getCos()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getCos() * L4ArmConstants.SHOULDER_LOCATION.getY(),
+                        L4Target.getY() - L4Target.getRotation().getSin()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getSin() * L4ArmConstants.SHOULDER_LOCATION.getY()),
+                        L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(0)));
     }
     
 

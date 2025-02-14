@@ -171,7 +171,8 @@ public class RobotContainer {
       () -> operatorController.getHID().getYButton(), //Stow
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
       () -> headingController.getHID().getRawButton(2), // point to Reef
-      () -> driveController.getHID().getRawButton(2), //auto align with humanLoad
+      () -> driveController.getHID().getRawButton(2),
+      () -> operatorController.getHID().getLeftBumperButton(), //auto align with humanLoad
       L1arm,
       L4arm,
       climber,
@@ -284,11 +285,11 @@ public class RobotContainer {
     operatorController.povUp().onTrue(climber.runWinch(1));
     operatorController.povCenter().onTrue(climber.runWinch(0));
     
-    operatorController.button(5).whileTrue(
-      new AlignToPose("Reef", drivebase)//align to scoring position
-      .andThen(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble,1)))//when aligned vibrate the controller
-    )
-    .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
+    // operatorController.button(5).whileTrue(
+    //   new AlignToPose("Reef", drivebase)//align to scoring position
+    //   .andThen(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble,1)))//when aligned vibrate the controller
+    // )
+    // .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
     //   L1arm.incrementArmVoltage(0.01);   
     // }  
     // if (operatorController.b().getAsBoolean() == true){
