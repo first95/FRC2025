@@ -412,13 +412,14 @@ public final class Constants {
         public static final double FOLLOW_TRAJECTORY_KI = 0;
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 
+        public static final double SCORING_WAIT_TIME = 1;
+        public static final double HUMANLOAD_WAIT_TIME = 1;
+
         public static final double ALIGN_TO_POSE_KP = 2;
         public static final double ALIGN_TO_POSE_KI = 0;
         public static final double ALIGN_TO_POSE_KD = 0;
 
         public static final double DRIVE_POSITIONAL_TOLERANCE = 0.05; // m
-        
-        
         
         
         private static final Map<String, Pose2d> BLUE_MAP = Map.ofEntries(
@@ -459,11 +460,6 @@ public final class Constants {
             Alliance.Red, RED_MAP
         );
 
-        // Added to final autoshoot calculations-- remember that we shoot from the back
-        public static final Rotation2d AUTO_SHOOT_AZIMUTH_ADJUSTMENT = Rotation2d.fromDegrees(4);
-
-        public static final double HUMANLOAD_TIMEOUT = 2;
-        public static final double SCORE_TIMEOUT = 3;
     }
     public static final class CommandDebugFlags {
         public static final int ALIGN_TO_POSE = 0b1000000;

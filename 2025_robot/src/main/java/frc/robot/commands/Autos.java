@@ -36,16 +36,6 @@ public final class Autos {
   /** Example static factory for an autonomous command. */
   private final AutoFactory autoFactory;
   private final SwerveBase swerve;
-  private final Command L1HumanLoad =
-    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, true)).andThen(
-    new WaitCommand(Constants.Auton.HUMANLOAD_TIMEOUT)).andThen(
-    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false))
-    );
-  private final Command l1Score = Commands.sequence(
-    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
-    new WaitCommand(Constants.Auton.SCORE_TIMEOUT),
-    new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)
-  ));
   String runningAuto;
   
   public static Command exampleAuto(ExampleSubsystem subsystem) {
@@ -149,13 +139,13 @@ public final class Autos {
   }
   
   
-  public AutoRoutine testModularAuto(){
+  public AutoRoutine ModularAuto(){
     AutoRoutine routine = autoFactory.newRoutine("TestModularAuto");
     String[] posTargets = SmartDashboard.getStringArray("modularAutoTargets", null);
     
     
     Pose2d[] fullTrajectory = {};    
-    if (posTargets != null && posTargets.length > 2){
+    if (posTargets != null && posTargets.length >= 2){
       for (String Target : posTargets) {
         runningAuto += "- " + Target;
       }
@@ -167,6 +157,7 @@ public final class Autos {
       //load trajectorys based on posTargets
       for(int n = 0; n < trajectories.length; n++){
         trajectories[n] = routine.trajectory(posTargets[n] + " - " + posTargets[n+1]);
+        
         Pose2d[] trajectoryPose2dList = trajectories[n].getRawTrajectory().getPoses();
         fullTrajectory = Arrays.copyOf(fullTrajectory, fullTrajectory.length + trajectoryPose2dList.length );
         System.arraycopy(trajectoryPose2dList, 0, fullTrajectory, fullTrajectory.length - trajectoryPose2dList.length , trajectoryPose2dList.length);
@@ -184,7 +175,12 @@ public final class Autos {
       
       //go through all trajectorys and run them one after another
       for(int n = 0; n < trajectories.length - 1; n++){
-        trajectories[n].done().onTrue(trajectories[n+1].cmd());
+        if(posTargets[n+1].charAt(0) == 'R'){
+          trajectories[n].done().onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+        }
+        else if(posTargets[n+1].charAt(0) == 'L'){
+          trajectories[n].done().onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+        }
       }
       
       swerve.field.getObject("autoTrajectory").setPoses(fullTrajectory);

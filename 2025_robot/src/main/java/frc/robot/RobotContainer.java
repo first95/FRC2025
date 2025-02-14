@@ -214,13 +214,27 @@ public class RobotContainer {
     autoChooser.addRoutine("diamond",autos :: Diamond);
     autoChooser.addRoutine("diamond 2", autos:: Diamond2);
     autoChooser.addRoutine("L1HumanLoadAndScore", autos :: L4HumanLoadAndScore);
-    autoChooser.addRoutine("TestModularAuto",autos :: testModularAuto);
+    autoChooser.addRoutine("TestModularAuto",autos :: ModularAuto);
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
 
     modularAutoTargetChooser.addOption("S1", "S1");
-    modularAutoTargetChooser.addOption("R1", "R1");
+    modularAutoTargetChooser.addOption("S2", "S2");
+    modularAutoTargetChooser.addOption("S3", "S3");
+    modularAutoTargetChooser.addOption("R00", "R00");
+    modularAutoTargetChooser.addOption("R01", "R01");
+    modularAutoTargetChooser.addOption("R10", "R10");
+    modularAutoTargetChooser.addOption("R11", "R11");
+    modularAutoTargetChooser.addOption("R20", "R20");
+    modularAutoTargetChooser.addOption("R21", "R21");
+    modularAutoTargetChooser.addOption("R30", "R30");
+    modularAutoTargetChooser.addOption("R31", "R31");
+    modularAutoTargetChooser.addOption("R40", "R40");
+    modularAutoTargetChooser.addOption("R41", "R41");
+    modularAutoTargetChooser.addOption("R50", "R50");
+    modularAutoTargetChooser.addOption("R51", "R51");
     modularAutoTargetChooser.addOption("L1", "L1");
+    modularAutoTargetChooser.addOption("L2", "L2");
     
     SmartDashboard.putData("autoChooser",autoChooser);
     
@@ -325,7 +339,6 @@ public class RobotContainer {
     for(String posTarget : modularAutoTargets){
       currentModularAuto += posTarget + ", ";
     }
-    
     SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
     SmartDashboard.putString("currentModularAuto",currentModularAuto);
   }
@@ -337,6 +350,7 @@ public class RobotContainer {
       for(String posTarget : modularAutoTargets){
         currentModularAuto += posTarget + ", ";
       }
+      
       SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
       SmartDashboard.putString("currentModularAuto", currentModularAuto);
     }
