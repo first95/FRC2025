@@ -170,7 +170,8 @@ public class RobotContainer {
       () -> headingController.getHID().getRawButton(9), //L1Score
       () -> operatorController.getHID().getYButton(), //Stow
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
-      () -> driveController.getHID().getRawButton(4), // point to Reef
+      () -> headingController.getHID().getRawButton(2), // point to Reef
+      () -> driveController.getHID().getRawButton(2), //auto align with humanLoad
       L1arm,
       L4arm,
       climber,
@@ -282,17 +283,8 @@ public class RobotContainer {
     operatorController.povDown().onTrue(climber.runWinch(-1));
     operatorController.povUp().onTrue(climber.runWinch(1));
     operatorController.povCenter().onTrue(climber.runWinch(0));
-    driveController.button(2).whileTrue( //align to humanload
-      drivebase.getAlliance() == Alliance.Blue ? //if alliance blue
-        (drivebase.getPose().getY() >= Constants.FIELD_WIDTH/2 ?  
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(180 - Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : 
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-180 + Constants.Auton.LINEUP_TO_HUMANLOADANGLE ))))
-      : //if alliance is red
-        drivebase.getPose().getY() >= Constants.FIELD_WIDTH/2 ? 
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) : //if on the top half of the field point towards the top humanload
-          new InstantCommand(() -> absoluteDrive.setHeading(Rotation2d.fromDegrees(-Constants.Auton.LINEUP_TO_HUMANLOADANGLE))) //if on the bottom half of the field point towards the bottom humanload
-    );
-    headingController.button(3).whileTrue(
+    
+    operatorController.button(5).whileTrue(
       new AlignToPose("Reef", drivebase)//align to scoring position
       .andThen(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble,1)))//when aligned vibrate the controller
     )

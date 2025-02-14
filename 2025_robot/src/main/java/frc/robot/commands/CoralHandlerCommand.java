@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,7 +38,8 @@ public class CoralHandlerCommand extends Command {
         L1ScoreButtonSupplier,
         StowButtonSupplier, 
         L1HumanLoadingSupplier,
-        pointToReefButtonSupplier;
+        pointToReefButtonSupplier,
+        alignWithHumanLoadButtonSupplier;
 
     private final L1Arm L1arm;
     private final L4Arm L4arm;
@@ -59,7 +61,8 @@ public class CoralHandlerCommand extends Command {
         L4ScoreButton, 
         StowButton, 
         L1HumanLoadButton,
-        pointToReefButton;
+        pointToReefButton,
+        alignWithHumanLoadButton;
     
     private boolean 
         autoL4HumanLoadTrigger,
@@ -75,6 +78,7 @@ public class CoralHandlerCommand extends Command {
     private int cyclesIntaking;
     private double L1IntakeSpeed;
     private State currentState = State.IDLE;
+    private Pose2d L4Target;
     
 
         public CoralHandlerCommand(
@@ -87,6 +91,7 @@ public class CoralHandlerCommand extends Command {
             BooleanSupplier StowButtonSupplier, 
             BooleanSupplier L1HumanLoadingSupplier,
             BooleanSupplier pointToReefButtonSupplier,
+            BooleanSupplier alignWithHumanLoadButtonSupplier, 
             L1Arm L1arm,
             L4Arm L4arm,
             Climber climber,
@@ -107,6 +112,7 @@ public class CoralHandlerCommand extends Command {
 
             this.L4ScoreButtonSupplier = L4ScoreButtonSupplier;
             this.pointToReefButtonSupplier = pointToReefButtonSupplier;
+            this.alignWithHumanLoadButtonSupplier = alignWithHumanLoadButtonSupplier;
 
         
             this.climber = climber;
@@ -137,7 +143,8 @@ public class CoralHandlerCommand extends Command {
         L4ScoreButton = L4ScoreButtonSupplier.getAsBoolean();
         
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
-        L1ScoreButton=L1ScoreButtonSupplier.getAsBoolean();
+        L1ScoreButton = L1ScoreButtonSupplier.getAsBoolean();
+        alignWithHumanLoadButton = alignWithHumanLoadButtonSupplier.getAsBoolean();
 
         inAuto = SmartDashboard.getBoolean(Constants.Auton.AUTO_ENABLED_KEY, false);
         autoL4HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L4HUMANLOAD_KEY, false);
@@ -145,15 +152,30 @@ public class CoralHandlerCommand extends Command {
 
         pointToReefButton = pointToReefButtonSupplier.getAsBoolean();
         
+        
         if(pointToReefButton){
             //absDrive.setHeading(calculatePointToCenterOfReefHeading());
-            swerve.field.getObject("Reef").setPose(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"));
-            absDrive.setHeading(calculatePointToTargetHeading(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"))); 
+            absDrive.setHeading(calculatePointToTargetHeading(L4Target)); 
+            L4ScoreAngle = calculateL4ScoreAngle(L4Target);
+        }
+        else{
+            L4Target = findClosestL4Target();
+            L4ScoreAngle = L4ArmConstants.SCORING;
+            swerve.field.getObject("Target").setPose(L4Target);
+            swerve.field.getObject("Scoring").setPose(
+                new Pose2d(
+                    new Translation2d(
+                        L4Target.getX() - L4Target.getRotation().getCos()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getCos() * L4ArmConstants.SHOULDER_LOCATION.getY(),
+                        L4Target.getY() - L4Target.getRotation().getSin()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getSin() * L4ArmConstants.SHOULDER_LOCATION.getY()),
+                        L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(0))));
+
         }
 
-        calculateL4ScoreAngle(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef"), swerve.getPose());
-        // absDrive.setHeading(calculatePointToTargetHeading(Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef")));
-        // swerve.setFieldRelChassisSpeedsAndSkewCorrect(new ChassisSpeeds(1,0,0));
+        if(alignWithHumanLoadButton){
+            absDrive.setHeading(Rotation2d.fromDegrees((swerve.getAlliance() == Alliance.Blue ? 1:-1)*(swerve.getPose().getY() < Constants.FIELD_WIDTH/2 ? 1 : -1) * Constants.Auton.LINEUP_TO_HUMANLOADANGLE + 180) );
+        }
+
+        
         
         if(StowButton){
             currentState = State.IDLE;
@@ -394,8 +416,8 @@ public class CoralHandlerCommand extends Command {
 
             case L4_SCORING:
                 L1arm.setArmAngle(L1ArmConstants.STOWED);
-                L4arm.setArmAngle(L4ArmConstants.SCORING);
-                //L4arm.setArmAngle(L4ScoreAngle);
+                //L4arm.setArmAngle(L4ArmConstants.SCORING);
+                L4arm.setArmAngle(L4ScoreAngle);
 
                 
                 if(inAuto){
@@ -414,10 +436,10 @@ public class CoralHandlerCommand extends Command {
     }
     }
 
-    private Rotation2d calculateL4ScoreAngle(Pose2d target, Pose2d robotPose){
+    private Rotation2d calculateL4ScoreAngle(Pose2d target){
         Translation2d shoulderFieldPose = new Translation2d(
-            robotPose.getX() + Math.cos(robotPose.getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()),
-            robotPose.getY() + Math.sin(robotPose.getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()));
+            swerve.getPose().getX() + Math.cos(swerve.getPose().getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()),
+            swerve.getPose().getY() + Math.sin(swerve.getPose().getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()));
         double armDistanceFromTarget = Math.hypot(target.getX() - shoulderFieldPose.getX(), target.getY() - shoulderFieldPose.getY());
         
         swerve.field.getObject("ShoulderPositon").setPose(new Pose2d(shoulderFieldPose,Rotation2d.fromRadians(swerve.getPose().getRotation().getRadians() + Math.PI)));
@@ -459,6 +481,24 @@ public class CoralHandlerCommand extends Command {
         
         return heading;
     }
-   
+    private Pose2d findClosestL4Target(){
+        Translation2d shoulderFieldPose = new Translation2d(
+            swerve.getPose().getX() + Math.cos(swerve.getPose().getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()),
+            swerve.getPose().getY() + Math.sin(swerve.getPose().getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()));
+        
+        Pose2d closestL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
+        Pose2d currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
+        for(int side = 0; side <= 5; side ++){
+            for(int L4Pole = 0; L4Pole <= 1;L4Pole ++){
+                currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + side + L4Pole);
+                if(Math.hypot(currentL4Pole.getX() - shoulderFieldPose.getX(), currentL4Pole.getY() - shoulderFieldPose.getY()) < Math.hypot(closestL4Pole.getX() - shoulderFieldPose.getX(), closestL4Pole.getY() - shoulderFieldPose.getY())){
+                    closestL4Pole = currentL4Pole;
+                }
+            }
+        }
+        return closestL4Pole;
+        
+    }
+    
 
 }
