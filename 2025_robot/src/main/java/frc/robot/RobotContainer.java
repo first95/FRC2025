@@ -320,7 +320,11 @@ public class RobotContainer {
     final int N = modularAutoTargets.length;
     modularAutoTargets = Arrays.copyOf(modularAutoTargets,N + 1);
     modularAutoTargets[N] = modularAutoTargetChooser.getSelected();
-    currentModularAuto += "- " + modularAutoTargetChooser.getSelected();
+    currentModularAuto = "";
+    for(String posTarget : modularAutoTargets){
+      currentModularAuto += posTarget + ", ";
+    }
+    
     SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
     SmartDashboard.putString("currentModularAuto",currentModularAuto);
   }
@@ -328,7 +332,10 @@ public class RobotContainer {
     final int N = modularAutoTargets.length;
     if (N > 0){
       modularAutoTargets = Arrays.copyOf(modularAutoTargets,N - 1);
-      currentModularAuto = currentModularAuto.substring(0,currentModularAuto.length() - 4);
+      currentModularAuto = "";
+      for(String posTarget : modularAutoTargets){
+        currentModularAuto += posTarget + ", ";
+      }
       SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
       SmartDashboard.putString("currentModularAuto", currentModularAuto);
     }
