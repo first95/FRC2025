@@ -244,13 +244,13 @@ public class L1Arm extends SubsystemBase {
   public void periodic() {
     
 
-    SmartDashboard.putNumber("ShoulderGoal", armGoal.getDegrees());
-    SmartDashboard.putNumber("shoulderVelocity", shoulderAbsoluteEncoder.getVelocity());
-    SmartDashboard.putNumber("ShoulderPos", getArmAngle().getDegrees());
-    SmartDashboard.putNumber("ShoulderControlEffort", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
-    SmartDashboard.putNumber("ShoulderCurrentDraw", getArmCurrent());
-    SmartDashboard.putNumber("ArmVoltage", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
-    SmartDashboard.putNumber("PrimaryEncoderPos",getRelativeEncoderPos().getDegrees());
+    SmartDashboard.putNumber("L1shoulderGoal", armGoal.getDegrees());
+    SmartDashboard.putNumber("L1shoulderVelocity", shoulderAbsoluteEncoder.getVelocity());
+    SmartDashboard.putNumber("L1shoulderPos", getArmAngle().getDegrees());
+    SmartDashboard.putNumber("L1shoulderControlEffort", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
+    SmartDashboard.putNumber("L1shoulderCurrentDraw", getArmCurrent());
+    SmartDashboard.putNumber("L1ArmVoltage", shoulder.getAppliedOutput() * shoulder.getBusVoltage());
+    SmartDashboard.putNumber("L1ArmPrimaryEncoderPos",getRelativeEncoderPos().getDegrees());
     
     SmartDashboard.putNumber("IntakeCurrentDraw",getIntakeCurrent());
   }
