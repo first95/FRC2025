@@ -208,7 +208,7 @@ public class RobotContainer {
 
 
     autoChooser = new AutoChooser();
-    autos = new Autos(drivebase);
+    autos = new Autos(drivebase,L4arm);
 
 
     autoChooser.addRoutine("diamond",autos :: Diamond);

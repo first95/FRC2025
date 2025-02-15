@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.Constants.Auton;
 import frc.robot.commands.autocommands.AlignToPose;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.L4Arm;
 import frc.robot.subsystems.SwerveBase;
 
 import java.sql.Driver;
@@ -37,6 +38,7 @@ public final class Autos {
   private final AutoFactory autoFactory;
   private final SwerveBase swerve;
   String runningAuto;
+  Trigger L4armAtGoal;
   
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
@@ -44,7 +46,7 @@ public final class Autos {
 
  
 
-  public Autos(SwerveBase swerve) {
+  public Autos(SwerveBase swerve, L4Arm L4arm) {
     autoFactory = new AutoFactory(
       swerve::getPose,
       swerve::resetOdometry,
@@ -73,6 +75,7 @@ public final class Autos {
         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))
       )
     );
+    L4armAtGoal = new Trigger(() -> L4arm.atGoal());
   }
 
   public AutoRoutine Diamond(){
@@ -168,7 +171,7 @@ public final class Autos {
       //When the routine starts run the first trajectory
       routine.active().onTrue(
         Commands.sequence(
-          trajectories[0].resetOdometry(),
+          new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
           trajectories[0].cmd()
         )
       );
@@ -176,10 +179,10 @@ public final class Autos {
       //go through all trajectorys and run them one after another
       for(int n = 0; n < trajectories.length - 1; n++){
         if(posTargets[n+1].charAt(0) == 'R'){
-          trajectories[n].done().onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
         }
         else if(posTargets[n+1].charAt(0) == 'L'){
-          trajectories[n].done().onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
         }
       }
       
