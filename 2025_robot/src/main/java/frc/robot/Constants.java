@@ -319,8 +319,6 @@ public final class Constants {
         public static final double OutputRangeMin = -0.25;
         public static final double OutputRangeMax = 0.5;
 
-        public static final double MAX_SPEED = 10.0;
-        public static final double MAX_ACCELERATION = 10.0;
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(-47);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(114.69);
@@ -353,7 +351,7 @@ public final class Constants {
         public static final boolean INVERTED = true; 
         public static final int SMARTCURRENTLIMIT = 80;
 
-        public static final double MAX_SPEED = 0.1;
+        public static final double MAX_SPEED = 0.5;
     }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
