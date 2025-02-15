@@ -25,7 +25,7 @@ public class CamData {
     LimelightResults results;
     if (LimelightHelpers.getTV(name)) {
       results = LimelightHelpers.getLatestResults(name);
-      valid = results.targetingResults.valid;
+      valid = results.valid;
     } else {
       valid = false;
       results = null;
@@ -33,24 +33,24 @@ public class CamData {
     if (valid) {
       pose3d = new Pose3d(
         new Translation3d(
-          results.targetingResults.botpose_wpiblue[0],
-          results.targetingResults.botpose_wpiblue[1],
-          results.targetingResults.botpose_wpiblue[2]
+          results.botpose_wpiblue[0],
+          results.botpose_wpiblue[1],
+          results.botpose_wpiblue[2]
         ),
         new Rotation3d(
-          Math.toRadians(results.targetingResults.botpose_wpiblue[3]),
-          Math.toRadians(results.targetingResults.botpose_wpiblue[4]),
-          Math.toRadians(results.targetingResults.botpose_wpiblue[5])
+          Math.toRadians(results.botpose_wpiblue[3]),
+          Math.toRadians(results.botpose_wpiblue[4]),
+          Math.toRadians(results.botpose_wpiblue[5])
         )
       );
       pose2d = pose3d.toPose2d();
       latency = 
-        results.targetingResults.latency_capture
-        + results.targetingResults.latency_pipeline
-        + results.targetingResults.latency_jsonParse;
-      avgTagDist = results.targetingResults.botpose_avgdist;
-      ta = results.targetingResults.botpose_avgarea;
-      numTargets = (int) results.targetingResults.botpose_tagcount;
+        results.latency_capture
+        + results.latency_pipeline
+        + results.latency_jsonParse;
+      avgTagDist = results.botpose_avgdist;
+      ta = results.botpose_avgarea;
+      numTargets = (int) results.botpose_tagcount;
     } else {
       pose3d = new Pose3d();
       pose2d = new Pose2d();
