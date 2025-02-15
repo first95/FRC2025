@@ -283,7 +283,9 @@ public class CoralHandlerCommand extends Command {
                 if(L1HumanLoadButton){
                     currentState = State.L1_HUMAN_LOADING;
                 }
-
+                if(L4ScoreButton){
+                    currentState = State.IDLE;
+                }
             break;
             case L1_HUMAN_LOADING:
 

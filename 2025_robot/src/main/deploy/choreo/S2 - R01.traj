@@ -62,6 +62,5 @@
   "splits":[0]
  },
  "events":[
-   {"name":"L4Score", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"L4Score"}}},
    {"name":"L4ScoringPosition", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"L4ScoringPosition"}}}]
 }
