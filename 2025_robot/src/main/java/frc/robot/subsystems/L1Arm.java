@@ -231,18 +231,19 @@ public class L1Arm extends SubsystemBase {
   }
 
   public void setArmAngle(Rotation2d angle){
-    armGoal = angle;
+    // armGoal = angle;
+    // if(armGoal.getRadians() >= L1ArmConstants.LOWER_LIMIT.getRadians() || armGoal.getRadians() <= L1ArmConstants.UPPER_LIMIT.getRadians()){
+    //   shoulderPID.setReference(
+    //     armGoal.getRadians(),
+    //     ControlType.kPosition,
+    //     ClosedLoopSlot.kSlot0,
+    //     shoulderFeedforward.calculate(armGoal.getRadians(),0),
+    //     ArbFFUnits.kVoltage);
+    // }
   }
   @Override
   public void periodic() {
-    if(armGoal.getRadians() >= L1ArmConstants.LOWER_LIMIT.getRadians() || armGoal.getRadians() <= L1ArmConstants.UPPER_LIMIT.getRadians()){
-      shoulderPID.setReference(
-        armGoal.getRadians(),
-        ControlType.kPosition,
-        ClosedLoopSlot.kSlot0,
-        shoulderFeedforward.calculate(armGoal.getRadians(),0),
-        ArbFFUnits.kVoltage);
-    }
+    
 
     SmartDashboard.putNumber("ShoulderGoal", armGoal.getDegrees());
     SmartDashboard.putNumber("shoulderVelocity", shoulderAbsoluteEncoder.getVelocity());

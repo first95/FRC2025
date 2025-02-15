@@ -49,10 +49,10 @@ public class L4Arm extends SubsystemBase {
   private final SparkAbsoluteEncoder shoulderAbsoluteEncoder;
   private final SysIdRoutine L4Characterizer;
 
-  private final TrapezoidProfile shoulderProfile;
+  //private final TrapezoidProfile shoulderProfile;
   private Rotation2d armGoal; 
   private final Timer timer;
-  private TrapezoidProfile.State profileStart, shoulderSetpoint; 
+  // private TrapezoidProfile.State profileStart, shoulderSetpoint; 
   private double lastShoulderVelocitySetpoint, armAccel;
   private int cyclesSinceShoulderNotAtGoal; 
 
@@ -102,10 +102,10 @@ public class L4Arm extends SubsystemBase {
 
 
     shoulderAbsoluteEncoder = shoulder.getAbsoluteEncoder();
-    shoulderProfile = new TrapezoidProfile(
-      new TrapezoidProfile.Constraints(
-        L4ArmConstants.MAX_SPEED, 
-        L4ArmConstants.MAX_ACCELERATION));
+    // shoulderProfile = new TrapezoidProfile(
+    //   new TrapezoidProfile.Constraints(
+    //     L4ArmConstants.MAX_SPEED, 
+    //     L4ArmConstants.MAX_ACCELERATION));
     armGoal = L4ArmConstants.STOWED;
     // profileStart = new TrapezoidProfile.State(shoulderAbsoluteEncoder.getPosition(),0);
     // lastShoulderVelocitySetpoint = 0;
@@ -194,6 +194,14 @@ public class L4Arm extends SubsystemBase {
   public void setArmAngle(Rotation2d angle){
     //armGoal = Rotation2d.fromDegrees(SmartDashboard.getNumber("setShoulderAngleNumber", 0));
     armGoal = angle;
+    if(armGoal.getRadians() >= L4ArmConstants.LOWER_LIMIT.getRadians() && armGoal.getRadians() <= L4ArmConstants.UPPER_LIMIT.getRadians()){
+      shoulderPID.setReference(
+      armGoal.getRadians(),
+      ControlType.kPosition,
+      ClosedLoopSlot.kSlot0,
+      shoulderFeedforward.calculate(shoulderAbsoluteEncoder.getPosition(),0),
+      ArbFFUnits.kVoltage);
+    } 
   }
   public void setGains(){
     shoulderFeedforward = new ArmFeedforward(
@@ -209,14 +217,7 @@ public class L4Arm extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    if(armGoal.getRadians() >= L4ArmConstants.LOWER_LIMIT.getRadians() && armGoal.getRadians() <= L4ArmConstants.UPPER_LIMIT.getRadians()){
-      shoulderPID.setReference(
-      armGoal.getRadians(),
-      ControlType.kPosition,
-      ClosedLoopSlot.kSlot0,
-      shoulderFeedforward.calculate(shoulderAbsoluteEncoder.getPosition(),0),
-      ArbFFUnits.kVoltage);
-    } 
+    
     if (armGoal == L4ArmConstants.STOWED && atGoal()) {
       shoulder.set(0);
     }
