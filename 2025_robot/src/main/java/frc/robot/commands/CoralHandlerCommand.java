@@ -169,6 +169,7 @@ public class CoralHandlerCommand extends Command {
         }
         else{
             L4Target = findClosestL4Target();
+            //L4Target = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef");
             L4ScorePose = findScoringPose(L4Target);
             L4ScoreAngle = L4ArmConstants.SCORING;
             swerve.field.getObject("Target").setPose(L4Target);
@@ -176,9 +177,9 @@ public class CoralHandlerCommand extends Command {
 
         }
 
-        new Trigger(autoAlignToScoreButtonSupplier).whileTrue(
-            new AlignToPose(L4ScorePose, swerve)//align to scoring position
-        );
+        // new Trigger(autoAlignToScoreButtonSupplier).whileTrue(
+        //     new AlignToPose(L4ScorePose, swerve)//align to scoring position
+        // );
 
         if(alignWithHumanLoadButton){
             absDrive.setHeading(Rotation2d.fromDegrees((swerve.getAlliance() == Alliance.Blue ? 1:-1)*(swerve.getPose().getY() < Constants.FIELD_WIDTH/2 ? 1 : -1) * Constants.Auton.LINEUP_TO_HUMANLOADANGLE + 180) );
@@ -430,6 +431,7 @@ public class CoralHandlerCommand extends Command {
 
                 
                 if(inAuto){
+                    L4ScoreAngle = calculateL4ScoreAngle(L4Target);
                     if(!autoL4ScoreTrigger){
                         currentState = State.IDLE;
                     }

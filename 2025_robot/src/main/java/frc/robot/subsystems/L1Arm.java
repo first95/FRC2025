@@ -206,8 +206,7 @@ public class L1Arm extends SubsystemBase {
   }
 
   public boolean atGoal(){
-    return true; 
-    //return Math.abs(shoulderAbsoluteEncoder.getPosition() - armGoal.getRadians()) < L1ArmConstants.TOLERANCE;
+    return Math.abs(shoulderAbsoluteEncoder.getPosition() - armGoal.getRadians()) < L1ArmConstants.TOLERANCE;
   }
   public Rotation2d getArmAngle(){
     return Rotation2d.fromRadians(shoulderAbsoluteEncoder.getPosition());
@@ -231,15 +230,15 @@ public class L1Arm extends SubsystemBase {
   }
 
   public void setArmAngle(Rotation2d angle){
-    // armGoal = angle;
-    // if(armGoal.getRadians() >= L1ArmConstants.LOWER_LIMIT.getRadians() || armGoal.getRadians() <= L1ArmConstants.UPPER_LIMIT.getRadians()){
-    //   shoulderPID.setReference(
-    //     armGoal.getRadians(),
-    //     ControlType.kPosition,
-    //     ClosedLoopSlot.kSlot0,
-    //     shoulderFeedforward.calculate(armGoal.getRadians(),0),
-    //     ArbFFUnits.kVoltage);
-    // }
+    armGoal = angle;
+    if(armGoal.getRadians() >= L1ArmConstants.LOWER_LIMIT.getRadians() || armGoal.getRadians() <= L1ArmConstants.UPPER_LIMIT.getRadians()){
+      shoulderPID.setReference(
+        armGoal.getRadians(),
+        ControlType.kPosition,
+        ClosedLoopSlot.kSlot0,
+        shoulderFeedforward.calculate(armGoal.getRadians(),0),
+        ArbFFUnits.kVoltage);
+    }
   }
   @Override
   public void periodic() {

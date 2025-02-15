@@ -212,7 +212,7 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = true;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 0;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 90;
         public static final boolean ABSOLUTE_ENCODER_ZERO_CENTERED = true;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
@@ -235,8 +235,8 @@ public final class Constants {
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(167);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-39);
-        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-38);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-31);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-30);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(110);
@@ -244,7 +244,7 @@ public final class Constants {
 
         public static final double DEADBAND = Math.toRadians(0.1);
 
-        public static final double TOLERANCE = Math.toRadians(6);
+        public static final double TOLERANCE = Math.toRadians(3);
         public static final int SETTLE_TIME_LOOP_CYCLES = 200;
 
         public static final double CURRENT_OFFSET = 5;
@@ -254,7 +254,7 @@ public final class Constants {
     public static final class L1IntakeConstants{
         public static final int INTAKE_ID = 11;
 
-        public static final boolean INVERTED = true;
+        public static final boolean INVERTED = false;
 
         public static final int SMARTCURRENTLIMIT = 30;
         public static final double OPEN_LOOP_RAMP_RATE = 10;
@@ -269,9 +269,9 @@ public final class Constants {
 
         public static final double MAX_SPEED = 1;
 
-        public static final double INTAKING_CURRENT_THRESHOULD = 15;
-        public static final double RELEASED_CURRENT_THRESHOULD = 10;
-        public static final double NOPICKUP_CURRENT_THRESHOULD = 3;
+        public static final double INTAKING_CURRENT_THRESHOULD = 20;
+        public static final double RELEASED_CURRENT_THRESHOULD = 30;
+        public static final double NOPICKUP_CURRENT_THRESHOULD = 4;
         public static final int CYCLE_INTAKING_THRESHOLD = 20;
         public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
@@ -337,10 +337,10 @@ public final class Constants {
 
         public static final Translation3d SHOULDER_LOCATION = new Translation3d(
             Units.inchesToMeters(-29/2 + 4 - 1),
-            Units.inchesToMeters(29/2 - 10.25),
+            Units.inchesToMeters(29/2 - 8.75),
             Units.inchesToMeters(-34.749)
             );
-        public static final double ARM_LENGTH = 0.927;
+        public static final double ARM_LENGTH = Units.inchesToMeters(35);
         public static final double MAX_SCORING_Z = Units.feetToMeters(6);
         public static final Rotation2d MAX_SCORING_Z_ANGLE = Rotation2d.fromRadians(Math.asin(MAX_SCORING_Z/ARM_LENGTH));
 

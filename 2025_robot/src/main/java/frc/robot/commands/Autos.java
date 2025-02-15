@@ -187,6 +187,7 @@ public final class Autos {
       }
       
       swerve.field.getObject("autoTrajectory").setPoses(fullTrajectory);
+      swerve.field.getObject("target").setPose(trajectories[0].getInitialPose().get());
     }
     
     return routine;  
