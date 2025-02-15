@@ -252,7 +252,7 @@ public final class Constants {
 
     }
     public static final class L1IntakeConstants{
-        public static final int INTAKE_ID = 16;
+        public static final int INTAKE_ID = 11;
 
         public static final boolean INVERTED = true;
 
@@ -360,15 +360,12 @@ public final class Constants {
 
         public static final int APRILTAG_PIPELINE_NUMBER = 0;
         public static final String BOW_LIMELIGHT_NAME = "limelight-bow";
-        public static final String STERN_LIMELIGHT_NAME = "limelight-stern";
-        public static final String NOTE_LIMELIGHT_NAME = "limelight-note";
+        public static final String STERN_LIMELIGHT_NAME = "limelight-three";
 
         @SuppressWarnings("unused")
-        private static final int BOW_IP = 16; // Git-tracked notepad
+        private static final int BOW_IP = 15; // Git-tracked notepad
         @SuppressWarnings("unused")
-        private static final int STERN_IP = 15;
-        @SuppressWarnings("unused")
-        private static final int NOTE_IP = 14;
+        private static final int STERN_IP = 14;
 
         public static final double POSE_ERROR_TOLERANCE = 1;
         public static final double ANGULAR_ERROR_TOLERANCE = Math.toRadians(5);
@@ -396,7 +393,7 @@ public final class Constants {
         public static final String AUTO_INTAKE_SPEED_KEY = "AutoIntakeSpeed";
         public static final String EJECT_MODE_KEY = "PurgeModeRequested";
 
-        public static final double LINEUP_TO_HUMANLOADANGLE = 53; //degrees
+        public static final double LINEUP_TO_HUMANLOADANGLE = 54; //degrees
         // Trapezoidal drive PID constants
         public static final double DRIVE_ACCELERATION_LIMIT = 2.1; // m/s/s
         public static final double DRIVE_VELOCITY_LIMIT = 6; // m/s
@@ -423,7 +420,7 @@ public final class Constants {
         
         
         private static final Map<String, Pose2d> BLUE_MAP = Map.ofEntries(
-            Map.entry("Reef", new Pose2d(new Translation2d(1.0,1.0), Rotation2d.fromDegrees(0.0))),
+            Map.entry("Reef", new Pose2d(new Translation2d(0,0), Rotation2d.fromDegrees(0.0))),
             Map.entry("R00", new Pose2d(new Translation2d(5.270,4.196582 ), Rotation2d.fromDegrees(0))),//Reef targets naming scheme R(side)(leftOrRight)
             Map.entry("R01", new Pose2d(new Translation2d(5.270,3.868) , Rotation2d.fromDegrees(0))),
             Map.entry("R10", new Pose2d(new Translation2d(4.737,3.268609), Rotation2d.fromDegrees(-60))),
