@@ -143,7 +143,6 @@ public class SwerveBase extends SubsystemBase {
     SmartDashboard.putData("BowCam", bowCam);
     SmartDashboard.putData("Field", field);
     poseErrorCounter = 0;
-    LimelightHelpers.setCameraMode_Driver(Vision.NOTE_LIMELIGHT_NAME);
 
     debugFlags = (int)SmartDashboard.getNumber(CommandDebugFlags.FLAGS_KEY, 0);
 
