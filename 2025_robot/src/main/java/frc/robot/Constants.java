@@ -212,7 +212,7 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = true;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 146;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 0;
         public static final boolean ABSOLUTE_ENCODER_ZERO_CENTERED = true;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
@@ -360,7 +360,7 @@ public final class Constants {
 
         public static final int APRILTAG_PIPELINE_NUMBER = 0;
         public static final String BOW_LIMELIGHT_NAME = "limelight-bow";
-        public static final String STERN_LIMELIGHT_NAME = "limelight-three";
+        public static final String STERN_LIMELIGHT_NAME = "limelight-stern";
 
         @SuppressWarnings("unused")
         private static final int BOW_IP = 15; // Git-tracked notepad
