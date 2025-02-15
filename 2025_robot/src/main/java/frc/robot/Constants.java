@@ -278,6 +278,7 @@ public final class Constants {
         public static final double HOLDING_SPEED = 0.05;
         public static final double SCORE_SPEED = -1;
         public static final double INTAKE_SPEED = 0.35;
+        public static final double HAND_OFF_SPEED = -0.4;
 
     }
 

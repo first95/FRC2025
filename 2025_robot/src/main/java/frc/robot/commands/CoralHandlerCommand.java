@@ -51,7 +51,7 @@ public class CoralHandlerCommand extends Command {
     private final AbsoluteDrive absDrive;
     private enum State{
         IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
-        POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
+        L4_POSITIONING_HANDOFF,L1_POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
         L4_INTAKING, L4_SCORING, L1_HUMAN_LOADING;
     }
 
@@ -324,7 +324,7 @@ public class CoralHandlerCommand extends Command {
                 }
                 
                 if(HandOffButton){
-                    currentState = State.POSITIONING_HANDOFF;
+                    currentState = State.L4_POSITIONING_HANDOFF;
                 }
 
                 if(!coralInL1){
@@ -386,22 +386,36 @@ public class CoralHandlerCommand extends Command {
             break;
 
 
-            case POSITIONING_HANDOFF:
-                L1arm.setArmAngle(L1ArmConstants.HAND_OFF);
+            case L4_POSITIONING_HANDOFF:
+                L4arm.setArmAngle(L4ArmConstants.HAND_OFF);
                 
                 if(!HandOffButton){
-                    currentState = State.PERFORMING_HANDOFF;
+                    currentState = State.IDLE;
+                if(L4arm.atGoal()){
+                    currentState = State.L1_POSITIONING_HANDOFF;
+                }
             }
-                
+            break;
+
+            case L1_POSITIONING_HANDOFF:
+            L1arm.setArmAngle(L1ArmConstants.HAND_OFF);
+            
+            if(!HandOffButton){
+                currentState = State.IDLE;
+                }
+            if(L1arm.atGoal() && L4arm.atGoal()){
+                currentState = State.PERFORMING_HANDOFF;
+            } 
 
             break;
 
 
             case PERFORMING_HANDOFF:
                 // Less resistance then go to L4 holding
-
-                
-
+                L1arm.runIntake(L1IntakeConstants.HAND_OFF_SPEED);
+                if(!HandOffButton){
+                    currentState = State.IDLE;
+                }
             break;
 
 
