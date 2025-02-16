@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.L1Arm;
@@ -83,6 +85,7 @@ public class CoralHandlerCommand extends Command {
     private double L1IntakeSpeed;
     private State currentState = State.IDLE;
     private Pose2d L4Target,L4ScorePose;
+    private Trigger autoAlignTrigger;
     
 
         public CoralHandlerCommand(
@@ -119,6 +122,7 @@ public class CoralHandlerCommand extends Command {
             this.pointToReefButtonSupplier = pointToReefButtonSupplier;
             this.alignWithHumanLoadButtonSupplier = alignWithHumanLoadButtonSupplier;
             this.autoAlignToScoreButtonSupplier = autoAlignToScoreButtonSupplier;
+            this.autoAlignTrigger = new Trigger(autoAlignToScoreButtonSupplier);
 
         
             this.climber = climber;
@@ -134,6 +138,7 @@ public class CoralHandlerCommand extends Command {
 
     public void initalize(){
         currentState = State.IDLE;
+        
     }
 
     public void execute(){
@@ -151,6 +156,7 @@ public class CoralHandlerCommand extends Command {
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
         L1ScoreButton = L1ScoreButtonSupplier.getAsBoolean();
         alignWithHumanLoadButton = alignWithHumanLoadButtonSupplier.getAsBoolean();
+        
 
         inAuto = SmartDashboard.getBoolean(Constants.Auton.AUTO_ENABLED_KEY, false);
         autoL4HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L4HUMANLOAD_KEY, false);
@@ -175,8 +181,8 @@ public class CoralHandlerCommand extends Command {
             L4ScoreAngle = L4ArmConstants.SCORING;
             swerve.field.getObject("Target").setPose(L4Target);
             swerve.field.getObject("Scoring").setPose(L4ScorePose);
-
         }
+        autoAlignTrigger.whileTrue(autoScore(L4ScorePose));
 
     
 
@@ -531,6 +537,16 @@ public class CoralHandlerCommand extends Command {
                         L4Target.getX() - L4Target.getRotation().getCos()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getCos() * L4ArmConstants.SHOULDER_LOCATION.getY(),
                         L4Target.getY() - L4Target.getRotation().getSin()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getSin() * L4ArmConstants.SHOULDER_LOCATION.getY()),
                         L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(0)));
+    }
+    private Command autoScore(Pose2d scoringPose){
+        return Commands.sequence(
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
+            new AlignToPose(scoringPose, swerve),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
+            Commands.waitUntil(L4arm :: atGoal),
+            new WaitCommand(Constants.Auton.SCORING_WAIT_TIME),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false))
+        );
     }
 
 

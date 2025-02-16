@@ -57,6 +57,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -97,6 +98,7 @@ public class RobotContainer {
   private String[] modularAutoTargets = {};
   String currentModularAuto = "";
   private final Autos autos;
+  Trigger autoOffTrigger = new Trigger(() -> SmartDashboard.getBoolean(Constants.Auton.AUTO_ENABLED_KEY, false));
 
   SendableChooser<Integer> debugMode = new SendableChooser<>();
 
@@ -172,7 +174,7 @@ public class RobotContainer {
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
       () -> headingController.getHID().getRawButton(2), // point to Reef
       () -> driveController.getHID().getRawButton(2),//auto align with humanLoad
-      () -> operatorController.getHID().getLeftBumperButton(), //auto align to scoring
+      () -> headingController.getHID().getRawButton(3), //auto align to scoring
       L1arm,
       L4arm,
       climber,
@@ -206,7 +208,11 @@ public class RobotContainer {
 
     SmartDashboard.putNumber("setShoulderAngleNumber", 0);
 
-
+    autoOffTrigger.onTrue(
+      Commands.sequence(
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))
+    ));
     autoChooser = new AutoChooser();
     autos = new Autos(drivebase,L4arm);
 
