@@ -214,7 +214,7 @@ public class RobotContainer {
     autoChooser.addRoutine("diamond",autos :: Diamond);
     autoChooser.addRoutine("diamond 2", autos:: Diamond2);
     autoChooser.addRoutine("L1HumanLoadAndScore", autos :: L4HumanLoadAndScore);
-    autoChooser.addRoutine("TestModularAuto",autos :: ModularAuto);
+    autoChooser.addRoutine("ModularAuto",autos :: ModularAuto);
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
 
@@ -233,8 +233,8 @@ public class RobotContainer {
     modularAutoTargetChooser.addOption("R41", "R41");
     modularAutoTargetChooser.addOption("R50", "R50");
     modularAutoTargetChooser.addOption("R51", "R51");
+    modularAutoTargetChooser.addOption("L0", "L0");
     modularAutoTargetChooser.addOption("L1", "L1");
-    modularAutoTargetChooser.addOption("L2", "L2");
     
     SmartDashboard.putData("autoChooser",autoChooser);
     
@@ -337,7 +337,7 @@ public class RobotContainer {
     modularAutoTargets[N] = modularAutoTargetChooser.getSelected();
     currentModularAuto = "";
     for(String posTarget : modularAutoTargets){
-      currentModularAuto += posTarget + ", ";
+      currentModularAuto += posTarget + ",";
     }
     SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
     SmartDashboard.putString("currentModularAuto",currentModularAuto);
@@ -348,13 +348,14 @@ public class RobotContainer {
       modularAutoTargets = Arrays.copyOf(modularAutoTargets,N - 1);
       currentModularAuto = "";
       for(String posTarget : modularAutoTargets){
-        currentModularAuto += posTarget + ", ";
+        currentModularAuto += posTarget + ",";
       }
       
       SmartDashboard.putStringArray("modularAutoTargets", modularAutoTargets);
       SmartDashboard.putString("currentModularAuto", currentModularAuto);
     }
   }
+  
 
   public void stopDrive() {
     drivebase.setChassisSpeeds(new ChassisSpeeds());

@@ -144,15 +144,10 @@ public final class Autos {
   
   public AutoRoutine ModularAuto(){
     AutoRoutine routine = autoFactory.newRoutine("TestModularAuto");
-    String[] posTargets = SmartDashboard.getStringArray("modularAutoTargets", null);
-    
+    String[] posTargets = getPosTargets();
     
     Pose2d[] fullTrajectory = {};    
     if (posTargets != null && posTargets.length >= 2){
-      for (String Target : posTargets) {
-        runningAuto += "- " + Target;
-      }
-      SmartDashboard.putString("runningAuto",runningAuto);
       AutoTrajectory[] trajectories = new AutoTrajectory[posTargets.length - 1];
       
 
@@ -171,7 +166,8 @@ public final class Autos {
       //When the routine starts run the first trajectory
       routine.active().onTrue(
         Commands.sequence(
-          new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
+          trajectories[0].resetOdometry(),
+          //new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
           trajectories[0].cmd()
         )
       );
@@ -192,4 +188,33 @@ public final class Autos {
     
     return routine;  
   }
+  private String[] getPosTargets(){
+    String currentModularAuto = SmartDashboard.getString("currentModularAuto", "");
+    String[] posTargets = {};
+    String posTarget = "";
+    if(currentModularAuto.length() > 3){
+      for(int character = 0; character < currentModularAuto.length(); character ++){
+      
+        if(currentModularAuto.charAt(character) == ','){
+          int posTargetsLength = posTargets.length;
+          posTargets = Arrays.copyOf(posTargets,posTargetsLength + 1);
+          posTargets[posTargetsLength] = posTarget;
+          posTarget = "";
+        }
+        else{
+          posTarget += currentModularAuto.charAt(character);
+        }
+      }
+      SmartDashboard.putStringArray("posTargets", posTargets);
+      return posTargets;
+      
+    }
+    else{
+      return new String[0];
+    }
+    
+    
+    
+  }
+ 
 }
