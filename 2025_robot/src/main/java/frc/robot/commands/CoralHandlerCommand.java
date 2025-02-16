@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Climber;
@@ -177,9 +178,7 @@ public class CoralHandlerCommand extends Command {
 
         }
 
-        // new Trigger(autoAlignToScoreButtonSupplier).whileTrue(
-        //     new AlignToPose(L4ScorePose, swerve)//align to scoring position
-        // );
+    
 
         if(alignWithHumanLoadButton){
             absDrive.setHeading(Rotation2d.fromDegrees((swerve.getAlliance() == Alliance.Blue ? 1:-1)*(swerve.getPose().getY() < Constants.FIELD_WIDTH/2 ? 1 : -1) * Constants.Auton.LINEUP_TO_HUMANLOADANGLE + 180) );
@@ -532,6 +531,9 @@ public class CoralHandlerCommand extends Command {
                         L4Target.getX() - L4Target.getRotation().getCos()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getCos() * L4ArmConstants.SHOULDER_LOCATION.getY(),
                         L4Target.getY() - L4Target.getRotation().getSin()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getSin() * L4ArmConstants.SHOULDER_LOCATION.getY()),
                         L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(0)));
+    }
+    public Command autoAligntoScoring(){
+        return new AlignToPose(L4ScorePose,swerve);
     }
     
 
