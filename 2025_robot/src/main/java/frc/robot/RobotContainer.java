@@ -218,9 +218,9 @@ public class RobotContainer {
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
 
+    modularAutoTargetChooser.addOption("S0", "S0");
     modularAutoTargetChooser.addOption("S1", "S1");
     modularAutoTargetChooser.addOption("S2", "S2");
-    modularAutoTargetChooser.addOption("S3", "S3");
     modularAutoTargetChooser.addOption("R00", "R00");
     modularAutoTargetChooser.addOption("R01", "R01");
     modularAutoTargetChooser.addOption("R10", "R10");
