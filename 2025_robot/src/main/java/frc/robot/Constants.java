@@ -383,14 +383,7 @@ public final class Constants {
         // Plumbing via SmartDashboard
         public static final String L4HUMANLOAD_KEY = "AutoL1HumanLoad";
         public static final String AUTO_ENABLED_KEY = "Auto_ENABLED_KEY";
-        public static final String ON_TARGET_KEY = "AutoOnTarget";
-        public static final String L4SCORE_KEY = "AutoL1Score";
-        public static final String PORT_SPEED_KEY = "PortSpeed";
-        public static final String STARBOARD_SPEED_KEY = "StarboardSpeed";
-        public static final String AUTO_AMP_ALIGN_KEY = "AutoAligningAmp";
-        public static final String AUTO_AMP_SCORE_KEY = "AutoScoreAmp";
-        public static final String AUTO_INTAKE_SPEED_KEY = "AutoIntakeSpeed";
-        public static final String EJECT_MODE_KEY = "PurgeModeRequested";
+        public static final String L4SCORE_KEY = "AutoL4Score";
 
         public static final double LINEUP_TO_HUMANLOADANGLE = 54; //degrees
         // Trapezoidal drive PID constants
