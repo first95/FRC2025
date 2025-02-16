@@ -532,9 +532,6 @@ public class CoralHandlerCommand extends Command {
                         L4Target.getY() - L4Target.getRotation().getSin()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getSin() * L4ArmConstants.SHOULDER_LOCATION.getY()),
                         L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(0)));
     }
-    public Command autoAligntoScoring(){
-        return new AlignToPose(L4ScorePose,swerve);
-    }
-    
+
 
 }

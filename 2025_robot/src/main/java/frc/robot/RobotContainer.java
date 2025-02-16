@@ -298,7 +298,6 @@ public class RobotContainer {
     operatorController.povDown().onTrue(climber.runWinch(-1));
     operatorController.povUp().onTrue(climber.runWinch(1));
     operatorController.povCenter().onTrue(climber.runWinch(0));
-    driveController.button(3).whileTrue(coralHandler.autoAligntoScoring());
     
     // operatorController.button(5).whileTrue(
     //   new AlignToPose("Reef", drivebase)//align to scoring position
