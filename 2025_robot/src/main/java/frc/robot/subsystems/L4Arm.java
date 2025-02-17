@@ -170,6 +170,7 @@ public class L4Arm extends SubsystemBase {
   //   return cyclesSinceShoulderNotAtGoal >= L4ArmConstants.SETTLE_TIME_LOOP_CYCLES;
   // }
   public boolean atGoal(){
+    //return true;
     return Math.abs(shoulderAbsoluteEncoder.getPosition() - armGoal.getRadians()) < L4ArmConstants.TOLERANCE;
   }
 

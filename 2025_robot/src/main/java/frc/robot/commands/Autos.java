@@ -76,6 +76,8 @@ public final class Autos {
       )
     );
     L4armAtGoal = new Trigger(() -> L4arm.atGoal());
+    SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false);
+    SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false);
   }
 
   public AutoRoutine Diamond(){
@@ -166,8 +168,8 @@ public final class Autos {
       //When the routine starts run the first trajectory
       routine.active().onTrue(
         Commands.sequence(
-          trajectories[0].resetOdometry(),
-          //new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
+          //trajectories[0].resetOdometry(),
+          new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
           trajectories[0].cmd()
         )
       );
