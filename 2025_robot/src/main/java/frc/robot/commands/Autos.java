@@ -55,7 +55,7 @@ public final class Autos {
       swerve);
       this.swerve = swerve;
     autoFactory.bind(
-      "L4ScoringPosition", 
+      "L4Score", 
       Commands.sequence(
         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true))

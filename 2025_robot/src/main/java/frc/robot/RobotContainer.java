@@ -98,7 +98,7 @@ public class RobotContainer {
   private String[] modularAutoTargets = {};
   String currentModularAuto = "";
   private final Autos autos;
-  Trigger autoOffTrigger = new Trigger(() -> SmartDashboard.getBoolean(Constants.Auton.AUTO_ENABLED_KEY, false));
+  
 
   SendableChooser<Integer> debugMode = new SendableChooser<>();
 
@@ -208,11 +208,7 @@ public class RobotContainer {
 
     SmartDashboard.putNumber("setShoulderAngleNumber", 0);
 
-    autoOffTrigger.onTrue(
-      Commands.sequence(
-        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))
-    ));
+    
     autoChooser = new AutoChooser();
     autos = new Autos(drivebase,L4arm);
 
@@ -281,6 +277,7 @@ public class RobotContainer {
     SmartDashboard.putBoolean("bool", false);
 
     RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+    
   }
 
   /**
@@ -374,6 +371,7 @@ public class RobotContainer {
   public void setIsAuto(boolean isAuto) {
     drivebase.isAuto = isAuto;
     SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, isAuto);
+    
   }
 
   private Map<String, Optional<Trajectory<SwerveSample>>> loadTrajectories() {

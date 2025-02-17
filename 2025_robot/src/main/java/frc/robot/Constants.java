@@ -60,7 +60,7 @@ public final class Constants {
 
         public static final int SWERVE_MODULE_CURRENT_LIMIT = 50;
 
-        public static final double HEADING_TOLERANCE = Math.toRadians(1.5);
+        public static final double HEADING_TOLERANCE = Math.toRadians(2.5);
 
         // Motor and encoder inversions
         public static final boolean ABSOLUTE_ENCODER_INVERT = true;
@@ -385,8 +385,8 @@ public final class Constants {
 
     public static final class Auton {
         // Plumbing via SmartDashboard
-        public static final String L4HUMANLOAD_KEY = "AutoL1HumanLoad";
-        public static final String AUTO_ENABLED_KEY = "Auto_ENABLED_KEY";
+        public static final String L4HUMANLOAD_KEY = "AutoL4HumanLoad";
+        public static final String AUTO_ENABLED_KEY = "autoEnabled";
         public static final String L4SCORE_KEY = "AutoL4Score";
 
         public static final double LINEUP_TO_HUMANLOADANGLE = 54; //degrees

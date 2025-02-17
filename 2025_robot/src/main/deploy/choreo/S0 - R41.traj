@@ -73,5 +73,6 @@
     {"t":1.42149, "x":4.03, "y":5.35, "heading":2.0944, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
   "splits":[0]
  },
- "events":[]
+ "events":[
+   {"name":"L4Score", "from":{"target":2, "targetTimestamp":0.98257, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
