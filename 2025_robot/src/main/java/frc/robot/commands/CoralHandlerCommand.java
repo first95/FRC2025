@@ -8,6 +8,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -469,14 +470,12 @@ public class CoralHandlerCommand extends Command {
     }
 
     private Rotation2d calculateL4ScoreAngle(Pose2d target){
-        Translation2d shoulderFieldPose = new Translation2d(
-            swerve.getPose().getX() + Math.cos(swerve.getPose().getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()),
-            swerve.getPose().getY() + Math.sin(swerve.getPose().getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()));
+        Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_LOCATION);
         double armDistanceFromTarget = Math.hypot(target.getX() - shoulderFieldPose.getX(), target.getY() - shoulderFieldPose.getY());
         
-        swerve.field.getObject("ShoulderPositon").setPose(new Pose2d(shoulderFieldPose,Rotation2d.fromRadians(swerve.getPose().getRotation().getRadians() + Math.PI)));
+        swerve.field.getObject("ShoulderPositon").setPose(shoulderFieldPose);
         Rotation2d L4ScoreAngle = Rotation2d.fromRadians(Math.PI - Math.acos(armDistanceFromTarget/L4ArmConstants.ARM_LENGTH));
-        if(L4ScoreAngle.getSin() * L4ArmConstants.ARM_LENGTH + L4ArmConstants.SHOULDER_LOCATION.getZ() < L4ArmConstants.MAX_SCORING_Z){
+        if(L4ScoreAngle.getSin() * L4ArmConstants.ARM_LENGTH + L4ArmConstants.SHOULDER_HEIGHT < L4ArmConstants.MAX_SCORING_Z){
             return L4ScoreAngle;
         }
         else{
@@ -514,10 +513,8 @@ public class CoralHandlerCommand extends Command {
         return heading;
     }
     private Pose2d findClosestL4Target(){
-        Translation2d shoulderFieldPose = new Translation2d(
-            swerve.getPose().getX() + Math.cos(swerve.getPose().getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()),
-            swerve.getPose().getY() + Math.sin(swerve.getPose().getRotation().getRadians() + Math.atan2(L4ArmConstants.SHOULDER_LOCATION.getY(), L4ArmConstants.SHOULDER_LOCATION.getX())) * Math.hypot(L4ArmConstants.SHOULDER_LOCATION.getX(), L4ArmConstants.SHOULDER_LOCATION.getY()));
-        
+        Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_LOCATION);
+
         Pose2d closestL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
         Pose2d currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
         for(int side = 0; side <= 5; side ++){
@@ -532,12 +529,15 @@ public class CoralHandlerCommand extends Command {
         
     }
     private Pose2d findScoringPose(Pose2d L4Target){
-       return new Pose2d(
-                    new Translation2d(
-                        L4Target.getX() - L4Target.getRotation().getCos()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getCos() * L4ArmConstants.SHOULDER_LOCATION.getY(),
-                        L4Target.getY() - L4Target.getRotation().getSin()*(L4ArmConstants.SHOULDER_LOCATION.getX() + L4ArmConstants.SCORING.getCos()*L4ArmConstants.ARM_LENGTH) + L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(-90)).getSin() * L4ArmConstants.SHOULDER_LOCATION.getY()),
-                        L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(0)));
-    }
+        return new Pose2d(new Translation2d(L4Target.getX(),L4Target.getY()),L4Target.getRotation().rotateBy(Rotation2d.fromDegrees(180)))
+            .plus(
+                (L4ArmConstants.SHOULDER_LOCATION.plus(
+                    new Transform2d(-L4ArmConstants.SCORING.getCos() * L4ArmConstants.ARM_LENGTH,
+                    0.0,
+                    Rotation2d.fromDegrees(0)))));
+        
+     }
+     
     private Command autoScore(Pose2d scoringPose){
         return Commands.sequence(
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),

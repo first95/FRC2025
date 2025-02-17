@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -336,11 +337,14 @@ public final class Constants {
 
         public static final double CURRENT_OFFSET = 5;
 
-        public static final Translation3d SHOULDER_LOCATION = new Translation3d(
-            Units.inchesToMeters(-29/2 + 4 - 1),
-            Units.inchesToMeters(29/2 - 8.75),
-            Units.inchesToMeters(-34.749)
+        public static final Transform2d SHOULDER_LOCATION = new Transform2d(
+            new Translation2d(
+                Units.inchesToMeters(-29/2 + 4 - 1),
+                Units.inchesToMeters(29/2 - 8.75)
+                ),
+            new Rotation2d(-1,0)
             );
+        public static final double SHOULDER_HEIGHT = Units.inchesToMeters(-34.749);
         public static final double ARM_LENGTH = Units.inchesToMeters(35);
         public static final double MAX_SCORING_Z = Units.feetToMeters(6);
         public static final Rotation2d MAX_SCORING_Z_ANGLE = Rotation2d.fromRadians(Math.asin(MAX_SCORING_Z/ARM_LENGTH));
