@@ -337,14 +337,16 @@ public final class Constants {
 
         public static final double CURRENT_OFFSET = 5;
 
-        public static final Transform2d SHOULDER_LOCATION = new Transform2d(
-            new Translation2d(
+        public static final Translation3d SHOULDER_LOCATION =
+            new Translation3d(
                 Units.inchesToMeters(-29/2 + 4 - 1),
-                Units.inchesToMeters(29/2 - 8.75)
-                ),
-            new Rotation2d(-1,0)
-            );
-        public static final double SHOULDER_HEIGHT = Units.inchesToMeters(-34.749);
+                Units.inchesToMeters(29/2 - 8.75),
+                Units.inchesToMeters(34.749)
+                );
+        public static final Transform2d SHOULDER_TRANSFORM = new Transform2d(
+            new Translation2d(
+                L4ArmConstants.SHOULDER_LOCATION.getX(),
+                L4ArmConstants.SHOULDER_LOCATION.getY()),new Rotation2d(-1,0));
         public static final double ARM_LENGTH = Units.inchesToMeters(35);
         public static final double MAX_SCORING_Z = Units.feetToMeters(6);
         public static final Rotation2d MAX_SCORING_Z_ANGLE = Rotation2d.fromRadians(Math.asin(MAX_SCORING_Z/ARM_LENGTH));

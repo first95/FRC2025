@@ -56,5 +56,5 @@
   "splits":[0]
  },
  "events":[
-   {"name":"L4 Intake", "from":{"target":0, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"L4 Intake", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
