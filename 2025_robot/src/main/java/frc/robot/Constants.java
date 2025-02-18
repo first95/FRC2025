@@ -319,7 +319,7 @@ public final class Constants {
         public static final double CLOSEDLOOPRAMPRATE = 0.2; 
         
         public static final double OutputRangeMin = -0.5;
-        public static final double OutputRangeMax = 0.5;
+        public static final double OutputRangeMax = 0.7;
 
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(-47);
@@ -336,6 +336,8 @@ public final class Constants {
         public static final int SETTLE_TIME_LOOP_CYCLES = 10;
 
         public static final double CURRENT_OFFSET = 5;
+
+        public static final double MOVING_THRESHOLD = 0.5;
 
         public static final Translation3d SHOULDER_LOCATION =
             new Translation3d(

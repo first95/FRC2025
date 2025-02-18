@@ -173,7 +173,9 @@ public class L4Arm extends SubsystemBase {
     //return true;
     return Math.abs(shoulderAbsoluteEncoder.getPosition() - armGoal.getRadians()) < L4ArmConstants.TOLERANCE;
   }
-
+  public boolean isMoving(){
+    return shoulderAbsoluteEncoder.getVelocity() > L4ArmConstants.MOVING_THRESHOLD;
+  }
   public Rotation2d getArmAngle(){
     return Rotation2d.fromRadians(shoulderAbsoluteEncoder.getPosition());
   }

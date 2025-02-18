@@ -11,6 +11,7 @@ import frc.robot.subsystems.L4Arm;
 import frc.robot.subsystems.SwerveBase;
 
 import java.sql.Driver;
+import java.time.temporal.TemporalQuery;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public final class Autos {
   private final AutoFactory autoFactory;
   private final SwerveBase swerve;
   String runningAuto;
-  Trigger L4armAtGoal;
+  Trigger L4armAtGoal, L4armNotMoving;
   
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
@@ -76,6 +77,7 @@ public final class Autos {
       )
     );
     L4armAtGoal = new Trigger(() -> L4arm.atGoal());
+    L4armNotMoving = new Trigger(() -> !L4arm.isMoving());
     SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false);
     SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false);
   }
@@ -179,12 +181,12 @@ public final class Autos {
       for(int n = 0; n < trajectories.length - 1; n++){
         //trajectories[n].done().onTrue(trajectories[n+1].cmd());
         if(posTargets[n+1].charAt(0) == 'R'){
-          trajectories[n].done().onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          trajectories[n].done().and(L4armNotMoving).onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
           //trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
         }
         else if(posTargets[n+1].charAt(0) == 'L'){
-          trajectories[n].done().onTrue(trajectories[n+1].cmd());
-          //trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          //trajectories[n].done().onTrue(trajectories[n+1].cmd());
+          trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
         }
       }
       
