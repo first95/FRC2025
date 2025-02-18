@@ -110,7 +110,7 @@ public final class Constants {
     public static final double ANGULAR_VELOCITY_LIMIT = 5;
 
         // Robot control gains
-        public static final double HEADING_KP = 2;
+        public static final double HEADING_KP = 3;
         public static final double HEADING_KI = 0;
         public static final double HEADING_KD = 0;
 
@@ -131,7 +131,7 @@ public final class Constants {
         // (maxMotorSpeedRPM / gearRatio) * (minutesPerSecond))
         public static final double MODULE_KV = 12 / MAX_MODULE_ANGULAR_SPEED;
 
-        public static final double VELOCITY_KP = 0.06;
+        public static final double VELOCITY_KP = 0.03;
         public static final double VELOCITY_KI = 0.0; // Leave all of these zero to disable them
         public static final double VELOCITY_KD = 0;
         public static final double VELOCITY_IZ = 0;
@@ -240,7 +240,7 @@ public final class Constants {
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-30);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(110);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(77);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
@@ -271,12 +271,12 @@ public final class Constants {
         public static final double MAX_SPEED = 1;
 
         public static final double INTAKING_CURRENT_THRESHOULD = 20;
-        public static final double RELEASED_CURRENT_THRESHOULD = 30;
+        public static final double RELEASED_CURRENT_THRESHOULD = 20;
         public static final double NOPICKUP_CURRENT_THRESHOULD = 4;
         public static final int CYCLE_INTAKING_THRESHOLD = 20;
         public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
-        public static final double HOLDING_SPEED = 0.05;
+        public static final double HOLDING_SPEED = 0.1;
         public static final double SCORE_SPEED = -1;
         public static final double INTAKE_SPEED = 0.35;
         public static final double HAND_OFF_SPEED = -0.4;
@@ -318,7 +318,7 @@ public final class Constants {
 
         public static final double CLOSEDLOOPRAMPRATE = 0.2; 
         
-        public static final double OutputRangeMin = -0.25;
+        public static final double OutputRangeMin = -0.5;
         public static final double OutputRangeMax = 0.5;
 
 
@@ -327,7 +327,7 @@ public final class Constants {
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-48);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-35);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(110);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-35);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-30);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
@@ -403,7 +403,7 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints ANGULAR_CONSTRAINTS = new TrapezoidProfile.Constraints(
             ANGULAR_VELOCITY_LIMIT, ANGULAR_ACCELERATION_LIMIT);
         
-        public static final double FOLLOW_TRAJECTORY_KP = 20;
+        public static final double FOLLOW_TRAJECTORY_KP = 15;
         public static final double FOLLOW_TRAJECTORY_KI = 0;
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 

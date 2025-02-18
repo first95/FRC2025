@@ -184,13 +184,13 @@ public class CoralHandlerCommand extends Command {
             swerve.field.getObject("Target").setPose(L4Target);
             swerve.field.getObject("Scoring").setPose(L4ScorePose);
         }
-        autoAlignTrigger
-            .whileTrue(autoScore(L4ScorePose))
-            .onFalse(
-                Commands.sequence(
-                new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
-                new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-                new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))));
+        // autoAlignTrigger
+        //     .whileTrue(autoScore(L4ScorePose))
+        //     .onFalse(
+        //         Commands.sequence(
+        //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
+        //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+        //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))));
 
     
 
@@ -404,21 +404,22 @@ public class CoralHandlerCommand extends Command {
                 
                 if(!HandOffButton){
                     currentState = State.IDLE;
+                }
                 if(L4arm.atGoal()){
                     currentState = State.L1_POSITIONING_HANDOFF;
                 }
-            }
             break;
 
             case L1_POSITIONING_HANDOFF:
-            L1arm.setArmAngle(L1ArmConstants.HAND_OFF);
+                L1arm.setArmAngle(L1ArmConstants.HAND_OFF);
+                L4arm.setArmAngle(L4ArmConstants.HAND_OFF);
             
-            if(!HandOffButton){
-                currentState = State.IDLE;
+                if(!HandOffButton){
+                    currentState = State.IDLE;
                 }
-            if(L1arm.atGoal() && L4arm.atGoal()){
-                currentState = State.PERFORMING_HANDOFF;
-            } 
+                if(L1arm.atGoal() && L4arm.atGoal()){
+                    currentState = State.PERFORMING_HANDOFF;
+                } 
 
             break;
 
@@ -521,19 +522,19 @@ public class CoralHandlerCommand extends Command {
         return heading;
     }
     private Pose2d findClosestL4Target(){
-        Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_TRANSFORM);
+        // Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_TRANSFORM);
 
-        Pose2d closestL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
-        Pose2d currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
-        for(int side = 0; side <= 5; side ++){
-            for(int L4Pole = 0; L4Pole <= 1;L4Pole ++){
-                currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + side + L4Pole);
-                if(Math.hypot(currentL4Pole.getX() - shoulderFieldPose.getX(), currentL4Pole.getY() - shoulderFieldPose.getY()) < Math.hypot(closestL4Pole.getX() - shoulderFieldPose.getX(), closestL4Pole.getY() - shoulderFieldPose.getY())){
-                    closestL4Pole = currentL4Pole;
-                }
-            }
-        }
-        return closestL4Pole;
+        // Pose2d closestL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
+        // Pose2d currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
+        // for(int side = 0; side <= 5; side ++){
+        //     for(int L4Pole = 0; L4Pole <= 1;L4Pole ++){
+        //         currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + side + L4Pole);
+        //         if(Math.hypot(currentL4Pole.getX() - shoulderFieldPose.getX(), currentL4Pole.getY() - shoulderFieldPose.getY()) < Math.hypot(closestL4Pole.getX() - shoulderFieldPose.getX(), closestL4Pole.getY() - shoulderFieldPose.getY())){
+        //             closestL4Pole = currentL4Pole;
+        //         }
+        //     }
+        // }
+        return Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef");
         
     }
     private Pose2d findScoringPose(Pose2d L4Target){
@@ -546,20 +547,20 @@ public class CoralHandlerCommand extends Command {
         
      }
      
-    private Command autoScore(Pose2d scoringPose){
-        return 
-        Commands.sequence(
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
-            new AlignToPose(scoringPose, swerve),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
-            Commands.waitUntil(L4arm :: atGoal),
-            new WaitCommand(Constants.Auton.SCORING_WAIT_TIME),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)));
+    // private Command autoScore(Pose2d scoringPose){
+    //     return 
+    //     Commands.sequence(
+    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
+    //         new AlignToPose(scoringPose, swerve),
+    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
+    //         Commands.waitUntil(L4arm :: atGoal),
+    //         new WaitCommand(Constants.Auton.SCORING_WAIT_TIME),
+    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
+    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)));
             
-    }
+    // }
 
 
 }

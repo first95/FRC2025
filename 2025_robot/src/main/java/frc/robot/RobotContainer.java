@@ -295,8 +295,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    operatorController.start().onTrue(new InstantCommand(() -> drivebase.resetOdometry(new Pose2d(new Translation2d(),new Rotation2d()))).ignoringDisable(true));
-    //operatorController.start().onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
+    //operatorController.start().onTrue(new InstantCommand(() -> drivebase.resetOdometry(new Pose2d(new Translation2d(),new Rotation2d()))).ignoringDisable(true));
+    operatorController.start().onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     operatorController.povDown().onTrue(climber.runWinch(-1));
     operatorController.povUp().onTrue(climber.runWinch(1));

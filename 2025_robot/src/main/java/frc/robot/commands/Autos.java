@@ -169,18 +169,22 @@ public final class Autos {
       routine.active().onTrue(
         Commands.sequence(
           //trajectories[0].resetOdometry(),
+          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
           new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
           trajectories[0].cmd()
         )
       );
-      
       //go through all trajectorys and run them one after another
       for(int n = 0; n < trajectories.length - 1; n++){
+        //trajectories[n].done().onTrue(trajectories[n+1].cmd());
         if(posTargets[n+1].charAt(0) == 'R'){
-          trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          trajectories[n].done().onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          //trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
         }
         else if(posTargets[n+1].charAt(0) == 'L'){
-          trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          trajectories[n].done().onTrue(trajectories[n+1].cmd());
+          //trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
         }
       }
       
