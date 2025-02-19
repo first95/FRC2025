@@ -186,7 +186,7 @@ public final class Autos {
         }
         else if(posTargets[n+1].charAt(0) == 'L'){
           //trajectories[n].done().onTrue(trajectories[n+1].cmd());
-          trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          trajectories[n].done().onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
         }
       }
       

@@ -337,7 +337,7 @@ public final class Constants {
 
         public static final double CURRENT_OFFSET = 5;
 
-        public static final double MOVING_THRESHOLD = 0.5;
+        public static final double MOVING_THRESHOLD = 2.5;
 
         public static final Translation3d SHOULDER_LOCATION =
             new Translation3d(
@@ -405,11 +405,11 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints ANGULAR_CONSTRAINTS = new TrapezoidProfile.Constraints(
             ANGULAR_VELOCITY_LIMIT, ANGULAR_ACCELERATION_LIMIT);
         
-        public static final double FOLLOW_TRAJECTORY_KP = 15;
+        public static final double FOLLOW_TRAJECTORY_KP = 5;
         public static final double FOLLOW_TRAJECTORY_KI = 0;
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 
-        public static final double SCORING_WAIT_TIME = 1;
+        public static final double SCORING_WAIT_TIME = 0.5;
         public static final double HUMANLOAD_WAIT_TIME = 1;
 
         public static final double ALIGN_TO_POSE_KP = 2;
