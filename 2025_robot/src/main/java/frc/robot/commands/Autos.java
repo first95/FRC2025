@@ -147,7 +147,7 @@ public final class Autos {
   
   
   public AutoRoutine ModularAuto(){
-    AutoRoutine routine = autoFactory.newRoutine("TestModularAuto");
+    AutoRoutine routine = autoFactory.newRoutine("ModularAuto");
     String[] posTargets = getPosTargets();
     
     Pose2d[] fullTrajectory = {};    
@@ -164,7 +164,6 @@ public final class Autos {
         fullTrajectory = Arrays.copyOf(fullTrajectory, fullTrajectory.length + trajectoryPose2dList.length );
         System.arraycopy(trajectoryPose2dList, 0, fullTrajectory, fullTrajectory.length - trajectoryPose2dList.length , trajectoryPose2dList.length);
       } 
-      //print Composite Trajectory
       
       
       //When the routine starts run the first trajectory
@@ -179,13 +178,12 @@ public final class Autos {
       );
       //go through all trajectorys and run them one after another
       for(int n = 0; n < trajectories.length - 1; n++){
-        //trajectories[n].done().onTrue(trajectories[n+1].cmd());
+        //if the position target is at the reef wait the scoring time
         if(posTargets[n+1].charAt(0) == 'R'){
           trajectories[n].done().and(L4armNotMoving).onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
-          //trajectories[n].done().and(L4armAtGoal).onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
         }
+        //if the position target is at a loading station wait the humanload time
         else if(posTargets[n+1].charAt(0) == 'L'){
-          //trajectories[n].done().onTrue(trajectories[n+1].cmd());
           trajectories[n].done().onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
         }
       }

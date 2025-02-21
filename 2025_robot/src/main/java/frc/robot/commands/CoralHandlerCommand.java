@@ -522,19 +522,19 @@ public class CoralHandlerCommand extends Command {
         return heading;
     }
     private Pose2d findClosestL4Target(){
-        // Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_TRANSFORM);
+        Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_TRANSFORM);
 
-        // Pose2d closestL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
-        // Pose2d currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
-        // for(int side = 0; side <= 5; side ++){
-        //     for(int L4Pole = 0; L4Pole <= 1;L4Pole ++){
-        //         currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + side + L4Pole);
-        //         if(Math.hypot(currentL4Pole.getX() - shoulderFieldPose.getX(), currentL4Pole.getY() - shoulderFieldPose.getY()) < Math.hypot(closestL4Pole.getX() - shoulderFieldPose.getX(), closestL4Pole.getY() - shoulderFieldPose.getY())){
-        //             closestL4Pole = currentL4Pole;
-        //         }
-        //     }
-        // }
-        return Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("Reef");
+        Pose2d closestL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
+        Pose2d currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
+        for(int side = 0; side <= 5; side ++){
+            for(int L4Pole = 0; L4Pole <= 1;L4Pole ++){
+                currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + side + L4Pole);
+                if(Math.hypot(currentL4Pole.getX() - shoulderFieldPose.getX(), currentL4Pole.getY() - shoulderFieldPose.getY()) < Math.hypot(closestL4Pole.getX() - shoulderFieldPose.getX(), closestL4Pole.getY() - shoulderFieldPose.getY())){
+                    closestL4Pole = currentL4Pole;
+                }
+            }
+        }
+        return closestL4Pole;
         
     }
     private Pose2d findScoringPose(Pose2d L4Target){

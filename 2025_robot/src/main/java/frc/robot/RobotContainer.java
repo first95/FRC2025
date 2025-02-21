@@ -212,10 +212,6 @@ public class RobotContainer {
     autoChooser = new AutoChooser();
     autos = new Autos(drivebase,L4arm);
 
-
-    autoChooser.addRoutine("diamond",autos :: Diamond);
-    autoChooser.addRoutine("diamond 2", autos:: Diamond2);
-    autoChooser.addRoutine("L1HumanLoadAndScore", autos :: L4HumanLoadAndScore);
     autoChooser.addRoutine("ModularAuto",autos :: ModularAuto);
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
