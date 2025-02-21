@@ -409,7 +409,7 @@ public final class Constants {
         public static final double FOLLOW_TRAJECTORY_KI = 0;
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 
-        public static final double SCORING_WAIT_TIME = 0.5;
+        public static final double SCORING_WAIT_TIME = 0.25;
         public static final double HUMANLOAD_WAIT_TIME = 1;
 
         public static final double ALIGN_TO_POSE_KP = 2;
