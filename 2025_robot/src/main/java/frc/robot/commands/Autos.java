@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
@@ -38,8 +39,8 @@ public final class Autos {
   /** Example static factory for an autonomous command. */
   private final AutoFactory autoFactory;
   private final SwerveBase swerve;
-  String runningAuto;
-  Trigger L4armAtGoal, L4armNotMoving;
+  private final Trigger L4armAtGoal, L4armNotMoving;
+  private final L4Arm L4arm;
   
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
@@ -54,7 +55,10 @@ public final class Autos {
       swerve::followTrajectory,
       true,
       swerve);
-      this.swerve = swerve;
+    
+    this.swerve = swerve;
+    this.L4arm = L4arm;
+
     autoFactory.bind(
       "L4Score", 
       Commands.sequence(
@@ -62,6 +66,7 @@ public final class Autos {
         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true))
       )
     );
+
     autoFactory.bind(
       "L4Intake",
       Commands.sequence(
@@ -69,6 +74,7 @@ public final class Autos {
         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))
       )
     );
+
     autoFactory.bind(
       "Stow",
       Commands.sequence(
@@ -78,6 +84,7 @@ public final class Autos {
     );
     L4armAtGoal = new Trigger(() -> L4arm.atGoal());
     L4armNotMoving = new Trigger(() -> !L4arm.isMoving());
+    
     SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false);
     SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false);
   }
@@ -180,7 +187,10 @@ public final class Autos {
       for(int n = 0; n < trajectories.length - 1; n++){
         //if the position target is at the reef wait the scoring time
         if(posTargets[n+1].charAt(0) == 'R'){
-          trajectories[n].done().and(L4armNotMoving).onTrue(new WaitCommand(Auton.SCORING_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          trajectories[n].done().onTrue(
+            new WaitUntilCommand(() -> !L4arm.isMoving())
+            .andThen(new WaitCommand(Auton.SCORING_WAIT_TIME))
+            .andThen(trajectories[n+1].cmd()));
         }
         //if the position target is at a loading station wait the humanload time
         else if(posTargets[n+1].charAt(0) == 'L'){

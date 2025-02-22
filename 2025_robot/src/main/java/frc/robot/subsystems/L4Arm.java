@@ -270,6 +270,7 @@ public class L4Arm extends SubsystemBase {
     SmartDashboard.putNumber("L4SetpointAccel", Math.toDegrees(armAccel));
     SmartDashboard.putNumber("L4ShoulderCurrentDraw", getArmCurrent());
     SmartDashboard.putNumber("L4PrimaryEncoderPos",shoulder.getEncoder().getPosition());
+    SmartDashboard.putBoolean("L4IsMoving", isMoving());
 
   }
 
