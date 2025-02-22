@@ -391,18 +391,9 @@ public class CoralHandlerCommand extends Command {
                 L1arm.runIntake(L1IntakeConstants.SCORE_SPEED);
 
                 coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.RELEASED_CURRENT_THRESHOULD;
-                if(!coralInL1){
-                    releasedCoralCycles += 1;
-                    if(releasedCoralCycles >= L1IntakeConstants.CYCLE_RELEASED_THRESHOLD){
-                        currentState = State.IDLE;
-                    }
-                }
-                else{
-                    releasedCoralCycles = 0;
-                }
                 
                 if(!L1ScoreButton){
-                    currentState = State.L1_SCORE_POSITIONING;
+                    currentState = State.IDLE;
                 }
 
             break;
