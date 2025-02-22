@@ -240,7 +240,7 @@ public final class Constants {
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-36.5);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(77);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(79);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
 
 
@@ -328,7 +328,7 @@ public final class Constants {
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-48);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-35);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(110);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-30);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-48);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
@@ -361,7 +361,7 @@ public final class Constants {
         public static final boolean INVERTED = true; 
         public static final int SMARTCURRENTLIMIT = 80;
 
-        public static final double MAX_SPEED = 0.75;
+        public static final double MAX_SPEED = 1;
     }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
@@ -411,7 +411,7 @@ public final class Constants {
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 
         public static final double SCORING_WAIT_TIME = 0.25;
-        public static final double HUMANLOAD_WAIT_TIME = 1;
+        public static final double HUMANLOAD_WAIT_TIME = 0.75;
 
         public static final double ALIGN_TO_POSE_KP = 2;
         public static final double ALIGN_TO_POSE_KI = 0;
