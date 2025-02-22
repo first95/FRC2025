@@ -175,6 +175,7 @@ public class RobotContainer {
       () -> headingController.getHID().getRawButton(2), // point to Reef
       () -> driveController.getHID().getRawButton(2),//auto align with humanLoad
       () -> headingController.getHID().getRawButton(3), //auto align to scoring
+      () -> operatorController.povUp().getAsBoolean(),//Climber Out
       L1arm,
       L4arm,
       climber,

@@ -47,7 +47,8 @@ public class CoralHandlerCommand extends Command {
         L1HumanLoadingSupplier,
         pointToReefButtonSupplier,
         alignWithHumanLoadButtonSupplier,
-        autoAlignToScoreButtonSupplier;
+        autoAlignToScoreButtonSupplier,
+        climbButtonSupplier;
 
     private final L1Arm L1arm;
     private final L4Arm L4arm;
@@ -70,7 +71,8 @@ public class CoralHandlerCommand extends Command {
         StowButton, 
         L1HumanLoadButton,
         pointToReefButton,
-        alignWithHumanLoadButton;
+        alignWithHumanLoadButton,
+        climbButton;
     
     private boolean 
         autoL4HumanLoadTrigger,
@@ -102,6 +104,7 @@ public class CoralHandlerCommand extends Command {
             BooleanSupplier pointToReefButtonSupplier,
             BooleanSupplier alignWithHumanLoadButtonSupplier, 
             BooleanSupplier autoAlignToScoreButtonSupplier,
+            BooleanSupplier climbButtonSupplier,
             L1Arm L1arm,
             L4Arm L4arm,
             Climber climber,
@@ -125,6 +128,7 @@ public class CoralHandlerCommand extends Command {
             this.alignWithHumanLoadButtonSupplier = alignWithHumanLoadButtonSupplier;
             this.autoAlignToScoreButtonSupplier = autoAlignToScoreButtonSupplier;
             this.autoAlignTrigger = new Trigger(autoAlignToScoreButtonSupplier);
+            this.climbButtonSupplier = climbButtonSupplier;
 
         
             this.climber = climber;
@@ -156,7 +160,10 @@ public class CoralHandlerCommand extends Command {
         L4ScoreButton = L4ScoreButtonSupplier.getAsBoolean();
         
         HandOffButton = HandOffButtonSupplier.getAsBoolean();
+        climbButton = climbButtonSupplier.getAsBoolean();
+
         L1ScoreButton = L1ScoreButtonSupplier.getAsBoolean();
+
         alignWithHumanLoadButton = alignWithHumanLoadButtonSupplier.getAsBoolean();
         
 
@@ -235,7 +242,7 @@ public class CoralHandlerCommand extends Command {
                 else{
 
                     if(L1arm.atGoal() && L4arm.atGoal()){
-                        if(L1IntakeButton){
+                        if(L1IntakeButton || climbButton){
                             currentState = State.L1_INTAKING;
                         }
         
@@ -473,7 +480,6 @@ public class CoralHandlerCommand extends Command {
                 }
             
             break;
-
     }
     }
 
