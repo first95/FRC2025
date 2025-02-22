@@ -1,0 +1,423 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="R" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="157" y="150"/>
+	</widget>
+	<widget field="L" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="157" y="129"/>
+	</widget>
+	<widget field="L4IsMoving" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="285"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="1145" y="297"/>
+		<width>324</width>
+		<height>180</height>
+		<property name="Camera Choice" value="limelight-bow"/>
+	</static-widget>
+	<widget field="limelight-stern_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="577" y="566"/>
+	</widget>
+	<widget field="limelight-stern_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="533" y="545"/>
+	</widget>
+	<widget field="limelight-stern_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="533" y="524"/>
+	</widget>
+	<widget field="limelight-bow_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="536" y="503"/>
+	</widget>
+	<widget field="limelight-bow_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="536" y="476"/>
+	</widget>
+	<widget field="limelight-bow_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="530" y="455"/>
+	</widget>
+	<widget field="L1ArmPrimaryEncoderPos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="523" y="434"/>
+	</widget>
+	<widget field="L1ArmVoltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="514" y="389"/>
+	</widget>
+	<widget field="L1shoulderCurrentDraw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="512" y="290"/>
+	</widget>
+	<widget field="L1shoulderControlEffort" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="394" y="627"/>
+	</widget>
+	<widget field="L1shoulderPos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="490" y="269"/>
+	</widget>
+	<widget field="L1shoulderVelocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="369" y="926"/>
+	</widget>
+	<widget field="L1shoulderGoal" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="369" y="905"/>
+	</widget>
+	<widget field="autoEnabled" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="222" y="664"/>
+	</widget>
+	<widget field="AutoL4Score" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="157" y="238"/>
+	</widget>
+	<widget field="AutoL4HumanLoad" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="757"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="1054" y="5"/>
+		<width>427</width>
+		<height>299</height>
+		<property name="Camera Choice" value="limelight-stern"/>
+	</static-widget>
+	<widget field="limelight-three_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="457" y="226"/>
+	</widget>
+	<widget field="limelight-three_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="384" y="606"/>
+	</widget>
+	<widget field="limelight-three_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="357" y="585"/>
+	</widget>
+	<widget field="runningAuto" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="164" y="217"/>
+	</widget>
+	<widget field="thetaAtTarg" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="164" y="196"/>
+	</widget>
+	<widget field="XYatTarg" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="164" y="175"/>
+	</widget>
+	<widget field="Ypos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="157" y="108"/>
+	</widget>
+	<widget field="XPos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="157" y="87"/>
+	</widget>
+	<widget field="YPosSetpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="232" y="643"/>
+	</widget>
+	<widget field="XPosSetpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="232" y="622"/>
+	</widget>
+	<widget field="AutoAlignVelSetpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="564"/>
+	</widget>
+	<widget field="AutoAlignPosSetpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="543"/>
+	</widget>
+	<widget field="AutoAlignGoal" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="522"/>
+	</widget>
+	<widget field="AutoAlignTargetY" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="339"/>
+	</widget>
+	<widget field="AutoAlignTargetX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="318"/>
+	</widget>
+	<widget field="AutoAlignDriveAngle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="501"/>
+	</widget>
+	<widget field="AutoAlignTargetTheta" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="480"/>
+	</widget>
+	<widget field="Auto_ENABLED_KEY" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="459"/>
+	</widget>
+	<widget field="bool" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="152" y="66"/>
+	</widget>
+	<widget field="modularAutoChooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="920" y="549"/>
+	</widget>
+	<widget field="autoChooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="1034" y="551"/>
+	</widget>
+	<widget field="currentModularAuto" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="767" y="479"/>
+		<width>723</width>
+	</widget>
+	<widget field="CurrentRobotHeading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="320" y="438"/>
+	</widget>
+	<widget field="CurrentRobotY" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="320" y="21"/>
+	</widget>
+	<widget field="CurrentRobotX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="320" y="0"/>
+	</widget>
+	<widget field="AutonHeadingSetpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="793" y="95"/>
+	</widget>
+	<widget field="AutonYSetpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="801" y="46"/>
+	</widget>
+	<widget field="AutonXSetpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="797" y="18"/>
+	</widget>
+	<widget field="DriveInputY" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="155" y="45"/>
+		<width>102</width>
+	</widget>
+	<widget field="DriveInputX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="152" y="21"/>
+	</widget>
+	<widget field="currentHeading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="846" y="247"/>
+	</widget>
+	<widget field="CommandedOmega" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="318" y="297"/>
+	</widget>
+	<widget field="HeadingSetpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="152" y="0"/>
+	</widget>
+	<widget field="Module 3 Target Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="933"/>
+	</widget>
+	<widget field="Module 3 Target Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="912"/>
+	</widget>
+	<widget field="Module 3 Drive Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="891"/>
+	</widget>
+	<widget field="Module 3 Drive Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="870"/>
+	</widget>
+	<widget field="Module 3 Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="6" y="852"/>
+	</widget>
+	<widget field="Module 3 Absolute Encoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="828"/>
+	</widget>
+	<widget field="Module 2 Target Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="807"/>
+	</widget>
+	<widget field="Module 2 Target Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="786"/>
+	</widget>
+	<widget field="Module 2 Drive Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="765"/>
+	</widget>
+	<widget field="Module 2 Drive Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="744"/>
+	</widget>
+	<widget field="Module 2 Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="723"/>
+	</widget>
+	<widget field="Module 2 Absolute Encoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="702"/>
+	</widget>
+	<widget field="Module 1 Target Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="681"/>
+	</widget>
+	<widget field="Module 1 Target Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="660"/>
+	</widget>
+	<widget field="Module 1 Drive Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="639"/>
+	</widget>
+	<widget field="Module 1 Drive Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="618"/>
+	</widget>
+	<widget field="Module 1 Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="-2" y="590"/>
+		<height>34</height>
+	</widget>
+	<widget field="Module 1 Absolute Encoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="576"/>
+	</widget>
+	<widget field="Module 0 Target Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="555"/>
+	</widget>
+	<widget field="Module 0 Target Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="534"/>
+	</widget>
+	<widget field="Module 0 Drive Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="-7" y="513"/>
+	</widget>
+	<widget field="Module 0 Drive Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="492"/>
+	</widget>
+	<widget field="Module 0 Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="471"/>
+	</widget>
+	<widget field="Module 0 Absolute Encoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="450"/>
+	</widget>
+	<widget field="targetVelocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="14" y="408"/>
+	</widget>
+	<widget field="shoulderVelocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="4" y="378"/>
+	</widget>
+	<widget field="setShoulderAngleNumber" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="355"/>
+	</widget>
+	<widget field="shoulderSetPoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="312"/>
+	</widget>
+	<widget field="ShoulderSetpointVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="2" y="427"/>
+	</widget>
+	<widget field="ShoulderSetpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="9" y="264"/>
+	</widget>
+	<widget field="ShoulderGoal" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="505" y="330"/>
+	</widget>
+	<widget field="setArmAngle" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="0" y="225"/>
+	</widget>
+	<widget field="setShoulderGains" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="0" y="191"/>
+	</widget>
+	<widget field="shoulderKA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="3" y="164"/>
+	</widget>
+	<widget field="shoulderKV" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="5" y="136"/>
+	</widget>
+	<widget field="shoulderKG" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="-4" y="111"/>
+	</widget>
+	<widget field="shoulderKS" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="5" y="89"/>
+	</widget>
+	<widget field="shoulderKF" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="63"/>
+	</widget>
+	<widget field="shoulderKD" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="42"/>
+	</widget>
+	<widget field="shoulderKI" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="21"/>
+	</widget>
+	<widget field="shoulderKP" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="0"/>
+	</widget>
+	<widget field="removePosFromAuto" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="1069" y="505"/>
+	</widget>
+	<widget field="SendAlliance" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="325" y="377"/>
+	</widget>
+	<widget field="AutoChooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="336" y="601"/>
+	</widget>
+	<widget field="setGains" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="281" y="141"/>
+	</widget>
+	<widget field="ModularAutoChooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="264" y="601"/>
+	</widget>
+	<widget field="addPosToAuto" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="917" y="505"/>
+	</widget>
+	<widget field="seeded" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="527" y="413"/>
+	</widget>
+	<widget field="nextAutoIndex" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="895" y="316"/>
+	</widget>
+	<widget field="BuildHost-BranchName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="31" y="334"/>
+		<width>327</width>
+		<height>20</height>
+	</widget>
+	<widget field="Module 0Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="266" y="51"/>
+	</widget>
+	<widget field="GitCommitID-BuildTimestamp" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="710" y="368"/>
+		<width>431</width>
+	</widget>
+	<widget field="Module 3Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="287" y="126"/>
+	</widget>
+	<widget field="PrimaryEncoderPos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="497" y="12"/>
+	</widget>
+	<widget field="ShoulderControlEffort" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="501" y="36"/>
+	</widget>
+	<widget field="SetpointAccel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="532" y="205"/>
+	</widget>
+	<widget field="OdometryPos" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="503" y="368"/>
+	</widget>
+	<widget field="ShoulderAtGoal" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="519" y="66"/>
+	</widget>
+	<widget field="Module 1Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="274" y="79"/>
+	</widget>
+	<widget field="CycleCounter" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="519" y="182"/>
+	</widget>
+	<widget field="IntakeCurrentDraw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="504" y="248"/>
+	</widget>
+	<widget field="alliance" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="332" y="417"/>
+	</widget>
+	<widget field="KV" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="302" y="174"/>
+	</widget>
+	<widget field="KP" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="311" y="224"/>
+	</widget>
+	<widget field="ShoulderCurrentDraw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="502" y="156"/>
+		<height>20</height>
+	</widget>
+	<widget field="KI" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="314" y="251"/>
+	</widget>
+	<widget field="ArmVoltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="530" y="123"/>
+	</widget>
+	<widget field="KD" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="315" y="276"/>
+		<height>20</height>
+	</widget>
+	<widget field="KA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="310" y="195"/>
+	</widget>
+	<widget field="Module 2Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="288" y="104"/>
+	</widget>
+	<widget field="ShoulderPos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="528" y="88"/>
+	</widget>
+	<widget field="L4PrimaryEncoderPos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="405" y="849"/>
+	</widget>
+	<widget field="L4ShoulderControlEffort" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="408" y="789"/>
+	</widget>
+	<widget field="L4ShoulderAtGoal" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="435" y="679"/>
+	</widget>
+	<widget field="L4SetpointAccel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="439" y="702"/>
+	</widget>
+	<widget field="L4CycleCounter" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="438" y="655"/>
+	</widget>
+	<widget field="L4ShoulderCurrentDraw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="410" y="736"/>
+	</widget>
+	<widget field="L4ShoulderPos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="443" y="884"/>
+	</widget>
+	<widget field="L4ShoulderVelocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="425" y="824"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Field"/>
+	<hidden field="BowCam"/>
+	<hidden field="SternCam"/>
+	<hidden field="Choreo Alerts"/>
+</xml>
