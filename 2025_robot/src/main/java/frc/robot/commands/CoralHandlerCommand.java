@@ -58,7 +58,7 @@ public class CoralHandlerCommand extends Command {
     private enum State{
         IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
         L4_POSITIONING_HANDOFF,L1_POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
-        L4_INTAKING, L4_SCORING, L1_HUMAN_LOADING;
+        L4_INTAKING, L4_SCORING, L1_HUMAN_LOADING, CLIMBING;
     }
 
     private boolean 
@@ -242,10 +242,12 @@ public class CoralHandlerCommand extends Command {
                 else{
 
                     if(L1arm.atGoal() && L4arm.atGoal()){
-                        if(L1IntakeButton || climbButton){
+                        if(L1IntakeButton){
                             currentState = State.L1_INTAKING;
                         }
-        
+                        if(climbButton){
+                            currentState = State.CLIMBING;
+                        }
                         if(L4IntakeButton){
                             currentState = State.L4_INTAKING;
                             
@@ -480,6 +482,13 @@ public class CoralHandlerCommand extends Command {
                 }
             
             break;
+            case CLIMBING:
+                L1arm.setArmAngle(L1ArmConstants.CLIMBING);
+                L1arm.runIntake(0);
+
+                if(L4IntakeButton || L1IntakeButton || L1HumanLoadButton){
+                    currentState = State.IDLE;
+                }
     }
     }
 

@@ -241,6 +241,7 @@ public final class Constants {
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(77);
+        public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
