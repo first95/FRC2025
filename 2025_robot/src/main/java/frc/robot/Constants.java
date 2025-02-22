@@ -236,8 +236,8 @@ public final class Constants {
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(167);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-31);
-        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-30);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-37);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-36.5);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(77);
@@ -360,7 +360,7 @@ public final class Constants {
         public static final boolean INVERTED = true; 
         public static final int SMARTCURRENTLIMIT = 80;
 
-        public static final double MAX_SPEED = 0.5;
+        public static final double MAX_SPEED = 0.75;
     }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
