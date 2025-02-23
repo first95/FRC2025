@@ -14,11 +14,15 @@
 
 ## Static IPs used so far
 
-| IP         | Device           | Position            |
-|------------|------------------|---------------------|
-| 10.0.95.13 | LimeLight 2+     | None                |
-| 10.0.95.14 | 1st LimeLight 3G | Lower, scoring side |
-| 10.0.95.15 | 2nd LimeLight 3G | Upper, loading side |
+| IP         | Device             | Position            |
+|------------|--------------------|---------------------|
+| 10.0.95.13 | LimeLight 2+       | None                |
+| 10.0.95.14 | 1st LimeLight 3G   | Lower, scoring side |
+| 10.0.95.15 | 2nd LimeLight 3G   | Upper, loading side |
+| 10.0.95.16 | Spare LimeLight 3G | None                |
 
-All three LimeLights are on Firmware 2025.0 and are configured with AprilTag localization pipelines.  We did get a couple Google Coral TPUs to try Machine Learning game piece recognition
-as well.
+LimeLight 2+ and the two 3G's are on Firmware 2025.0 and are configured with AprilTag localization pipelines.  We did get a couple Google Coral TPUs to try Machine Learning game piece recognition as well, but have not yet found a use for them.
+
+## ToDo
+* Save the pipelines / settings of the two on-robot 3Gs for backup.
+* pre-configure the spare 3G as much as possible to make swaping it into use as easy as possible
