@@ -214,6 +214,8 @@ public class RobotContainer {
     autos = new Autos(drivebase,L4arm);
 
     autoChooser.addRoutine("ModularAuto",autos :: ModularAuto);
+    autoChooser.addRoutine("threeCoralAutoLeftSide", autos :: threeCoralAutoLeftSide);
+    autoChooser.addRoutine("threeCoralAutoRightSide", autos::threeCoralAutoRightSide);
     //autoChooser.addRoutine("Example Routine", this::exampleRoutine);
     //autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
 
