@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.Auton;
+import frc.robot.Constants.L4ArmConstants;
 import frc.robot.commands.autocommands.AlignToPose;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.L4Arm;
@@ -23,6 +24,8 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -181,7 +184,7 @@ public final class Autos {
           new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
           new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
           new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
-          new WaitCommand(Auton.SCORING_WAIT_TIME + 1),
+          new WaitCommand(Auton.SCORING_WAIT_TIME + L4ArmConstants.TIME_TO_SCORING),
           trajectories[0].cmd()
         )
       );
@@ -196,7 +199,11 @@ public final class Autos {
         }
         //if the position target is at a loading station wait the humanload time
         else if(posTargets[n+1].charAt(0) == 'L'){
-          trajectories[n].done().onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
+          trajectories[n].done().onTrue(
+            new AlignToPose(posTargets[n+1], swerve)
+            .andThen(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME)
+            .andThen(trajectories[n+1].cmd()))
+            );
         }
       }
       
@@ -209,109 +216,15 @@ public final class Autos {
 
   public AutoRoutine threeCoralAutoLeftSide(){
     AutoRoutine routine = autoFactory.newRoutine("threeCoralAutoLeftSide");
-    String[] posTargets = {"R51","L0","R41","L0","R40","L0","R50","L0"};
-    SmartDashboard.putString("currentModularAuto", "R51,L0,R41,L0,R40,L0,R50,L0,");
+    SmartDashboard.putString("currentModularAuto", "R50,L0,R41,L0,R40,L0,R51,L0,");
     
-    Pose2d[] fullTrajectory = {};    
-    if (posTargets != null && posTargets.length >= 2){
-      AutoTrajectory[] trajectories = new AutoTrajectory[posTargets.length - 1];
-      
-
-
-      //load trajectorys based on posTargets
-      for(int n = 0; n < trajectories.length; n++){
-        trajectories[n] = routine.trajectory(posTargets[n] + " - " + posTargets[n+1]);
-        
-        Pose2d[] trajectoryPose2dList = trajectories[n].getRawTrajectory().getPoses();
-        fullTrajectory = Arrays.copyOf(fullTrajectory, fullTrajectory.length + trajectoryPose2dList.length );
-        System.arraycopy(trajectoryPose2dList, 0, fullTrajectory, fullTrajectory.length - trajectoryPose2dList.length , trajectoryPose2dList.length);
-      } 
-      
-      
-      //When the routine starts run the first trajectory
-      routine.active().onTrue(
-        Commands.sequence(
-          //trajectories[0].resetOdometry(),
-          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
-          new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
-          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
-          new WaitCommand(Auton.SCORING_WAIT_TIME + 1),
-          trajectories[0].cmd()
-        )
-      );
-      //go through all trajectorys and run them one after another
-      for(int n = 0; n < trajectories.length - 1; n++){
-        //if the position target is at the reef wait the scoring time
-        if(posTargets[n+1].charAt(0) == 'R'){
-          trajectories[n].done().onTrue(
-            new WaitUntilCommand(() -> !L4arm.isMoving())
-            .andThen(new WaitCommand(Auton.SCORING_WAIT_TIME))
-            .andThen(trajectories[n+1].cmd()));
-        }
-        //if the position target is at a loading station wait the humanload time
-        else if(posTargets[n+1].charAt(0) == 'L'){
-          trajectories[n].done().onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
-        }
-      }
-      
-      swerve.field.getObject("autoTrajectory").setPoses(fullTrajectory);
-      swerve.field.getObject("target").setPose(trajectories[0].getInitialPose().get());
-    }
-    
-    return routine;  
+    return ModularAuto();  
   }
   public AutoRoutine threeCoralAutoRightSide(){
     AutoRoutine routine = autoFactory.newRoutine("threeCoralAutoRightSide");
-    String[] posTargets = {"R11","L1","R21","L1","R20","L1","R10","L1"};
     SmartDashboard.putString("currentModularAuto", "R11,L1,R21,L1,R20,L1,R10,L1,");
     
-    Pose2d[] fullTrajectory = {};    
-    if (posTargets != null && posTargets.length >= 2){
-      AutoTrajectory[] trajectories = new AutoTrajectory[posTargets.length - 1];
-      
-
-
-      //load trajectorys based on posTargets
-      for(int n = 0; n < trajectories.length; n++){
-        trajectories[n] = routine.trajectory(posTargets[n] + " - " + posTargets[n+1]);
-        
-        Pose2d[] trajectoryPose2dList = trajectories[n].getRawTrajectory().getPoses();
-        fullTrajectory = Arrays.copyOf(fullTrajectory, fullTrajectory.length + trajectoryPose2dList.length );
-        System.arraycopy(trajectoryPose2dList, 0, fullTrajectory, fullTrajectory.length - trajectoryPose2dList.length , trajectoryPose2dList.length);
-      } 
-      
-      
-      //When the routine starts run the first trajectory
-      routine.active().onTrue(
-        Commands.sequence(
-          //trajectories[0].resetOdometry(),
-          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
-          new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
-          trajectories[0].cmd()
-        )
-      );
-      //go through all trajectorys and run them one after another
-      for(int n = 0; n < trajectories.length - 1; n++){
-        //if the position target is at the reef wait the scoring time
-        if(posTargets[n+1].charAt(0) == 'R'){
-          trajectories[n].done().onTrue(
-            new WaitUntilCommand(() -> !L4arm.isMoving())
-            .andThen(new WaitCommand(Auton.SCORING_WAIT_TIME))
-            .andThen(trajectories[n+1].cmd()));
-        }
-        //if the position target is at a loading station wait the humanload time
-        else if(posTargets[n+1].charAt(0) == 'L'){
-          trajectories[n].done().onTrue(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME).andThen(trajectories[n+1].cmd()));
-        }
-      }
-      
-      swerve.field.getObject("autoTrajectory").setPoses(fullTrajectory);
-      swerve.field.getObject("target").setPose(trajectories[0].getInitialPose().get());
-    }
-    
-    return routine;  
+    return ModularAuto();  
   }
   private String[] getPosTargets(){
     String currentModularAuto = SmartDashboard.getString("currentModularAuto", "");

@@ -354,6 +354,7 @@ public final class Constants {
         public static final double MAX_SCORING_Z = Units.feetToMeters(6);
         public static final Rotation2d MAX_SCORING_Z_ANGLE = Rotation2d.fromRadians(Math.asin(MAX_SCORING_Z/ARM_LENGTH));
 
+        public static final double TIME_TO_SCORING = 1;
     }
     public static final class ClimberConstants{
         public static final int CLIMBER_ID = 13;
@@ -376,7 +377,7 @@ public final class Constants {
         private static final int STERN_IP = 14;
 
         public static final double POSE_ERROR_TOLERANCE = 1;
-        public static final double ANGULAR_ERROR_TOLERANCE = Math.toRadians(5);
+        public static final double ANGULAR_ERROR_TOLERANCE = Math.toRadians(3);
         public static final int LOOP_CYCLES_BEFORE_RESET = 20;
 
         public static final double ODOMETRY_TRANSLATIONAL_STD_DEV = 0.01; // Meters and radians
@@ -413,7 +414,7 @@ public final class Constants {
         public static final double SCORING_WAIT_TIME = 0.25;
         public static final double HUMANLOAD_WAIT_TIME = 0.75;
 
-        public static final double ALIGN_TO_POSE_KP = 2;
+        public static final double ALIGN_TO_POSE_KP = 3;
         public static final double ALIGN_TO_POSE_KI = 0;
         public static final double ALIGN_TO_POSE_KD = 0;
 
@@ -421,7 +422,8 @@ public final class Constants {
         
         
         private static final Map<String, Pose2d> BLUE_MAP = Map.ofEntries(
-            Map.entry("Reef", new Pose2d(new Translation2d(0,0), Rotation2d.fromDegrees(0.0))),
+            Map.entry("L0", new Pose2d(new Translation2d(1.3, FIELD_WIDTH - 1.2), Rotation2d.fromDegrees(126))),
+            Map.entry("L1", new Pose2d(new Translation2d(1.3,1.2), Rotation2d.fromDegrees(-126))),
             Map.entry("R00", new Pose2d(new Translation2d(5.270,4.196582 ), Rotation2d.fromDegrees(0))),//Reef targets naming scheme R(side)(leftOrRight)
             Map.entry("R01", new Pose2d(new Translation2d(5.270,3.868) , Rotation2d.fromDegrees(0))),
             Map.entry("R10", new Pose2d(new Translation2d(4.737,3.268609), Rotation2d.fromDegrees(-60))),
