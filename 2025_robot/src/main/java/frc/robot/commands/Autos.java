@@ -180,6 +180,8 @@ public final class Autos {
           new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
           new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
           new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
+          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
+          new WaitCommand(Auton.SCORING_WAIT_TIME + 1),
           trajectories[0].cmd()
         )
       );
@@ -207,8 +209,8 @@ public final class Autos {
 
   public AutoRoutine threeCoralAutoLeftSide(){
     AutoRoutine routine = autoFactory.newRoutine("threeCoralAutoLeftSide");
-    String[] posTargets = {"S0","R51","L0","R41","L0","R40","L0","R50","L0"};
-    SmartDashboard.putString("currentModularAuto", "S0,R51,L0,R41,L0,R40,L0,R50,L0,");
+    String[] posTargets = {"R51","L0","R41","L0","R40","L0","R50","L0"};
+    SmartDashboard.putString("currentModularAuto", "R51,L0,R41,L0,R40,L0,R50,L0,");
     
     Pose2d[] fullTrajectory = {};    
     if (posTargets != null && posTargets.length >= 2){
@@ -233,6 +235,8 @@ public final class Autos {
           new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
           new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
           new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
+          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
+          new WaitCommand(Auton.SCORING_WAIT_TIME + 1),
           trajectories[0].cmd()
         )
       );
@@ -259,8 +263,8 @@ public final class Autos {
   }
   public AutoRoutine threeCoralAutoRightSide(){
     AutoRoutine routine = autoFactory.newRoutine("threeCoralAutoRightSide");
-    String[] posTargets = {"S2","R11","L1","R21","L1","R20","L1","R10","L1"};
-    SmartDashboard.putString("currentModularAuto", "S2,R11,L1,R21,L1,R20,L1,R10,L1,");
+    String[] posTargets = {"R11","L1","R21","L1","R20","L1","R10","L1"};
+    SmartDashboard.putString("currentModularAuto", "R11,L1,R21,L1,R20,L1,R10,L1,");
     
     Pose2d[] fullTrajectory = {};    
     if (posTargets != null && posTargets.length >= 2){
