@@ -4,6 +4,8 @@
 
 package frc.robot.commands.autocommands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -18,6 +20,7 @@ import frc.robot.subsystems.SwerveBase;
 
 public class AlignToPose extends Command {
   private Pose2d target, initialPose;
+  private Supplier<Pose2d> targetSupplier;
   private String targetName;
   private final SwerveBase swerve;
   private final TrapezoidProfile driveProfile;
@@ -30,6 +33,22 @@ public class AlignToPose extends Command {
   private TrapezoidProfile.State goalState, initialState;
 
   /** Creates a new AlignToPose. */
+  public AlignToPose(Supplier<Pose2d> pose, SwerveBase swerve) {
+    targetSupplier = pose;
+    this.swerve = swerve;
+    driveProfile = new TrapezoidProfile(Auton.DRIVE_CONSTRAINTS);
+    xController = new PIDController(
+      Auton.ALIGN_TO_POSE_KP, Auton.ALIGN_TO_POSE_KI, Auton.ALIGN_TO_POSE_KD);
+    yController = new PIDController(
+      Auton.ALIGN_TO_POSE_KP, Auton.ALIGN_TO_POSE_KI, Auton.ALIGN_TO_POSE_KD);
+    thetaController = new PIDController(
+      Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    timer = new Timer();
+    stringPose = false;
+
+    addRequirements(swerve);
+  }
   public AlignToPose(Pose2d pose, SwerveBase swerve) {
     target = pose;
     this.swerve = swerve;
@@ -67,6 +86,7 @@ public class AlignToPose extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
     if (stringPose) {
       try {
         target = Auton.POSE_MAP.get(swerve.getAlliance()).get(targetName);
@@ -78,6 +98,9 @@ public class AlignToPose extends Command {
         DriverStation.reportError("AlignToPose aborted! Named pose does not exist!", false);
         cancel();
       }
+    }
+    else if(targetSupplier != null){
+      target = targetSupplier.get();
     }
     SmartDashboard.putNumber("AutoAlignTargetTheta", target.getRotation().getDegrees());
     initialPose = swerve.getPose();

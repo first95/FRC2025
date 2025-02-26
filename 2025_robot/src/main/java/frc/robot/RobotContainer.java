@@ -59,6 +59,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -174,7 +175,6 @@ public class RobotContainer {
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
       () -> headingController.getHID().getRawButton(2), // point to Reef
       () -> driveController.getHID().getRawButton(2),//auto align with humanLoad
-      () -> headingController.getHID().getRawButton(3), //auto align to scoring
       () -> operatorController.povUp().getAsBoolean(),//Climber Out
       L1arm,
       L4arm,
@@ -300,6 +300,7 @@ public class RobotContainer {
     operatorController.povDown().onTrue(climber.runWinch(-1));
     operatorController.povUp().onTrue(climber.runWinch(1));
     operatorController.povCenter().onTrue(climber.runWinch(0));
+    headingController.button(3).onTrue(coralHandler.autoScore());
     
     // operatorController.button(5).whileTrue(
     //   new AlignToPose("Reef", drivebase)//align to scoring position

@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Rotation;
 
 import java.security.spec.ECPublicKeySpec;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -47,7 +48,6 @@ public class CoralHandlerCommand extends Command {
         L1HumanLoadingSupplier,
         pointToReefButtonSupplier,
         alignWithHumanLoadButtonSupplier,
-        autoAlignToScoreButtonSupplier,
         climbButtonSupplier;
 
     private final L1Arm L1arm;
@@ -90,7 +90,6 @@ public class CoralHandlerCommand extends Command {
     private State currentState = State.IDLE;
     private Pose2d L4Target,L4ScorePose;
     private Trigger autoAlignTrigger;
-    
 
         public CoralHandlerCommand(
             BooleanSupplier L1IntakeButtonSupplier, 
@@ -103,7 +102,6 @@ public class CoralHandlerCommand extends Command {
             BooleanSupplier L1HumanLoadingSupplier,
             BooleanSupplier pointToReefButtonSupplier,
             BooleanSupplier alignWithHumanLoadButtonSupplier, 
-            BooleanSupplier autoAlignToScoreButtonSupplier,
             BooleanSupplier climbButtonSupplier,
             L1Arm L1arm,
             L4Arm L4arm,
@@ -126,8 +124,6 @@ public class CoralHandlerCommand extends Command {
             this.L4ScoreButtonSupplier = L4ScoreButtonSupplier;
             this.pointToReefButtonSupplier = pointToReefButtonSupplier;
             this.alignWithHumanLoadButtonSupplier = alignWithHumanLoadButtonSupplier;
-            this.autoAlignToScoreButtonSupplier = autoAlignToScoreButtonSupplier;
-            this.autoAlignTrigger = new Trigger(autoAlignToScoreButtonSupplier);
             this.climbButtonSupplier = climbButtonSupplier;
 
         
@@ -191,13 +187,6 @@ public class CoralHandlerCommand extends Command {
             swerve.field.getObject("Target").setPose(L4Target);
             swerve.field.getObject("Scoring").setPose(L4ScorePose);
         }
-        // autoAlignTrigger
-        //     .whileTrue(autoScore(L4ScorePose))
-        //     .onFalse(
-        //         Commands.sequence(
-        //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
-        //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-        //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))));
 
     
 
@@ -553,20 +542,19 @@ public class CoralHandlerCommand extends Command {
         
      }
      
-    // private Command autoScore(Pose2d scoringPose){
-    //     return 
-    //     Commands.sequence(
-    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
-    //         new AlignToPose(scoringPose, swerve),
-    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
-    //         Commands.waitUntil(L4arm :: atGoal),
-    //         new WaitCommand(Constants.Auton.SCORING_WAIT_TIME),
-    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
-    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-    //         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)));
+    public Command autoScore(){
+        return 
+        Commands.sequence(
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
+            new AlignToPose(() -> L4ScorePose, swerve),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
+            new WaitCommand(Constants.Auton.SCORING_WAIT_TIME + L4ArmConstants.TIME_TO_SCORING),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)));
             
-    // }
+    }
 
 
 }
