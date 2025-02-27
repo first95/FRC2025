@@ -215,13 +215,11 @@ public final class Autos {
   }
 
   public AutoRoutine threeCoralAutoLeftSide(){
-    AutoRoutine routine = autoFactory.newRoutine("threeCoralAutoLeftSide");
     SmartDashboard.putString("currentModularAuto", "R50,L0,R41,L0,R40,L0,R51,L0,");
     
     return ModularAuto();  
   }
   public AutoRoutine threeCoralAutoRightSide(){
-    AutoRoutine routine = autoFactory.newRoutine("threeCoralAutoRightSide");
     SmartDashboard.putString("currentModularAuto", "R11,L1,R21,L1,R20,L1,R10,L1,");
     
     return ModularAuto();  
