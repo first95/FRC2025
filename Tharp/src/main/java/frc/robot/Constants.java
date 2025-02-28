@@ -424,7 +424,7 @@ public final class Constants {
         
         
         private static final Map<String, Pose2d> BLUE_MAP = Map.ofEntries(
-            Map.entry("L0", new Pose2d(new Translation2d(1.3, FIELD_WIDTH - 1.2), Rotation2d.fromDegrees(126))),
+            Map.entry("L0", new Pose2d(new Translation2d(1.2, FIELD_WIDTH - 1.1), Rotation2d.fromDegrees(126))),
             Map.entry("L1", new Pose2d(new Translation2d(1.2,1.1), Rotation2d.fromDegrees(-126))),
             Map.entry("R00", new Pose2d(new Translation2d(5.270,4.196582 ), Rotation2d.fromDegrees(0))),//Reef targets naming scheme R(side)(leftOrRight)
             Map.entry("R01", new Pose2d(new Translation2d(5.270,3.868) , Rotation2d.fromDegrees(0))),
