@@ -74,7 +74,8 @@ public class L1Arm extends SubsystemBase {
     intakeConfig
       .inverted(L1IntakeConstants.INVERTED)
       .idleMode(IdleMode.kBrake)
-      .smartCurrentLimit(L1IntakeConstants.SMARTCURRENTLIMIT);
+      .smartCurrentLimit(L1IntakeConstants.SMARTCURRENTLIMIT)
+      .openLoopRampRate(L1IntakeConstants.RAMP_RATE);
     intakeConfig.signals
       .faultsPeriodMs(L1IntakeConstants.FAULTS_PERIOD_MS)
       .primaryEncoderPositionPeriodMs(L1IntakeConstants.PRIMARY_ENCODER_POSITON_PERIODMS)

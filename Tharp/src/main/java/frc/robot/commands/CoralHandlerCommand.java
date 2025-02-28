@@ -56,7 +56,7 @@ public class CoralHandlerCommand extends Command {
     private final SwerveBase swerve;
     private final AbsoluteDrive absDrive;
     private enum State{
-        IDLE, L1_INTAKING, L1_HOLDING, L1_SCORE_POSITIONING, L1_SCORING, 
+        IDLE, L1_INTAKING, L1_SCORE_POSITIONING, 
         L4_POSITIONING_HANDOFF,L1_POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
         L4_INTAKING, L4_SCORING, L1_HUMAN_LOADING, CLIMBING;
     }
@@ -259,7 +259,7 @@ public class CoralHandlerCommand extends Command {
                 if(coralInL1){
                     cyclesIntaking += 1;
                     if(cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                        currentState = State.L1_HOLDING;
+                        currentState = State.L1_SCORE_POSITIONING;
                     }
                 }
                 else{
@@ -280,7 +280,7 @@ public class CoralHandlerCommand extends Command {
                 L1IntakeSpeed = L1IntakeButton ? L1IntakeConstants.INTAKE_SPEED : 0;
                 if (coralInL1){
                     if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                        currentState = State.L1_HOLDING;
+                        currentState = State.L1_SCORE_POSITIONING;
                     }
                     cyclesIntaking += 1;
                 }
@@ -288,15 +288,19 @@ public class CoralHandlerCommand extends Command {
                     cyclesIntaking = 0;
                 }
 
-                if(L4IntakeButton){
-                    currentState = State.IDLE;
-                }
                 if(L1HumanLoadButton){
                     currentState = State.L1_HUMAN_LOADING;
                 }
-                if(L4ScoreButton){
-                    currentState = State.IDLE;
+
+                if(L1arm.atGoal()){
+                    if(L4ScoreButton){
+                        currentState = State.L4_SCORING;
+                    }
+                    if(L4IntakeButton){
+                        currentState = State.L4_INTAKING;
+                    }
                 }
+                
             break;
             case L1_HUMAN_LOADING:
 
@@ -306,7 +310,7 @@ public class CoralHandlerCommand extends Command {
 
                 if (coralInL1){
                     if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                        currentState = State.L1_HOLDING;
+                        currentState = State.L1_SCORE_POSITIONING;
                     }
                     cyclesIntaking += 1;
                 }
@@ -317,38 +321,25 @@ public class CoralHandlerCommand extends Command {
                 if(!L1HumanLoadButton){
                     currentState = State.IDLE;
                 }
-            break;
-
-            case L1_HOLDING:
-                // Stow L1 
-                L1arm.setArmAngle(L1ArmConstants.STOWED);
-                L4arm.setArmAngle(L4ArmConstants.STOWED);
-
-                L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
-                
-                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD;                
-                
-
-                if(L1ScoreButton){
-
-                    currentState = State.L1_SCORE_POSITIONING;
-                }
-                
-                if(HandOffButton){
-                    currentState = State.L4_POSITIONING_HANDOFF;
-                }
-
-                if(!coralInL1){
-                    cyclesIntaking += 1;
-                    if(cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                        currentState = State.IDLE;
+                if(inAuto){
+                    if(autoL4HumanLoadTrigger){
+                        currentState = State.L4_INTAKING;
+                    }
+                    if(autoL4ScoreTrigger){
+                        currentState = State.L4_SCORING;
                     }
                 }
-                else{
-                    cyclesIntaking = 0;
+
+                if(L4ScoreButton){
+                    currentState = State.IDLE;
                 }
 
+                if(L4IntakeButton){
+                    currentState = State.L4_INTAKING;
+                    
+                }
             break;
+
 
 
             case L1_SCORE_POSITIONING:
@@ -358,31 +349,16 @@ public class CoralHandlerCommand extends Command {
 
                 coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD; 
 
-                if(L1arm.atGoal() && L1ScoreButton){
-                    currentState = State.L1_SCORING;
-                }
-                if(!coralInL1){
-                    cyclesIntaking += 1;
-                    if(cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                        currentState = State.IDLE;
+                if(L1arm.atGoal()){
+                    if(L4ScoreButton){
+                        currentState = State.L4_SCORING;
                     }
-                }
-                else{
-                    cyclesIntaking = 0;
-                }
-                
-
-            break;
-
-
-            case L1_SCORING:
-                // Move the roller forward
-                L1arm.runIntake(L1IntakeConstants.SCORE_SPEED);
-
-                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.RELEASED_CURRENT_THRESHOULD;
-                
-                if(!L1ScoreButton){
-                    currentState = State.IDLE;
+                    if(L4IntakeButton){
+                        currentState = State.L4_INTAKING;
+                    }
+                    if(L1ScoreButton){
+                        L1IntakeSpeed = L1IntakeConstants.SCORE_SPEED;
+                    }
                 }
 
             break;
@@ -554,6 +530,13 @@ public class CoralHandlerCommand extends Command {
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)));
             
+    }
+    public Command cancelAutoScore(){
+        return Commands.sequence(
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))
+        );
     }
 
 

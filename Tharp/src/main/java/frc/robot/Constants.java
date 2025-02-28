@@ -266,6 +266,8 @@ public final class Constants {
         public static final int PRIMARY_ENCODER_POSITON_PERIODMS = 6000;
         public static final int PRIMARY_ENCODER_VELOCITY_PERIODMS = 5900;
 
+        public static final double RAMP_RATE = 0.5;
+
         public static final boolean OUTPUT_CURRENT_ALWAYS_ON = true;
         public static final int OUTPUT_CURRENT_PERIODMS = 20;
 
@@ -273,11 +275,11 @@ public final class Constants {
 
         public static final double INTAKING_CURRENT_THRESHOULD = 20;
         public static final double RELEASED_CURRENT_THRESHOULD = 20;
-        public static final double NOPICKUP_CURRENT_THRESHOULD = 4;
+        public static final double NOPICKUP_CURRENT_THRESHOULD = 17;
         public static final int CYCLE_INTAKING_THRESHOLD = 20;
         public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
-        public static final double HOLDING_SPEED = 0.1;
+        public static final double HOLDING_SPEED = 0.17;
         public static final double SCORE_SPEED = -1;
         public static final double INTAKE_SPEED = 0.35;
         public static final double HAND_OFF_SPEED = -0.4;
@@ -423,7 +425,7 @@ public final class Constants {
         
         private static final Map<String, Pose2d> BLUE_MAP = Map.ofEntries(
             Map.entry("L0", new Pose2d(new Translation2d(1.3, FIELD_WIDTH - 1.2), Rotation2d.fromDegrees(126))),
-            Map.entry("L1", new Pose2d(new Translation2d(1.3,1.2), Rotation2d.fromDegrees(-126))),
+            Map.entry("L1", new Pose2d(new Translation2d(1.2,1.1), Rotation2d.fromDegrees(-126))),
             Map.entry("R00", new Pose2d(new Translation2d(5.270,4.196582 ), Rotation2d.fromDegrees(0))),//Reef targets naming scheme R(side)(leftOrRight)
             Map.entry("R01", new Pose2d(new Translation2d(5.270,3.868) , Rotation2d.fromDegrees(0))),
             Map.entry("R10", new Pose2d(new Translation2d(4.737,3.268609), Rotation2d.fromDegrees(-60))),
