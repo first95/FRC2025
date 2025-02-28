@@ -259,8 +259,8 @@ public class L4Arm extends SubsystemBase {
     //   0;
     
     
-    // SmartDashboard.putNumber("L4ShoulderGoal", armGoal.getDegrees());
-    // SmartDashboard.putNumber("L4ShoulderSetpoint", Math.toDegrees(shoulderSetpoint.position));
+    SmartDashboard.putNumber("L4ShoulderGoal", armGoal.getDegrees());
+    //SmartDashboard.putNumber("L4ShoulderSetpoint", Math.toDegrees(shoulderSetpoint.position));
     // SmartDashboard.putNumber("L4ShoulderSetpointVel", Math.toDegrees(shoulderSetpoint.velocity));
     SmartDashboard.putNumber("L4ShoulderPos", getArmAngle().getDegrees());
     SmartDashboard.putNumber("L4ShoulderVelocity", shoulderAbsoluteEncoder.getVelocity());

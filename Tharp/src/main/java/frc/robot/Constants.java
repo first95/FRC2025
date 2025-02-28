@@ -329,7 +329,7 @@ public final class Constants {
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(114.69);
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-48);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-35);
-        public static final Rotation2d SCORING = Rotation2d.fromDegrees(110);
+        public static final Rotation2d SCORING = Rotation2d.fromDegrees(112);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-48);
 
 
