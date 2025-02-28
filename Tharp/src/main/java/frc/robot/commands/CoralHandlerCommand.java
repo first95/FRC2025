@@ -300,6 +300,9 @@ public class CoralHandlerCommand extends Command {
                         currentState = State.L4_INTAKING;
                     }
                 }
+                if(climbButton){
+                    currentState = State.CLIMBING;
+                }
                 
             break;
             case L1_HUMAN_LOADING:
@@ -348,6 +351,7 @@ public class CoralHandlerCommand extends Command {
                 L1arm.setArmAngle(L1ArmConstants.SCORING);
 
                 coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD; 
+                L1IntakeSpeed = L1ScoreButton ? L1IntakeConstants.SCORE_SPEED : 0;
 
                 if(L1arm.atGoal()){
                     if(L4ScoreButton){
@@ -355,11 +359,15 @@ public class CoralHandlerCommand extends Command {
                     }
                     if(L4IntakeButton){
                         currentState = State.L4_INTAKING;
-                    }
-                    if(L1ScoreButton){
-                        L1IntakeSpeed = L1IntakeConstants.SCORE_SPEED;
-                    }
+                    } 
                 }
+                if(L1IntakeButton){
+                    currentState = State.L1_INTAKING;
+                }
+                if(climbButton){
+                    currentState = State.CLIMBING;
+                }
+                
 
             break;
 
@@ -420,7 +428,6 @@ public class CoralHandlerCommand extends Command {
             break;
 
             case L4_SCORING:
-                L1arm.setArmAngle(L1ArmConstants.STOWED);
                 //L4arm.setArmAngle(L4ArmConstants.SCORING);
                 L4arm.setArmAngle(L4ScoreAngle);
 
