@@ -161,7 +161,7 @@ public final class Autos {
     String[] posTargets = getPosTargets();
     
     Pose2d[] fullTrajectory = {};    
-    if (posTargets != null && posTargets.length >= 2){
+    if (posTargets != null && posTargets.length >= 1){
       AutoTrajectory[] trajectories = new AutoTrajectory[posTargets.length - 1];
       
 
@@ -200,10 +200,9 @@ public final class Autos {
         //if the position target is at a loading station wait the humanload time
         else if(posTargets[n+1].charAt(0) == 'L'){
           trajectories[n].done().onTrue(
-            new AlignToPose(posTargets[n+1], swerve)
-            .andThen(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME)
+            Commands.deadline(new WaitCommand(Auton.HUMANLOAD_WAIT_TIME), new AlignToPose(posTargets[n+1], swerve))
             .andThen(trajectories[n+1].cmd()))
-            );
+            ;
         }
       }
       

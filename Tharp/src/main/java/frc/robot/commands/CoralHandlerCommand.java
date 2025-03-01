@@ -58,7 +58,7 @@ public class CoralHandlerCommand extends Command {
     private enum State{
         IDLE, L1_INTAKING, L1_SCORE_POSITIONING, 
         L4_POSITIONING_HANDOFF,L1_POSITIONING_HANDOFF, PERFORMING_HANDOFF, 
-        L4_INTAKING, L4_SCORING, L1_HUMAN_LOADING, CLIMBING;
+        L4_INTAKING, L4_SCORING, L1_HUMAN_LOADING, CLIMBING_L4_POSITIONING,CLIMBING_L1_POSITIONING;
     }
 
     private boolean 
@@ -235,7 +235,7 @@ public class CoralHandlerCommand extends Command {
                             currentState = State.L1_INTAKING;
                         }
                         if(climbButton){
-                            currentState = State.CLIMBING;
+                            currentState = State.CLIMBING_L1_POSITIONING;
                         }
                         if(L4IntakeButton){
                             currentState = State.L4_INTAKING;
@@ -301,7 +301,7 @@ public class CoralHandlerCommand extends Command {
                     }
                 }
                 if(climbButton){
-                    currentState = State.CLIMBING;
+                    currentState = State.CLIMBING_L1_POSITIONING;
                 }
                 
             break;
@@ -365,7 +365,10 @@ public class CoralHandlerCommand extends Command {
                     currentState = State.L1_INTAKING;
                 }
                 if(climbButton){
-                    currentState = State.CLIMBING;
+                    currentState = State.CLIMBING_L1_POSITIONING;
+                }
+                if(L1HumanLoadButton){
+                    currentState = State.L1_HUMAN_LOADING;
                 }
                 
 
@@ -445,13 +448,25 @@ public class CoralHandlerCommand extends Command {
                 }
             
             break;
-            case CLIMBING:
+            case CLIMBING_L4_POSITIONING:
                 L1arm.setArmAngle(L1ArmConstants.CLIMBING);
+                L4arm.setArmAngle(L4ArmConstants.CLIMBING);
                 L1arm.runIntake(0);
 
                 if(L4IntakeButton || L1IntakeButton || L1HumanLoadButton){
                     currentState = State.IDLE;
                 }
+            break;
+            case CLIMBING_L1_POSITIONING:
+                L1arm.setArmAngle(L1ArmConstants.CLIMBING);
+                L1arm.runIntake(0);
+                if(L1arm.atGoal()){
+                    currentState = State.CLIMBING_L4_POSITIONING;
+                }
+                if(L4IntakeButton || L1IntakeButton || L1HumanLoadButton){
+                    currentState = State.IDLE;
+                }
+            break;
     }
     }
 

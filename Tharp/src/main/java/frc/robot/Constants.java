@@ -228,8 +228,8 @@ public final class Constants {
         public static final double KA = 0;
       
         
-        public static final double OutputRangeMin = -1;
-        public static final double OutputRangeMax = 1;
+        public static final double OutputRangeMin = -0.6;
+        public static final double OutputRangeMax = 0.6;
 
         public static final double MAX_SPEED = 1.788;
         public static final double MAX_ACCELERATION = 1.788;
@@ -331,6 +331,7 @@ public final class Constants {
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-35);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(112);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-48);
+        public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(-29);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
@@ -365,6 +366,8 @@ public final class Constants {
         public static final int SMARTCURRENTLIMIT = 80;
 
         public static final double MAX_SPEED = 1;
+        public static final double WINCH_OUT_SPEED = 1;
+        public static final double WINCH_IN_SPEED = -0.5;
     }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
@@ -385,8 +388,8 @@ public final class Constants {
         public static final double ODOMETRY_TRANSLATIONAL_STD_DEV = 0.01; // Meters and radians
         public static final double ODOMETRY_ANGULAR_STD_DEV = 0.0002;
 
-        public static final double XY_STD_DEV_COEFFICIENT = 0.01;
-        public static final double ANG_STD_DEV_COEFFICIENT = 0.01;
+        public static final double XY_STD_DEV_COEFFICIENT = 0.005;//0.01;
+        public static final double ANG_STD_DEV_COEFFICIENT = 0.005;//0.01;
 
         public static final double MAX_ALLOWABLE_Z_ERROR = 0.25; // Meters
     }
@@ -416,6 +419,7 @@ public final class Constants {
         public static final double SCORING_WAIT_TIME = 0.25;
         public static final double HUMANLOAD_WAIT_TIME = 0.75;
 
+        public static final double AUTO_ALIGN_TIMEOUT_TIMEOUT = 0.5;
         public static final double ALIGN_TO_POSE_KP = 3;
         public static final double ALIGN_TO_POSE_KI = 0;
         public static final double ALIGN_TO_POSE_KD = 0;

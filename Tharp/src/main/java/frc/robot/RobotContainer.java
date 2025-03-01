@@ -297,8 +297,8 @@ public class RobotContainer {
     //operatorController.start().onTrue(new InstantCommand(() -> drivebase.resetOdometry(new Pose2d(new Translation2d(),new Rotation2d()))).ignoringDisable(true));
     operatorController.start().onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
-    operatorController.povDown().onTrue(climber.runWinch(-1));
-    operatorController.povUp().onTrue(climber.runWinch(1));
+    operatorController.povDown().onTrue(climber.runWinch(ClimberConstants.WINCH_IN_SPEED));
+    operatorController.povUp().onTrue(climber.runWinch(ClimberConstants.WINCH_OUT_SPEED));
     operatorController.povCenter().onTrue(climber.runWinch(0));
     headingController.button(3).onTrue(coralHandler.autoScore()).onFalse(coralHandler.cancelAutoScore());
     
