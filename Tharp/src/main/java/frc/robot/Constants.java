@@ -396,6 +396,7 @@ public final class Constants {
         public static final String L4HUMANLOAD_KEY = "AutoL4HumanLoad";
         public static final String AUTO_ENABLED_KEY = "autoEnabled";
         public static final String L4SCORE_KEY = "AutoL4Score";
+        public static final String L1SCORE_KEY = "AutoL1Score";
 
         public static final double LINEUP_TO_HUMANLOADANGLE = 54; //degrees
         // Trapezoidal drive PID constants
