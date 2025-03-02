@@ -367,7 +367,7 @@ public final class Constants {
 
         public static final double MAX_SPEED = 1;
         public static final double WINCH_OUT_SPEED = 1;
-        public static final double WINCH_IN_SPEED = -0.5;
+        public static final double WINCH_IN_SPEED = -1;
     }
     public static final class Vision {
         public static final int DEBUG_FLAG = 0b10;
