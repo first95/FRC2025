@@ -177,7 +177,8 @@ public class CoralHandlerCommand extends Command {
         if(pointToReefButton){
             //absDrive.setHeading(calculatePointToCenterOfReefHeading());
             absDrive.setHeading(calculatePointToTargetHeading(L4Target)); 
-            L4ScoreAngle = calculateL4ScoreAngle(L4Target);
+            L4ScoreAngle =  L4ArmConstants.SCORING;//calculateL4ScoreAngle(L4Target);
+            
         }
         else{
             L4Target = findClosestL4Target();
@@ -493,7 +494,9 @@ public class CoralHandlerCommand extends Command {
               
     }
     private Rotation2d calculatePointToTargetHeading(Pose2d target){
-        
+        Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_TRANSFORM);
+        swerve.field.getObject("ShoulderPositon").setPose(shoulderFieldPose);
+
         double distanceFromTarget = Math.hypot(swerve.getPose().getX() - target.getX(), swerve.getPose().getY() - target.getY());
         Rotation2d heading = new Rotation2d();
         if (distanceFromTarget > L4ArmConstants.SHOULDER_LOCATION.getY()){
@@ -502,9 +505,9 @@ public class CoralHandlerCommand extends Command {
                 Math.atan2(target.getY() - swerve.getPose().getY(), target.getX() - swerve.getPose().getX()) - Math.asin((-L4ArmConstants.SHOULDER_LOCATION.getY())/(Math.hypot(target.getX() - swerve.getPose().getX(), target.getY() - swerve.getPose().getY()))) + Math.PI
                 );
             }
-            else{// flip when on read alliance
+            else{// flip when on red alliance
                 heading = Rotation2d.fromRadians(
-                Math.atan2(target.getY() - swerve.getPose().getY(), target.getX() - swerve.getPose().getX()) - Math.asin((L4ArmConstants.SHOULDER_LOCATION.getY())/(Math.hypot(target.getX() - swerve.getPose().getX(), target.getY() - swerve.getPose().getY())))
+                Math.atan2(target.getY() - swerve.getPose().getY(), target.getX() - swerve.getPose().getX()) + Math.asin((L4ArmConstants.SHOULDER_LOCATION.getY())/(Math.hypot(target.getX() - swerve.getPose().getX(), target.getY() - swerve.getPose().getY())))
                 );
             }
 

@@ -280,7 +280,7 @@ public final class Constants {
         public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
         public static final double HOLDING_SPEED = 0.17;
-        public static final double SCORE_SPEED = -1;
+        public static final double SCORE_SPEED = -0.9;
         public static final double INTAKE_SPEED = 0.35;
         public static final double HAND_OFF_SPEED = -0.4;
 
@@ -328,7 +328,7 @@ public final class Constants {
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(-47);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(114.69);
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-48);
-        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-35);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-34);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(112);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-48);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(-29);
@@ -416,7 +416,7 @@ public final class Constants {
         public static final double FOLLOW_TRAJECTORY_KI = 0;
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 
-        public static final double SCORING_WAIT_TIME = 0.25;
+        public static final double SCORING_WAIT_TIME = 0.45;
         public static final double HUMANLOAD_WAIT_TIME = 0.75;
 
         public static final double AUTO_ALIGN_TIMEOUT_TIMEOUT = 0.5;
