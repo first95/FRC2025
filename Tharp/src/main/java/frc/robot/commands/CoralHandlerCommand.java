@@ -89,7 +89,7 @@ public class CoralHandlerCommand extends Command {
     private int releasedCoralCycles = 0;
     private double IntakeCurrent;
     private Rotation2d L4ScoreAngle,L1ScoreAngle;
-    private int cyclesIntaking;
+    private int cyclesIntaking, cyclesPositioningHandOff;
     private double L1IntakeSpeed;
     private State currentState = State.IDLE;
     private Pose2d L4Target, L4ScorePose, L1ScorePose;
@@ -426,7 +426,7 @@ public class CoralHandlerCommand extends Command {
             case L4_POSITIONING_HANDOFF:
                 L4arm.setArmAngle(L4ArmConstants.HAND_OFF);
                 
-                
+                cyclesPositioningHandOff = 0;
                 if(!HandOffButton){
                     currentState = State.IDLE;
                 }
@@ -438,11 +438,12 @@ public class CoralHandlerCommand extends Command {
             case L1_POSITIONING_HANDOFF:
                 L1arm.setArmAngle(L1ArmConstants.HAND_OFF);
                 L4arm.setArmAngle(L4ArmConstants.HAND_OFF);
-            
+                cyclesPositioningHandOff += 1;
+                
                 if(!HandOffButton){
                     currentState = State.IDLE;
                 }
-                if(L1arm.atGoal()&&L4arm.atGoal()){
+                if(L1arm.atGoal() && L4arm.atGoal() && cyclesPositioningHandOff >= L1ArmConstants.HAND_OFF_SETTLING_TIME){
                     currentState = State.PERFORMING_HANDOFF;
                 } 
 
