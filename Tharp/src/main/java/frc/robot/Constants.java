@@ -434,16 +434,16 @@ public final class Constants {
             Map.entry("L1", new Pose2d(new Translation2d(1.2,1.1), Rotation2d.fromDegrees(-126))),
             Map.entry("R00", new Pose2d(new Translation2d(5.270,4.196582 ), Rotation2d.fromDegrees(0))),//Reef targets naming scheme R(side)(leftOrRight)
             Map.entry("R01", new Pose2d(new Translation2d(5.270,3.868) , Rotation2d.fromDegrees(0))),
-            Map.entry("R10", new Pose2d(new Translation2d(4.737,3.268609), Rotation2d.fromDegrees(-60))),
-            Map.entry("R11", new Pose2d(new Translation2d(5.022008,3.431928), Rotation2d.fromDegrees(-60))),
+            Map.entry("R10", new Pose2d(new Translation2d(5.022008,3.431928), Rotation2d.fromDegrees(-60))),
+            Map.entry("R11", new Pose2d(new Translation2d(4.737,3.268609), Rotation2d.fromDegrees(-60))),
             Map.entry("R20", new Pose2d(new Translation2d(4.241257,3.268), Rotation2d.fromDegrees(-180 + 60))),
             Map.entry("R21", new Pose2d(new Translation2d(3.957238,3.432917), Rotation2d.fromDegrees(-180 + 60))),
-            Map.entry("R30", new Pose2d(new Translation2d(3.709730,4.190231), Rotation2d.fromDegrees(180))),
-            Map.entry("R31", new Pose2d(new Translation2d(3.709730,3.862), Rotation2d.fromDegrees(180))),
-            Map.entry("R40", new Pose2d(new Translation2d(4.241828,4.783237), Rotation2d.fromDegrees(180 - 60))),
-            Map.entry("R41", new Pose2d(new Translation2d(3.956666,4.619918), Rotation2d.fromDegrees(180 - 60))),
-            Map.entry("R50", new Pose2d(new Translation2d(5.021435,4.618929), Rotation2d.fromDegrees(60))),
-            Map.entry("R51", new Pose2d(new Translation2d(4.737416,4.784227), Rotation2d.fromDegrees(60))),
+            Map.entry("R30", new Pose2d(new Translation2d(3.709730,3.862), Rotation2d.fromDegrees(180))),
+            Map.entry("R31", new Pose2d(new Translation2d(3.709730,4.190231), Rotation2d.fromDegrees(180))),
+            Map.entry("R40", new Pose2d(new Translation2d(3.956666,4.619918), Rotation2d.fromDegrees(180 - 60))),
+            Map.entry("R41", new Pose2d(new Translation2d(4.241828,4.783237), Rotation2d.fromDegrees(180 - 60))),
+            Map.entry("R50", new Pose2d(new Translation2d(4.737416,4.784227), Rotation2d.fromDegrees(60))),
+            Map.entry("R51", new Pose2d(new Translation2d(5.021435,4.618929), Rotation2d.fromDegrees(60))),
             Map.entry("Reef", new Pose2d(new Translation2d(4.489,4.025923), Rotation2d.fromDegrees(0)))
             
         );
