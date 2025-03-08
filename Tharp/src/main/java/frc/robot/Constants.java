@@ -446,7 +446,7 @@ public final class Constants {
             Map.entry("R41", new Pose2d(new Translation2d(3.956666,4.619918), Rotation2d.fromDegrees(180 - 60))),
             Map.entry("R50", new Pose2d(new Translation2d(5.021435,4.618929), Rotation2d.fromDegrees(60))),
             Map.entry("R51", new Pose2d(new Translation2d(4.737416,4.784227), Rotation2d.fromDegrees(60))),
-            Map.entry("Reef", new Pose2d(new Translation2d(0,0), Rotation2d.fromDegrees(0)))
+            Map.entry("Reef", new Pose2d(new Translation2d(4.489,4.025923), Rotation2d.fromDegrees(0)))
             
         );
         
