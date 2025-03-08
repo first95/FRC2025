@@ -85,7 +85,7 @@ public class CoralHandlerCommand extends Command {
     private boolean releasedCoral = false; 
     private int releasedCoralCycles = 0;
     private double IntakeCurrent;
-    private Rotation2d L4ScoreAngle;
+    private Rotation2d L4ScoreAngle,L1ScoreAngle;
     private int cyclesIntaking;
     private double L1IntakeSpeed;
     private State currentState = State.IDLE;
@@ -171,7 +171,11 @@ public class CoralHandlerCommand extends Command {
 
         pointToReefButton = pointToReefButtonSupplier.getAsBoolean();
 
-        L1ScorePose = findL1ScorePose();       
+        L1ScorePose = findL1ScorePose();      
+        L1ScoreAngle = Math.abs(swerve.getPose().getRotation().getRadians() - calculatePointToCenterOfReefHeading().getRadians()) < Math.PI/2 ? 
+            L1ArmConstants.SCORING_OF_BACK:
+            L1ArmConstants.SCORING_OF_FRONT;
+
         
         swerve.field.getObject("L1ScorePose").setPose(L1ScorePose);
         if(pointToReefButton){
@@ -207,6 +211,7 @@ public class CoralHandlerCommand extends Command {
         else{
             L1arm.runIntake(L1IntakeSpeed);
         }
+        
 
         //
         // State Machine 
@@ -296,14 +301,12 @@ public class CoralHandlerCommand extends Command {
                     currentState = State.L1_HUMAN_LOADING;
                 }
 
-                if(L1arm.atGoal()){
-                    if(L4ScoreButton){
-                        currentState = State.L4_SCORING;
-                    }
-                    if(L4IntakeButton){
-                        currentState = State.L4_INTAKING;
-                    }
+                if(L4ScoreButton){
+                    currentState = State.IDLE;
                 }
+                if(L4IntakeButton){ 
+                    currentState = State.IDLE;
+                } 
                 if(L1ScoreButton){
                     currentState = State.L1_SCORE_POSITIONING;
                 }
@@ -356,7 +359,7 @@ public class CoralHandlerCommand extends Command {
             case L1_SCORE_POSITIONING:
                 // Move to scoring position then stop
 
-                L1arm.setArmAngle(L1ArmConstants.SCORING);
+                L1arm.setArmAngle(L1ScoreAngle);
 
                 coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD; 
                 L1IntakeSpeed = L1ScoreButton ? L1IntakeConstants.SCORE_SPEED : 0;
@@ -372,12 +375,7 @@ public class CoralHandlerCommand extends Command {
                 }
                 else{
                     if(L1arm.atGoal()){
-                        if(L4ScoreButton){
-                            currentState = State.L4_SCORING;
-                        }
-                        if(L4IntakeButton){
-                            currentState = State.L4_INTAKING;
-                        } 
+                       
                         if(L1ScoreButton){
                             L1IntakeSpeed = L1IntakeConstants.SCORE_SPEED;
                         }
@@ -385,6 +383,12 @@ public class CoralHandlerCommand extends Command {
                             L1IntakeSpeed = 0;
                         }
                     }
+                    if(L4ScoreButton){
+                        currentState = State.IDLE;
+                    }
+                    if(L4IntakeButton){ 
+                        currentState = State.IDLE;
+                    } 
                     if(L1IntakeButton){
                         currentState = State.L1_INTAKING;
                     }

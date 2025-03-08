@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -239,7 +241,8 @@ public final class Constants {
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-40);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-38);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
-        public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
+        public static final Rotation2d SCORING_OF_BACK = Rotation2d.fromDegrees(160);
+        public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(60);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(72);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
 
@@ -442,7 +445,8 @@ public final class Constants {
             Map.entry("R40", new Pose2d(new Translation2d(4.241828,4.783237), Rotation2d.fromDegrees(180 - 60))),
             Map.entry("R41", new Pose2d(new Translation2d(3.956666,4.619918), Rotation2d.fromDegrees(180 - 60))),
             Map.entry("R50", new Pose2d(new Translation2d(5.021435,4.618929), Rotation2d.fromDegrees(60))),
-            Map.entry("R51", new Pose2d(new Translation2d(4.737416,4.784227), Rotation2d.fromDegrees(60)))
+            Map.entry("R51", new Pose2d(new Translation2d(4.737416,4.784227), Rotation2d.fromDegrees(60))),
+            Map.entry("Reef", new Pose2d(new Translation2d(0,0), Rotation2d.fromDegrees(0)))
             
         );
         
