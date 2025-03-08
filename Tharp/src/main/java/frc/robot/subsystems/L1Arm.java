@@ -192,6 +192,9 @@ public class L1Arm extends SubsystemBase {
   public double getArmVoltage(){
     return (shoulder.getAppliedOutput() * shoulder.getBusVoltage());
   }
+  public void setControleffort(double controleffort){
+    shoulder.set(controleffort);
+  }
 
   public void setGains(){
     shoulderFeedforward = new ArmFeedforward(

@@ -48,7 +48,8 @@ public class CoralHandlerCommand extends Command {
         L1HumanLoadingSupplier,
         pointToReefButtonSupplier,
         alignWithHumanLoadButtonSupplier,
-        climbButtonSupplier;
+        climbButtonSupplier,
+        IgnoreL1PositionButtonSupplier;
 
     private final L1Arm L1arm;
     private final L4Arm L4arm;
@@ -72,7 +73,8 @@ public class CoralHandlerCommand extends Command {
         L1HumanLoadButton,
         pointToReefButton,
         alignWithHumanLoadButton,
-        climbButton;
+        climbButton,
+        IgnoreL1PositionButton;
     
     private boolean 
         autoL4HumanLoadTrigger,
@@ -82,6 +84,7 @@ public class CoralHandlerCommand extends Command {
 
 
     private boolean coralInL1 = false;
+    private boolean IgnoreL1Position = false;
     private boolean releasedCoral = false; 
     private int releasedCoralCycles = 0;
     private double IntakeCurrent;
@@ -104,6 +107,7 @@ public class CoralHandlerCommand extends Command {
             BooleanSupplier pointToReefButtonSupplier,
             BooleanSupplier alignWithHumanLoadButtonSupplier, 
             BooleanSupplier climbButtonSupplier,
+            BooleanSupplier IgnoreL1PositionButtonSupplier,
             L1Arm L1arm,
             L4Arm L4arm,
             Climber climber,
@@ -126,6 +130,7 @@ public class CoralHandlerCommand extends Command {
             this.pointToReefButtonSupplier = pointToReefButtonSupplier;
             this.alignWithHumanLoadButtonSupplier = alignWithHumanLoadButtonSupplier;
             this.climbButtonSupplier = climbButtonSupplier;
+            this.IgnoreL1PositionButtonSupplier = IgnoreL1PositionButtonSupplier;
 
         
             this.climber = climber;
@@ -161,6 +166,8 @@ public class CoralHandlerCommand extends Command {
 
         L1ScoreButton = L1ScoreButtonSupplier.getAsBoolean();
 
+        IgnoreL1PositionButton = IgnoreL1PositionButtonSupplier.getAsBoolean();
+        
         alignWithHumanLoadButton = alignWithHumanLoadButtonSupplier.getAsBoolean();
         
 
@@ -211,7 +218,18 @@ public class CoralHandlerCommand extends Command {
         else{
             L1arm.runIntake(L1IntakeSpeed);
         }
-        
+        if(IgnoreL1PositionButton){
+            IgnoreL1Position = true;
+        }
+        if(IgnoreL1Position){
+            L1arm.setControleffort(0);
+            if(L4IntakeButton){
+                currentState = State.L4_INTAKING;
+            } 
+            if(L4ScoreButton){
+                currentState = State.L4_SCORING;
+            }
+        }
 
         //
         // State Machine 
@@ -442,7 +460,6 @@ public class CoralHandlerCommand extends Command {
             case L4_INTAKING:
                 // L4 intaking pos
                 // L1 backstop ~95 deg
-                L1arm.setArmAngle(L1ArmConstants.STOWED);
                 L4arm.setArmAngle(L4ArmConstants.INTAKING);
                 
                 if(inAuto){
