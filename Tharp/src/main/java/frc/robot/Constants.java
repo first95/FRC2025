@@ -236,11 +236,11 @@ public final class Constants {
 
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(100);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(167);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-37);
-        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-36.5);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-40);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-38);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(160);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(79);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(72);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
 
 
@@ -259,30 +259,30 @@ public final class Constants {
         public static final boolean INVERTED = false;
 
         public static final int SMARTCURRENTLIMIT = 30;
-        public static final double OPEN_LOOP_RAMP_RATE = 10;
+        public static final double OPEN_LOOP_RAMP_RATE = 0.1;
 
         public static final int FAULTS_PERIOD_MS = 20;
 
         public static final int PRIMARY_ENCODER_POSITON_PERIODMS = 6000;
         public static final int PRIMARY_ENCODER_VELOCITY_PERIODMS = 5900;
 
-        public static final double RAMP_RATE = 0.5;
+        public static final double RAMP_RATE = 0;
 
         public static final boolean OUTPUT_CURRENT_ALWAYS_ON = true;
         public static final int OUTPUT_CURRENT_PERIODMS = 20;
 
         public static final double MAX_SPEED = 1;
 
-        public static final double INTAKING_CURRENT_THRESHOULD = 20;
-        public static final double RELEASED_CURRENT_THRESHOULD = 20;
-        public static final double NOPICKUP_CURRENT_THRESHOULD = 17;
+        public static final double INTAKING_CURRENT_THRESHOULD = 30;
+        public static final double RELEASED_CURRENT_THRESHOULD = 30;
+        public static final double NOPICKUP_CURRENT_THRESHOULD = 30;
         public static final int CYCLE_INTAKING_THRESHOLD = 20;
         public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
         public static final double HOLDING_SPEED = 0.17;
-        public static final double SCORE_SPEED = -0.9;
-        public static final double INTAKE_SPEED = 0.35;
-        public static final double HAND_OFF_SPEED = -0.4;
+        public static final double SCORE_SPEED = -1;
+        public static final double INTAKE_SPEED = 0.6;
+        public static final double HAND_OFF_SPEED = -0.5;
 
     }
 
@@ -330,7 +330,7 @@ public final class Constants {
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-48);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-34);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(112);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-48);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-31);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(-29);
 
 

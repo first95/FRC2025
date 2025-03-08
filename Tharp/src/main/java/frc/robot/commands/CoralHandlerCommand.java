@@ -254,6 +254,9 @@ public class CoralHandlerCommand extends Command {
                             currentState = State.L4_SCORING;
                         }
                     }
+                    if(HandOffButton){
+                        currentState = State.L4_POSITIONING_HANDOFF;
+                    }
                 }
                 
 
@@ -277,10 +280,10 @@ public class CoralHandlerCommand extends Command {
                 L1arm.setArmAngle(L1ArmConstants.INTAKING);
                 L4arm.setArmAngle(L4ArmConstants.STOWED);
                 // wait for spike in current that means we have coral
-                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.INTAKING_CURRENT_THRESHOULD;
-                L1IntakeSpeed = L1IntakeButton ? L1IntakeConstants.INTAKE_SPEED : 0;
+                coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD;
+                L1IntakeSpeed = L1IntakeButton ? L1IntakeConstants.INTAKE_SPEED : L1IntakeConstants.HOLDING_SPEED;
                 if (coralInL1){
-                    if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
+                    if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD && !L1IntakeButton){
                         currentState = State.L1_SCORE_POSITIONING;
                     }
                     cyclesIntaking += 1;
@@ -288,7 +291,7 @@ public class CoralHandlerCommand extends Command {
                 else{
                     cyclesIntaking = 0;
                 }
-
+                
                 if(L1HumanLoadButton){
                     currentState = State.L1_HUMAN_LOADING;
                 }
@@ -301,9 +304,13 @@ public class CoralHandlerCommand extends Command {
                         currentState = State.L4_INTAKING;
                     }
                 }
+                if(L1ScoreButton){
+                    currentState = State.L1_SCORE_POSITIONING;
+                }
                 if(climbButton){
                     currentState = State.CLIMBING_L1_POSITIONING;
                 }
+                
                 
             break;
             case L1_HUMAN_LOADING:
@@ -371,18 +378,22 @@ public class CoralHandlerCommand extends Command {
                         if(L4IntakeButton){
                             currentState = State.L4_INTAKING;
                         } 
+                        if(L1ScoreButton){
+                            L1IntakeSpeed = L1IntakeConstants.SCORE_SPEED;
+                        }
+                        else{
+                            L1IntakeSpeed = 0;
+                        }
                     }
                     if(L1IntakeButton){
                         currentState = State.L1_INTAKING;
                     }
                     if(climbButton){
-                        currentState = State.CLIMBING;
+                        currentState = State.CLIMBING_L1_POSITIONING;
                     }
-                    if(L1ScoreButton){
-                        L1IntakeSpeed = L1IntakeConstants.SCORE_SPEED;
-                    }
-                    else{
-                        L1IntakeSpeed = 0;
+                    
+                    if(HandOffButton){
+                        currentState = State.L4_POSITIONING_HANDOFF;
                     }
                 }
 
@@ -391,6 +402,7 @@ public class CoralHandlerCommand extends Command {
 
             case L4_POSITIONING_HANDOFF:
                 L4arm.setArmAngle(L4ArmConstants.HAND_OFF);
+                
                 
                 if(!HandOffButton){
                     currentState = State.IDLE;
@@ -407,7 +419,7 @@ public class CoralHandlerCommand extends Command {
                 if(!HandOffButton){
                     currentState = State.IDLE;
                 }
-                if(L1arm.atGoal() && L4arm.atGoal()){
+                if(L1arm.atGoal()&&L4arm.atGoal()){
                     currentState = State.PERFORMING_HANDOFF;
                 } 
 
