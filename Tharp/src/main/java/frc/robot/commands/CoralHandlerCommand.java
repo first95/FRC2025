@@ -599,8 +599,12 @@ public class CoralHandlerCommand extends Command {
                 closestL4Pole = currentL4Pole;
             }
         }
-
-        return findScoringPose(closestL4Pole);
+        if(Math.abs(swerve.getPose().getRotation().getRadians() - calculatePointToCenterOfReefHeading().getRadians()) < Math.PI/2){
+            return findScoringPose(closestL4Pole);
+        }
+        else{
+            return new Pose2d(findScoringPose(closestL4Pole).getTranslation(),findScoringPose(closestL4Pole).getRotation().rotateBy(Rotation2d.fromDegrees(180)));
+        }
     }
      
     public Command L4AutoScore(){
@@ -620,7 +624,8 @@ public class CoralHandlerCommand extends Command {
         return Commands.sequence(
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1SCORE_KEY, false))
         );
     }
     public Command L1AutoScore(){
