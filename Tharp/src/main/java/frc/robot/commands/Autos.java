@@ -73,7 +73,7 @@ public final class Autos {
     autoFactory.bind(
       "L4Intake",
       Commands.sequence(
-        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, true)),
+        new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
         new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false))
       )
     );
@@ -161,7 +161,7 @@ public final class Autos {
     String[] posTargets = getPosTargets();
     
     Pose2d[] fullTrajectory = {};    
-    if (posTargets != null && posTargets.length >= 1){
+    if (posTargets != null && posTargets.length >= 2){
       AutoTrajectory[] trajectories = new AutoTrajectory[posTargets.length - 1];
       
 

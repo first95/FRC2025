@@ -276,10 +276,11 @@ public class CoralHandlerCommand extends Command {
                         if(L4ScoreButton){
                             currentState = State.L4_SCORING;
                         }
+                        if(HandOffButton){
+                            currentState = State.L4_POSITIONING_HANDOFF;
+                        }
                     }
-                    if(HandOffButton){
-                        currentState = State.L4_POSITIONING_HANDOFF;
-                    }
+                    
                 }
                 
 
@@ -380,7 +381,7 @@ public class CoralHandlerCommand extends Command {
                 L1arm.setArmAngle(L1ScoreAngle);
 
                 coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.NOPICKUP_CURRENT_THRESHOULD; 
-                L1IntakeSpeed = L1ScoreButton ? L1IntakeConstants.SCORE_SPEED : 0;
+                //L1IntakeSpeed = L1ScoreButton ? L1IntakeConstants.SCORE_SPEED : 0;
 
                 
                 if(inAuto){
@@ -388,7 +389,7 @@ public class CoralHandlerCommand extends Command {
                         L1IntakeSpeed = L1IntakeConstants.SCORE_SPEED;
                     }
                     else{
-                        L1IntakeSpeed = 0;
+                        L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
                     }
                 }
                 else{
@@ -398,7 +399,7 @@ public class CoralHandlerCommand extends Command {
                             L1IntakeSpeed = L1IntakeConstants.SCORE_SPEED;
                         }
                         else{
-                            L1IntakeSpeed = 0;
+                            L1IntakeSpeed = L1IntakeConstants.HOLDING_SPEED;
                         }
                     }
                     if(L4ScoreButton){
@@ -415,7 +416,7 @@ public class CoralHandlerCommand extends Command {
                     }
                     
                     if(HandOffButton){
-                        currentState = State.L4_POSITIONING_HANDOFF;
+                        currentState = State.IDLE;
                     }
                 }
 

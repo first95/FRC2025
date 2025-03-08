@@ -236,20 +236,20 @@ public final class Constants {
         public static final double MAX_SPEED = 1.788;
         public static final double MAX_ACCELERATION = 1.788;
 
-        public static final Rotation2d STOWED = Rotation2d.fromDegrees(100);
+        public static final Rotation2d STOWED = Rotation2d.fromDegrees(95);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(167);
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-40);
-        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-38);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-40);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING_OF_BACK = Rotation2d.fromDegrees(160);
-        public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(60);
+        public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(25);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(72);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
 
-        public static final double TOLERANCE = Math.toRadians(10);
+        public static final double TOLERANCE = Math.toRadians(5);
         public static final int SETTLE_TIME_LOOP_CYCLES = 200;
 
         public static final double CURRENT_OFFSET = 5;
@@ -418,10 +418,10 @@ public final class Constants {
         public static final double FOLLOW_TRAJECTORY_KI = 0;
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 
-        public static final double SCORING_WAIT_TIME = 0.45;
-        public static final double HUMANLOAD_WAIT_TIME = 0.75;
+        public static final double SCORING_WAIT_TIME = 0.20;
+        public static final double HUMANLOAD_WAIT_TIME = 0.64;
 
-        public static final double AUTO_ALIGN_TIMEOUT_TIMEOUT = 0.5;
+        public static final double AUTO_ALIGN_TIMEOUT_TIMEOUT = 0.8;
         public static final double ALIGN_TO_POSE_KP = 3;
         public static final double ALIGN_TO_POSE_KI = 0;
         public static final double ALIGN_TO_POSE_KD = 0;
