@@ -119,6 +119,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     initializeDashboard();
+    m_robotContainer.setBrakes(true);
     m_robotContainer.stopDrive();
     m_robotContainer.setIsAuto(false);
   }
