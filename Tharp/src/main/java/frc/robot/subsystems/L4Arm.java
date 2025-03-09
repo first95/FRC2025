@@ -184,6 +184,11 @@ public class L4Arm extends SubsystemBase {
     return shoulder.getOutputCurrent();
   }
 
+  public void setBrake(boolean setbrake){
+    shoulderConfig.idleMode(setbrake ? IdleMode.kBrake : IdleMode.kCoast);
+    shoulder.configure(shoulderConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+  }
+
   // public void setArmAngle(Rotation2d angle){
   //   if(angle.getRadians() != armGoal.getRadians()){
   //     armGoal = angle;

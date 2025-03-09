@@ -45,7 +45,7 @@ public final class Constants {
     public static final double FIELD_WIDTH = 8.0518;
     public static final double FIELD_LENGTH = 17.548225;
 
-  public static final double LOOP_CYCLE = 0.02; // 20ms
+  public static final double LOOP_CYCLE = 0.02; // 20m
 
   public static final double ROBOT_MASS = 90;
   public static final double MANIPULATOR_MASS = 0;
@@ -58,7 +58,7 @@ public final class Constants {
     public static final class Drivebase {
         public static final int DEBUG_FLAG = 0b1;
         // Hold time on motor brakes when disabled
-        public static final double WHEEL_LOCK_TIME = 10; // seconds
+        public static final int DISABLED_BREAK_TIMEOUT = 50; // cycles
 
         public static final int SWERVE_MODULE_CURRENT_LIMIT = 50;
 

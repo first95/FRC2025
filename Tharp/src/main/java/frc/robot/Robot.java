@@ -25,6 +25,8 @@ public class Robot extends TimedRobot {
 
   private boolean sentAlliance = false;
 
+  private int cyclesDisabled;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -79,10 +81,16 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.setIsAuto(false);
+    cyclesDisabled = 0;
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    cyclesDisabled += 1;
+    if(cyclesDisabled >= Constants.Drivebase.DISABLED_BREAK_TIMEOUT){
+      m_robotContainer.setBrakes(false);
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

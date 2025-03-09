@@ -224,6 +224,11 @@ public class L1Arm extends SubsystemBase {
     return shoulder.getOutputCurrent();
   }
 
+  public void setBrake(boolean setbrake){
+    shoulderConfig.idleMode(setbrake ? IdleMode.kBrake : IdleMode.kCoast);
+    shoulder.configure(shoulderConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+  }
+  
   public void runIntake(double speed){
     
     intake.set(speed * L1IntakeConstants.MAX_SPEED);

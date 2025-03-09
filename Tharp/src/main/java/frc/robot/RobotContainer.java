@@ -378,6 +378,12 @@ public class RobotContainer {
     
   }
 
+  public void setBrakes(boolean setbrake){
+    L1arm.setBrake(setbrake);
+    L4arm.setBrake(setbrake);
+    drivebase.setMotorBrake(setbrake);
+  }
+
   private Map<String, Optional<Trajectory<SwerveSample>>> loadTrajectories() {
     Set<String> trajNames;
     try {
