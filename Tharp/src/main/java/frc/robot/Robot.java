@@ -81,13 +81,14 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.setIsAuto(false);
+    m_robotContainer.setBrakes(true);
     cyclesDisabled = 0;
   }
 
   @Override
   public void disabledPeriodic() {
     cyclesDisabled += 1;
-    if(cyclesDisabled >= Constants.Drivebase.DISABLED_BREAK_TIMEOUT){
+    if(cyclesDisabled == Constants.Drivebase.DISABLED_BREAK_TIMEOUT){
       m_robotContainer.setBrakes(false);
     }
   }
@@ -97,6 +98,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.setIsAuto(true);
+    m_robotContainer.setBrakes(true);
     //SmartDashboard.putString("selectedAuto",toString(m_autonomousCommand));
     
     // schedule the autonomous command (example)
@@ -118,8 +120,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    initializeDashboard();
     m_robotContainer.setBrakes(true);
+    initializeDashboard();
     m_robotContainer.stopDrive();
     m_robotContainer.setIsAuto(false);
   }
@@ -130,6 +132,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    m_robotContainer.setBrakes(true);
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.setIsAuto(false);

@@ -284,15 +284,15 @@ public class CoralHandlerCommand extends Command {
                 }
                 
 
-                if(coralInL1){
-                    cyclesIntaking += 1;
-                    if(cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                        currentState = State.L1_SCORE_POSITIONING;
-                    }
-                }
-                else{
-                    cyclesIntaking = 0;
-                }
+                // if(coralInL1){
+                //     cyclesIntaking += 1;
+                //     if(cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
+                //         currentState = State.L1_SCORE_POSITIONING;
+                //     }
+                // }
+                // else{
+                //     cyclesIntaking = 0;
+                // }
                 
 
             break;
@@ -308,7 +308,7 @@ public class CoralHandlerCommand extends Command {
                 L1IntakeSpeed = L1IntakeButton ? L1IntakeConstants.INTAKE_SPEED : L1IntakeConstants.HOLDING_SPEED;
                 if (coralInL1){
                     if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD && !L1IntakeButton){
-                        currentState = State.L1_SCORE_POSITIONING;
+                        currentState = State.IDLE;
                     }
                     cyclesIntaking += 1;
                 }

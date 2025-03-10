@@ -243,7 +243,7 @@ public final class Constants {
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING_OF_BACK = Rotation2d.fromDegrees(160);
         public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(25);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(72);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(75);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
 
 
@@ -251,7 +251,7 @@ public final class Constants {
 
         public static final double TOLERANCE = Math.toRadians(5);
         public static final int SETTLE_TIME_LOOP_CYCLES = 200;
-        public static final int HAND_OFF_SETTLING_TIME = 30;
+        public static final int HAND_OFF_SETTLING_TIME = 0;
 
         public static final double CURRENT_OFFSET = 5;
 
@@ -283,8 +283,8 @@ public final class Constants {
 
         public static final double HOLDING_SPEED = 0.17;
         public static final double SCORE_SPEED = -1;
-        public static final double INTAKE_SPEED = 1;
-        public static final double HAND_OFF_SPEED = -0.9;
+        public static final double INTAKE_SPEED = 0.6;
+        public static final double HAND_OFF_SPEED = -0.2;
 
     }
 
