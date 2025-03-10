@@ -214,7 +214,7 @@ public final class Autos {
   }
 
   public AutoRoutine threeCoralAutoLeftSide(){
-    SmartDashboard.putString("currentModularAuto", "R50,L0,R41,L0,R40,L0,R51,L0,");
+    SmartDashboard.putString("currentModularAuto", "R50,L0,R41,L0,R40,L0,R50,L0,");
     
     return ModularAuto();  
   }
