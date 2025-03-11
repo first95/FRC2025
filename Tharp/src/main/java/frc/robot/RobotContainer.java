@@ -167,11 +167,12 @@ public class RobotContainer {
     coralHandler = new CoralHandlerCommand(
       () -> operatorController.getHID().getLeftBumperButton(),    // L1Intake
       () -> operatorController.getHID().getBButton(),    // L1Eject
+      () -> operatorController.getHID().getYButton(),    //L1Inject
       () -> driveController.getHID().getRawButton(1),   // L4 intake
       () -> headingController.getHID().getRawButton(1), // L4 Score
       () -> operatorController.getHID().getAButton(),   // Handoff
       () -> operatorController.getHID().getRightBumperButton(), //L1Score
-      () -> operatorController.getHID().getYButton(), //Stow
+      () -> operatorController.getHID().getLeftStickButton(), //Stow
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
       () -> headingController.getHID().getRawButton(2), // point to Reef
       () -> driveController.getHID().getRawButton(2),//auto align with humanLoad

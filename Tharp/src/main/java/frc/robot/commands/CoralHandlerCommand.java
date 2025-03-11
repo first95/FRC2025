@@ -40,6 +40,7 @@ public class CoralHandlerCommand extends Command {
     private final BooleanSupplier 
         L1IntakeButtonSupplier, 
         L1EjectButtonSupplier, 
+        L1InjectButtonSupplier,
         L4IntakeButtonSupplier,
         L4ScoreButtonSupplier, 
         HandOffButtonSupplier, 
@@ -65,6 +66,7 @@ public class CoralHandlerCommand extends Command {
     private boolean 
         L1IntakeButton, 
         L1EjectButton, 
+        L1InjectButton,
         L4IntakeButton, 
         HandOffButton,
         L1ScoreButton, 
@@ -98,6 +100,7 @@ public class CoralHandlerCommand extends Command {
         public CoralHandlerCommand(
             BooleanSupplier L1IntakeButtonSupplier, 
             BooleanSupplier L1EjectButtonSupplier, 
+            BooleanSupplier L1InjectButtonSupplier,
             BooleanSupplier L4IntakeButtonSupplier,
             BooleanSupplier L4ScoreButtonSupplier, 
             BooleanSupplier HandOffButtonSupplier, 
@@ -119,6 +122,7 @@ public class CoralHandlerCommand extends Command {
     
             this.L1IntakeButtonSupplier = L1IntakeButtonSupplier;
             this.L1EjectButtonSupplier = L1EjectButtonSupplier;
+            this.L1InjectButtonSupplier = L1InjectButtonSupplier;
             this.L1HumanLoadingSupplier = L1HumanLoadingSupplier;
             this.StowButtonSupplier = StowButtonSupplier;
             this.L4IntakeButtonSupplier = L4IntakeButtonSupplier;
@@ -155,6 +159,7 @@ public class CoralHandlerCommand extends Command {
 
         L1IntakeButton = L1IntakeButtonSupplier.getAsBoolean();
         L1EjectButton = L1EjectButtonSupplier.getAsBoolean();
+        L1InjectButton = L1InjectButtonSupplier.getAsBoolean();
         L1HumanLoadButton = L1HumanLoadingSupplier.getAsBoolean();
         StowButton = StowButtonSupplier.getAsBoolean();
 
@@ -214,6 +219,9 @@ public class CoralHandlerCommand extends Command {
 
         if(L1EjectButton){
             L1arm.runIntake(L1IntakeConstants.SCORE_SPEED);
+        }
+        else if(L1InjectButton){
+            L1arm.runIntake(L1IntakeConstants.INTAKE_SPEED);
         }
         else{
             L1arm.runIntake(L1IntakeSpeed);
@@ -353,7 +361,7 @@ public class CoralHandlerCommand extends Command {
                  
                 if(!L1HumanLoadButton){
                     currentState = State.IDLE;
-                }
+                } 
                 if(inAuto){
                     if(autoL4HumanLoadTrigger){
                         currentState = State.L4_INTAKING;
@@ -452,7 +460,7 @@ public class CoralHandlerCommand extends Command {
 
             case PERFORMING_HANDOFF:
                 // Less resistance then go to L4 holding
-                L1arm.runIntake(L1IntakeConstants.HAND_OFF_SPEED);
+                L1IntakeSpeed = L1IntakeConstants.HAND_OFF_SPEED;
                 if(!HandOffButton){
                     currentState = State.IDLE;
                 }
