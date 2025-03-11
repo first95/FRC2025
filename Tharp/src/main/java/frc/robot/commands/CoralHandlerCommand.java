@@ -332,7 +332,9 @@ public class CoralHandlerCommand extends Command {
                 if(climbButton){
                     currentState = State.CLIMBING_L1_POSITIONING;
                 }
-                
+                if(HandOffButton){
+                    currentState = State.IDLE;
+                }                
                 
             break;
             case L1_HUMAN_LOADING:
@@ -341,15 +343,6 @@ public class CoralHandlerCommand extends Command {
                 L1IntakeSpeed = L1HumanLoadButton ? L1IntakeConstants.INTAKE_SPEED : 0;
                 coralInL1 = L1arm.getIntakeCurrent() > L1IntakeConstants.INTAKING_CURRENT_THRESHOULD;
 
-                if (coralInL1){
-                    if( cyclesIntaking >= L1IntakeConstants.CYCLE_INTAKING_THRESHOLD){
-                        currentState = State.L1_SCORE_POSITIONING;
-                    }
-                    cyclesIntaking += 1;
-                }
-                else{
-                    cyclesIntaking = 0;
-                }
                  
                 if(!L1HumanLoadButton){
                     currentState = State.IDLE;
