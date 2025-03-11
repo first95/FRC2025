@@ -427,6 +427,8 @@ public class CoralHandlerCommand extends Command {
             case L4_POSITIONING_HANDOFF:
                 L4arm.setArmAngle(L4ArmConstants.HAND_OFF);
                 
+                swerve.setDriveBrake();
+
                 cyclesPositioningHandOff = 0;
                 if(!HandOffButton){
                     currentState = State.IDLE;
@@ -439,6 +441,9 @@ public class CoralHandlerCommand extends Command {
             case L1_POSITIONING_HANDOFF:
                 L1arm.setArmAngle(L1ArmConstants.HAND_OFF);
                 L4arm.setArmAngle(L4ArmConstants.HAND_OFF);
+
+                swerve.setDriveBrake();
+
                 cyclesPositioningHandOff += 1;
                 
                 if(!HandOffButton){
@@ -454,6 +459,8 @@ public class CoralHandlerCommand extends Command {
             case PERFORMING_HANDOFF:
                 // Less resistance then go to L4 holding
                 L1IntakeSpeed = L1IntakeConstants.HAND_OFF_SPEED;
+
+                swerve.setDriveBrake();
                 if(!HandOffButton){
                     currentState = State.IDLE;
                 }
