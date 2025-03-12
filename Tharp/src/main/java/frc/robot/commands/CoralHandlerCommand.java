@@ -554,7 +554,7 @@ public class CoralHandlerCommand extends Command {
         swerve.field.getObject("ShoulderPositon").setPose(shoulderFieldPose);
 
         double distanceFromTarget = Math.hypot(swerve.getPose().getX() - target.getX(), swerve.getPose().getY() - target.getY());
-        Rotation2d heading = new Rotation2d();
+        Rotation2d heading = Rotation2d.fromDegrees(0);
         if (distanceFromTarget > L4ArmConstants.SHOULDER_LOCATION.getY()){
             if(swerve.getAlliance() == Alliance.Blue){
                 heading = Rotation2d.fromRadians(// creates a circle of radius Shoulder Relative Y and then finds the heaing to aim tangent to that circle
@@ -570,8 +570,8 @@ public class CoralHandlerCommand extends Command {
 
         }
         
-        
-        return heading;
+       return heading;
+       
     }
     private Pose2d findClosestL4Target(){
         Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_TRANSFORM);
