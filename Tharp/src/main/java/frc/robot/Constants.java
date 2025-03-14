@@ -215,7 +215,7 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = true;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 26.67;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 27.3;
         public static final boolean ABSOLUTE_ENCODER_ZERO_CENTERED = true;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
@@ -308,7 +308,7 @@ public final class Constants {
         public static final boolean ABSOLUTE_ENCODER_VELOCITY_ALWAYS_ON = true;
         public static final int ABSOLUTE_ENCODER_VELOCITY_PERIOD = 20;
         public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
-        public static final double ABSOLUTE_ENCODER_OFFSET = 154.15;
+        public static final double ABSOLUTE_ENCODER_OFFSET = 154.8;
         public static final double SHOULDER_RADIANS_PER_ABS_ENCODER_ROTATION = 2 * Math.PI;
 
         public static final double KP = 1;
@@ -359,7 +359,7 @@ public final class Constants {
         public static final double MAX_SCORING_Z = Units.feetToMeters(6);
         public static final Rotation2d MAX_SCORING_Z_ANGLE = Rotation2d.fromRadians(Math.asin(MAX_SCORING_Z/ARM_LENGTH));
 
-        public static final double TIME_TO_SCORING = 1;
+        public static final double TIME_TO_SCORING = 1.3;
     }
     public static final class ClimberConstants{
         public static final int CLIMBER_ID = 13;
