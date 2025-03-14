@@ -88,12 +88,12 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     
-    if(cyclesDisabled == Constants.Drivebase.DISABLED_BREAK_TIMEOUT){
-      m_robotContainer.setBrakes(false);
-    }
-    if(cyclesDisabled < Constants.Drivebase.DISABLED_BREAK_TIMEOUT){
-      cyclesDisabled += 1;
-    }
+    // if(cyclesDisabled == Constants.Drivebase.DISABLED_BREAK_TIMEOUT){
+    //   m_robotContainer.setBrakes(false);
+    // }
+    // else if(cyclesDisabled < Constants.Drivebase.DISABLED_BREAK_TIMEOUT){
+    //   cyclesDisabled += 1;
+    // }
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

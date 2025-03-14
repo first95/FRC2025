@@ -251,7 +251,7 @@ public final class Constants {
 
         public static final double TOLERANCE = Math.toRadians(5);
         public static final int SETTLE_TIME_LOOP_CYCLES = 200;
-        public static final int HAND_OFF_SETTLING_TIME = 0;
+        public static final int HAND_OFF_SETTLING_TIME = 40;
 
         public static final double CURRENT_OFFSET = 5;
 
