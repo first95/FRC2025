@@ -218,10 +218,10 @@ public class CoralHandlerCommand extends Command {
         }
 
         if(L1EjectButton){
-            L1arm.runIntake(L1IntakeConstants.SCORE_SPEED);
+            L1arm.runIntake(-1);
         }
         else if(L1InjectButton){
-            L1arm.runIntake(L1IntakeConstants.INTAKE_SPEED);
+            L1arm.runIntake(1);
         }
         else{
             L1arm.runIntake(L1IntakeSpeed);
