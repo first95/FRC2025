@@ -283,7 +283,7 @@ public final class Constants {
 
         public static final double HOLDING_SPEED = 0.17;
         public static final double SCORE_SPEED = -1;
-        public static final double INTAKE_SPEED = 0.6;
+        public static final double INTAKE_SPEED = 0.4;
         public static final double HAND_OFF_SPEED = -0.3;
 
     }
@@ -327,9 +327,9 @@ public final class Constants {
         public static final double OutputRangeMax = 0.7;
 
 
-        public static final Rotation2d STOWED = Rotation2d.fromDegrees(-47);
+        public static final Rotation2d STOWED = Rotation2d.fromDegrees(-49);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(114.69);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-48);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-49);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-34);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(112);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-28);
