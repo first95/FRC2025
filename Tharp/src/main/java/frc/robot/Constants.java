@@ -275,16 +275,16 @@ public final class Constants {
 
         public static final double MAX_SPEED = 1;
 
-        public static final double INTAKING_CURRENT_THRESHOULD = 15;
+        public static final double INTAKING_CURRENT_THRESHOULD = 30;
         public static final double RELEASED_CURRENT_THRESHOULD = 15;
-        public static final double NOPICKUP_CURRENT_THRESHOULD =15;
+        public static final double NOPICKUP_CURRENT_THRESHOULD = 25;
         public static final int CYCLE_INTAKING_THRESHOLD = 20;
         public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
-        public static final double HOLDING_SPEED = 0.17;
+        public static final double HOLDING_SPEED = 0.34;
         public static final double SCORE_SPEED = -1;
-        public static final double INTAKE_SPEED = 0.6;
-        public static final double HAND_OFF_SPEED = -0.3;
+        public static final double INTAKE_SPEED = 0.8;
+        public static final double HAND_OFF_SPEED = -0.65;
 
     }
 
@@ -327,9 +327,9 @@ public final class Constants {
         public static final double OutputRangeMax = 0.7;
 
 
-        public static final Rotation2d STOWED = Rotation2d.fromDegrees(-47);
+        public static final Rotation2d STOWED = Rotation2d.fromDegrees(-49);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(114.69);
-        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-48);
+        public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-49);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-34);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(112);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-28);
