@@ -24,7 +24,8 @@ public class AbsoluteDrive extends Command {
   private final SwerveBase swerve;
   private final PIDController thetaController;
   private final DoubleSupplier vX, vY, headingHorizontal, headingVertical;
-  private final BooleanSupplier brakeMode;
+  private final BooleanSupplier brakeButton;
+  private boolean brake = false;
   private double omega, angle, lastAngle, x, y, xMoment, yMoment, zMoment,
     armHeight, armExtension; //maxAngularVelocity, maxAngularAccel;
   private final boolean isOpenLoop;
@@ -52,14 +53,14 @@ public class AbsoluteDrive extends Command {
    * robot coordinate system, this is along the same axis as vX.  Should range from -1 to 1 with no deadband.
    * Positive is away from the alliance wall.
    */
-  public AbsoluteDrive(SwerveBase swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier headingHorizontal, DoubleSupplier headingVertical, boolean isOpenLoop, BooleanSupplier brakeMode) {
+  public AbsoluteDrive(SwerveBase swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier headingHorizontal, DoubleSupplier headingVertical, boolean isOpenLoop, BooleanSupplier brakeButton) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.headingHorizontal = headingHorizontal;
     this.headingVertical = headingVertical;
     this.isOpenLoop = isOpenLoop;
-    this.brakeMode = brakeMode;
+    this.brakeButton = brakeButton;
     thetaController = new PIDController(Drivebase.HEADING_KP, Drivebase.HEADING_KI, Drivebase.HEADING_KD);
     
     addRequirements(swerve);
@@ -89,7 +90,7 @@ public class AbsoluteDrive extends Command {
       swerve.clearGyroReset();
     }
 
-    if (brakeMode.getAsBoolean()) {
+    if (brakeButton.getAsBoolean() || brake) {
       swerve.setDriveBrake();
     } else {
 
@@ -156,6 +157,9 @@ public class AbsoluteDrive extends Command {
     return false;
   }
   
+  public void setBrake(boolean setBrake){
+    brake = setBrake;
+  }
   /**
    * Calculates the maximum acceleration allowed in a direction without tipping the robot.
    * Reads arm position from NetworkTables and is passed the direction in question.
