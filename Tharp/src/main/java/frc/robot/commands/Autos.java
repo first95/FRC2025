@@ -25,6 +25,7 @@ import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.util.sendable.Sendable;
@@ -182,9 +183,11 @@ public final class Autos {
           //trajectories[0].resetOdometry(),
           new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
           new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
-          new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
+          new AlignToPose(trajectories[0].getInitialPose().get().plus(new Transform2d(new Translation2d(0.4,0),new Rotation2d())), swerve),
           new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
-          new WaitCommand(Auton.SCORING_WAIT_TIME + L4ArmConstants.TIME_TO_SCORING),
+          new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
+          new WaitUntilCommand(() -> !L4arm.isMoving()),
+          new WaitCommand(Auton.SCORING_WAIT_TIME),
           trajectories[0].cmd()
         )
       );

@@ -511,7 +511,7 @@ public class CoralHandlerCommand extends Command {
             case CLIMBING_L4_POSITIONING:
                 L1arm.setArmAngle(L1ArmConstants.CLIMBING);
                 L4arm.setArmAngle(L4ArmConstants.CLIMBING);
-                L1arm.runIntake(0);
+                L1IntakeSpeed = 0;
 
                 if(L4IntakeButton || L1IntakeButton || L1HumanLoadButton){
                     currentState = State.IDLE;
@@ -519,7 +519,8 @@ public class CoralHandlerCommand extends Command {
             break;
             case CLIMBING_L1_POSITIONING:
                 L1arm.setArmAngle(L1ArmConstants.CLIMBING);
-                L1arm.runIntake(0);
+                L1IntakeSpeed = 0;
+                
                 if(L1arm.atGoal()){
                     currentState = State.CLIMBING_L4_POSITIONING;
                 }

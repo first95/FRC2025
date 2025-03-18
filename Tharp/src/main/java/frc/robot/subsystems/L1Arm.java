@@ -231,7 +231,7 @@ public class L1Arm extends SubsystemBase {
   
   public void runIntake(double speed){
     
-    intake.set(speed * L1IntakeConstants.MAX_SPEED);
+    intake.set(speed * L1IntakeConstants.MAX_SPEED * 10/intake.getBusVoltage());
   }
   
   public double getIntakeCurrent(){

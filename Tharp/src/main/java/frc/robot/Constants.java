@@ -180,7 +180,7 @@ public final class Constants {
         public static final class Mod2 {
             public static final int DRIVE_MOTOR_ID = 7;
             public static final int ANGLE_MOTOR_ID = 6;
-            public static final double ANGLE_OFFSET = 360 - 309.81;
+            public static final double ANGLE_OFFSET = 180 - 128.9;
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(2, DRIVE_MOTOR_ID,
                     ANGLE_MOTOR_ID, ANGLE_OFFSET, BACK_LEFT_X, BACK_LEFT_Y);
         }
@@ -244,14 +244,14 @@ public final class Constants {
         public static final Rotation2d SCORING_OF_BACK = Rotation2d.fromDegrees(160);
         public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(25);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(73);
-        public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
+        public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(-5);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
 
         public static final double TOLERANCE = Math.toRadians(5);
         public static final int SETTLE_TIME_LOOP_CYCLES = 200;
-        public static final int HAND_OFF_SETTLING_TIME = 40;
+        public static final int HAND_OFF_SETTLING_TIME = 0;
 
         public static final double CURRENT_OFFSET = 5;
 
@@ -284,7 +284,7 @@ public final class Constants {
         public static final double HOLDING_SPEED = 0.34;
         public static final double SCORE_SPEED = -1;
         public static final double INTAKE_SPEED = 0.8;
-        public static final double HAND_OFF_SPEED = -0.65;
+        public static final double HAND_OFF_SPEED = -0.50;
 
     }
 
@@ -332,8 +332,8 @@ public final class Constants {
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-49);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-34);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(112);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-28);
-        public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(-29);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-30);
+        public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
@@ -419,8 +419,8 @@ public final class Constants {
         public static final double FOLLOW_TRAJECTORY_KI = 0;
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 
-        public static final double SCORING_WAIT_TIME = 0.20;
-        public static final double HUMANLOAD_WAIT_TIME = 0.64;
+        public static final double SCORING_WAIT_TIME = 0.25;
+        public static final double HUMANLOAD_WAIT_TIME = 0.75;
 
         public static final double AUTO_ALIGN_TIMEOUT_TIMEOUT = 0.8;
         public static final double ALIGN_TO_POSE_KP = 3;
