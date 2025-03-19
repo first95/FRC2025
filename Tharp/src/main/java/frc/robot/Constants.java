@@ -239,11 +239,11 @@ public final class Constants {
         public static final Rotation2d STOWED = Rotation2d.fromDegrees(90);
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(167);
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-40);
-        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-40);
+        public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-37);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING_OF_BACK = Rotation2d.fromDegrees(160);
         public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(25);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(73);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(69);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(-5);
 
 
@@ -332,7 +332,7 @@ public final class Constants {
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-49);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-34);
         public static final Rotation2d SCORING = Rotation2d.fromDegrees(112);
-        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-30);
+        public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-28);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
 
 
