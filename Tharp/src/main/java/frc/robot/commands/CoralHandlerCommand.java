@@ -651,6 +651,9 @@ public class CoralHandlerCommand extends Command {
     public Trigger getCoralInL1(){
         return new Trigger(() -> coralInL1);
     }
+    public Trigger getCoralNotInL1(){
+        return new Trigger(() -> !coralInL1);
+    }
     public Command L4AutoScore(){
         return Commands.sequence(
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
@@ -665,7 +668,7 @@ public class CoralHandlerCommand extends Command {
     }
     public Command handOffAndL4(){
         return Commands.sequence(
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLE_KEY, true)),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
             new AlignToPose(() -> L4ScorePose, swerve),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_HANDOFF_KEY, true)),
             new WaitCommand(Constants.Auton.HANDOFF_WAIT_TIME),

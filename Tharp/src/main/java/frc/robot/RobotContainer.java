@@ -310,7 +310,7 @@ public class RobotContainer {
       .onFalse(coralHandler.cancelL4AutoScore());
     headingController.button(3).and(coralHandler.getCoralNotInL1())
       .onTrue(coralHandler.L4AutoScore())
-      .onFalse(coralHandler.cancelL4AutoScore())
+      .onFalse(coralHandler.cancelL4AutoScore());
     driveController.button(4)
       .whileTrue(coralHandler.L1AutoScore())
       .onFalse(coralHandler.cancelL1AutoScore());
