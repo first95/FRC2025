@@ -298,14 +298,19 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    
     //operatorController.start().onTrue(new InstantCommand(() -> drivebase.resetOdometry(new Pose2d(new Translation2d(),new Rotation2d()))).ignoringDisable(true));
     operatorController.start().onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     driveController.button(8).onTrue(new InstantCommand(drivebase::clearOdometrySeed).ignoringDisable(true));
     operatorController.povDown().onTrue(climber.runWinch(ClimberConstants.WINCH_IN_SPEED));
     operatorController.povUp().onTrue(climber.runWinch(ClimberConstants.WINCH_OUT_SPEED));
     operatorController.povCenter().onTrue(climber.runWinch(0));
-    headingController.button(3).whileTrue(coralHandler.L4AutoScore()).onFalse(coralHandler.cancelAutoScore());
-    driveController.button(4).whileTrue(coralHandler.L1AutoScore()).onFalse(coralHandler.cancelAutoScore());
+    headingController.button(3).and(coralHandler.getCoralInL1())
+      .onTrue((coralHandler.handOffAndL4()))
+      .onFalse(coralHandler.cancelL4AutoScore());
+    driveController.button(4)
+      .whileTrue(coralHandler.L1AutoScore())
+      .onFalse(coralHandler.cancelL1AutoScore());
     
     // operatorController.button(5).whileTrue(
     //   new AlignToPose("Reef", drivebase)//align to scoring position

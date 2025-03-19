@@ -27,6 +27,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.L1Arm;
 import frc.robot.subsystems.L4Arm;
 import frc.robot.subsystems.SwerveBase;
+import pabeles.concurrency.ConcurrencyOps.NewInstance;
 import frc.robot.Constants.L1ArmConstants;
 import frc.robot.Constants.L1IntakeConstants;
 import frc.robot.Constants.L4ArmConstants;
@@ -82,6 +83,7 @@ public class CoralHandlerCommand extends Command {
         autoL4HumanLoadTrigger,
         autoL4ScoreTrigger,
         autoL1ScoreTrigger,
+        autoHandOffTrigger,
         inAuto;
 
 
@@ -95,7 +97,6 @@ public class CoralHandlerCommand extends Command {
     private double L1IntakeSpeed;
     private State currentState = State.IDLE;
     private Pose2d L4Target, L4ScorePose, L1ScorePose;
-    private Trigger autoAlignTrigger;
 
         public CoralHandlerCommand(
             BooleanSupplier L1IntakeButtonSupplier, 
@@ -180,6 +181,7 @@ public class CoralHandlerCommand extends Command {
         autoL1ScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L1SCORE_KEY, false);
         autoL4HumanLoadTrigger = SmartDashboard.getBoolean(Constants.Auton.L4HUMANLOAD_KEY, false);
         autoL4ScoreTrigger = SmartDashboard.getBoolean(Constants.Auton.L4SCORE_KEY, false);
+        autoHandOffTrigger = SmartDashboard.getBoolean(Constants.Auton.AUTO_HANDOFF_KEY, false);
 
         pointToReefButton = pointToReefButtonSupplier.getAsBoolean();
 
@@ -258,6 +260,9 @@ public class CoralHandlerCommand extends Command {
                     }
                     if(autoL4ScoreTrigger){
                         currentState = State.L4_SCORING;
+                    }
+                    if(autoHandOffTrigger){
+                        currentState = State.L4_POSITIONING_HANDOFF;
                     }
                 }
                 else{
@@ -428,12 +433,19 @@ public class CoralHandlerCommand extends Command {
                 L4arm.setArmAngle(L4ArmConstants.HAND_OFF);
                 
                 absDrive.setBrake(true);
-
-                cyclesPositioningHandOff = 0;
-                if(!HandOffButton){
-                    currentState = State.IDLE;
-                    absDrive.setBrake(false);
+                if(inAuto){
+                    if(!autoHandOffTrigger){
+                        currentState = State.IDLE;
+                        absDrive.setBrake(false);
+                    }
                 }
+                else{
+                    if(!HandOffButton){
+                        currentState = State.IDLE;
+                        absDrive.setBrake(false);
+                    }
+                }
+                cyclesPositioningHandOff = 0; 
                 if(L4arm.atGoal()){
                     currentState = State.L1_POSITIONING_HANDOFF;
                 }
@@ -446,10 +458,17 @@ public class CoralHandlerCommand extends Command {
                 absDrive.setBrake(true);
 
                 cyclesPositioningHandOff += 1;
-                
-                if(!HandOffButton){
-                    currentState = State.IDLE;
-                    absDrive.setBrake(false);
+                if(inAuto){
+                    if(!autoHandOffTrigger){
+                        currentState = State.IDLE;
+                        absDrive.setBrake(false);
+                    }
+                }
+                else{
+                    if(!HandOffButton){
+                        currentState = State.IDLE;
+                        absDrive.setBrake(false);
+                    }
                 }
                 if(L1arm.atGoal() && L4arm.atGoal() && cyclesPositioningHandOff >= L1ArmConstants.HAND_OFF_SETTLING_TIME){
                     currentState = State.PERFORMING_HANDOFF;
@@ -463,9 +482,17 @@ public class CoralHandlerCommand extends Command {
                 L1IntakeSpeed = L1IntakeConstants.HAND_OFF_SPEED;
 
                 absDrive.setBrake(true);
-                if(!HandOffButton){
-                    currentState = State.IDLE;
-                    absDrive.setBrake(false);
+                if(inAuto){
+                    if(!autoHandOffTrigger){
+                        currentState = State.IDLE;
+                        absDrive.setBrake(false);
+                    }
+                }
+                else{
+                    if(!HandOffButton){
+                        currentState = State.IDLE;
+                        absDrive.setBrake(false);
+                    }
                 }
             break;
 
@@ -620,10 +647,12 @@ public class CoralHandlerCommand extends Command {
             return new Pose2d(findScoringPose(closestL4Pole).getTranslation(),findScoringPose(closestL4Pole).getRotation().rotateBy(Rotation2d.fromDegrees(180)));
         }
     }
-     
+
+    public Trigger getCoralInL1(){
+        return new Trigger(() -> coralInL1);
+    }
     public Command L4AutoScore(){
-        return 
-        Commands.sequence(
+        return Commands.sequence(
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
             new AlignToPose(() -> L4ScorePose, swerve),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
@@ -634,11 +663,26 @@ public class CoralHandlerCommand extends Command {
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)));
             
     }
-    public Command cancelAutoScore(){
+    public Command handOffAndL4(){
+        return Commands.sequence(
+            new AlignToPose(() -> L4ScorePose, swerve),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_HANDOFF_KEY, true)),
+            new WaitCommand(Constants.Auton.HANDOFF_WAIT_TIME),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_HANDOFF_KEY, false)),
+            L4AutoScore()
+        );
+    }
+    public Command cancelL4AutoScore(){
         return Commands.sequence(
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_HANDOFF_KEY, false))
+        );
+    }
+    public Command cancelL1AutoScore(){
+        return Commands.sequence(
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1SCORE_KEY, false))
         );
     }

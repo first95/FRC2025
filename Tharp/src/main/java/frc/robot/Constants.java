@@ -400,6 +400,7 @@ public final class Constants {
         // Plumbing via SmartDashboard
         public static final String L4HUMANLOAD_KEY = "AutoL4HumanLoad";
         public static final String AUTO_ENABLED_KEY = "autoEnabled";
+        public static final String AUTO_HANDOFF_KEY = "autoHandOff";
         public static final String L4SCORE_KEY = "AutoL4Score";
         public static final String L1SCORE_KEY = "AutoL1Score";
 
@@ -421,6 +422,7 @@ public final class Constants {
 
         public static final double SCORING_WAIT_TIME = 0.2;
         public static final double HUMANLOAD_WAIT_TIME = 0.8;
+        public static final double HANDOFF_WAIT_TIME = 1;
 
         public static final double AUTO_ALIGN_TIMEOUT_TIMEOUT = 0.8;
         public static final double ALIGN_TO_POSE_KP = 3;
