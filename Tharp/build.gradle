@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.1.1"
+    id "edu.wpi.first.GradleRIO" version "2025.3.2"
     id "com.palantir.git-version" version "3.1.0" // used to add git commit ID and branch name to Jar Manifest - zaaj
 }
 
