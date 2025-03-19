@@ -306,8 +306,11 @@ public class RobotContainer {
     operatorController.povUp().onTrue(climber.runWinch(ClimberConstants.WINCH_OUT_SPEED));
     operatorController.povCenter().onTrue(climber.runWinch(0));
     headingController.button(3).and(coralHandler.getCoralInL1())
-      .onTrue((coralHandler.handOffAndL4()))
+      .onTrue(coralHandler.handOffAndL4())
       .onFalse(coralHandler.cancelL4AutoScore());
+    headingController.button(3).and(coralHandler.getCoralNotInL1())
+      .onTrue(coralHandler.L4AutoScore())
+      .onFalse(coralHandler.cancelL4AutoScore())
     driveController.button(4)
       .whileTrue(coralHandler.L1AutoScore())
       .onFalse(coralHandler.cancelL1AutoScore());
