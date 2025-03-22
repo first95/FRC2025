@@ -375,7 +375,7 @@ public final class Constants {
         public static final int DEBUG_FLAG = 0b10;
 
         public static final int APRILTAG_PIPELINE_NUMBER = 0;
-        public static final String BOW_LIMELIGHT_NAME = "limelight-mast";
+        public static final String BOW_LIMELIGHT_NAME = "limelight-bow";
         public static final String STERN_LIMELIGHT_NAME = "limelight-stern";
 
         @SuppressWarnings("unused")
