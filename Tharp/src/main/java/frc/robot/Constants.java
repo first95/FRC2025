@@ -242,7 +242,7 @@ public final class Constants {
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-37);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING_OF_BACK = Rotation2d.fromDegrees(160);
-        public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(30);
+        public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(21);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(69);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(-5);
 
@@ -420,7 +420,7 @@ public final class Constants {
         public static final double FOLLOW_TRAJECTORY_KI = 0;
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 
-        public static final double SCORING_WAIT_TIME = 0.2;
+        public static final double SCORING_WAIT_TIME = 0.25;
         public static final double HUMANLOAD_WAIT_TIME = 0.8;
         public static final double HANDOFF_WAIT_TIME = 2;
 

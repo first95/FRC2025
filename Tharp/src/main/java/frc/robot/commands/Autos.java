@@ -188,6 +188,7 @@ public final class Autos {
           new AlignToPose(trajectories[0].getInitialPose().get(), swerve),
           new WaitUntilCommand(() -> !L4arm.isMoving()),
           new WaitCommand(Auton.SCORING_WAIT_TIME),
+          new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)),
           trajectories[0].cmd()
         )
       );
@@ -198,6 +199,7 @@ public final class Autos {
           trajectories[n].done().onTrue(
             new WaitUntilCommand(() -> !L4arm.isMoving())
             .andThen(new WaitCommand(Auton.SCORING_WAIT_TIME))
+            .andThen(new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)))
             .andThen(trajectories[n+1].cmd()));
         }
         //if the position target is at a loading station wait the humanload time
