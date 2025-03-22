@@ -242,7 +242,7 @@ public final class Constants {
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-37);
         public static final Rotation2d HUMANLOADING = Rotation2d.fromDegrees(65);
         public static final Rotation2d SCORING_OF_BACK = Rotation2d.fromDegrees(160);
-        public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(25);
+        public static final Rotation2d SCORING_OF_FRONT = Rotation2d.fromDegrees(30);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(69);
         public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(-5);
 
@@ -284,7 +284,7 @@ public final class Constants {
         public static final double HOLDING_SPEED = 0.34;
         public static final double SCORE_SPEED = -1;
         public static final double INTAKE_SPEED = 0.8;
-        public static final double HAND_OFF_SPEED = -0.50;
+        public static final double HAND_OFF_SPEED = -0.30;
 
     }
 
@@ -331,14 +331,14 @@ public final class Constants {
         public static final Rotation2d UPPER_LIMIT = Rotation2d.fromDegrees(114.69);
         public static final Rotation2d LOWER_LIMIT = Rotation2d.fromDegrees(-49);
         public static final Rotation2d INTAKING = Rotation2d.fromDegrees(-34);
-        public static final Rotation2d SCORING = Rotation2d.fromDegrees(112);
+        public static final Rotation2d SCORING = Rotation2d.fromDegrees(113);
         public static final Rotation2d HAND_OFF = Rotation2d.fromDegrees(-28);
-        public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(0);
+        public static final Rotation2d CLIMBING = Rotation2d.fromDegrees(-30);
 
 
         public static final double DEADBAND = Math.toRadians(0.1);
 
-        public static final double TOLERANCE = Math.toRadians(3);
+        public static final double TOLERANCE = Math.toRadians(2);
         public static final int SETTLE_TIME_LOOP_CYCLES = 10;
 
         public static final double CURRENT_OFFSET = 5;
@@ -375,7 +375,7 @@ public final class Constants {
         public static final int DEBUG_FLAG = 0b10;
 
         public static final int APRILTAG_PIPELINE_NUMBER = 0;
-        public static final String BOW_LIMELIGHT_NAME = "limelight-bow";
+        public static final String BOW_LIMELIGHT_NAME = "limelight-mast";
         public static final String STERN_LIMELIGHT_NAME = "limelight-stern";
 
         @SuppressWarnings("unused")
@@ -422,7 +422,7 @@ public final class Constants {
 
         public static final double SCORING_WAIT_TIME = 0.2;
         public static final double HUMANLOAD_WAIT_TIME = 0.8;
-        public static final double HANDOFF_WAIT_TIME = 1;
+        public static final double HANDOFF_WAIT_TIME = 2;
 
         public static final double AUTO_ALIGN_TIMEOUT_TIMEOUT = 0.8;
         public static final double ALIGN_TO_POSE_KP = 3;

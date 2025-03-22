@@ -483,6 +483,10 @@ public class CoralHandlerCommand extends Command {
 
                 absDrive.setBrake(true);
                 if(inAuto){
+                    if(autoL4ScoreTrigger){
+                        currentState = State.L4_SCORING;
+                        absDrive.setBrake(false);
+                    }
                     if(!autoHandOffTrigger){
                         currentState = State.IDLE;
                         absDrive.setBrake(false);
@@ -552,7 +556,7 @@ public class CoralHandlerCommand extends Command {
                     currentState = State.CLIMBING_L4_POSITIONING;
                 }
                 if(L4IntakeButton || L1IntakeButton || L1HumanLoadButton){
-                    currentState = State.IDLE;
+                    currentState = State.L1_INTAKING;
                 }
             break;
     }
@@ -658,13 +662,10 @@ public class CoralHandlerCommand extends Command {
         return Commands.sequence(
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
             new AlignToPose(() -> L4ScorePose, swerve),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
             new WaitCommand(Constants.Auton.SCORING_WAIT_TIME + L4ArmConstants.TIME_TO_SCORING),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4HUMANLOAD_KEY, false)),
-            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, false)));
-            
+            cancelL4AutoScore()
+            );
     }
     public Command handOffAndL4(){
         return Commands.sequence(
