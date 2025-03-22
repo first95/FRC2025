@@ -96,7 +96,7 @@ public class CoralHandlerCommand extends Command {
     private int cyclesIntaking, cyclesPositioningHandOff;
     private double L1IntakeSpeed;
     private State currentState = State.IDLE;
-    private Pose2d L4Target, L4ScorePose, L1ScorePose;
+    private Pose2d L4Target, L4ScorePose, LeftScorePose,RightScorePose;
 
         public CoralHandlerCommand(
             BooleanSupplier L1IntakeButtonSupplier, 
@@ -185,13 +185,14 @@ public class CoralHandlerCommand extends Command {
 
         pointToReefButton = pointToReefButtonSupplier.getAsBoolean();
 
-        L1ScorePose = findL1ScorePose();      
+        LeftScorePose = findLeftScorePose();
+        RightScorePose = findRightScorePose();      
         L1ScoreAngle = Math.abs(swerve.getPose().getRotation().getRadians() - calculatePointToCenterOfReefHeading().getRadians()) < Math.PI/2 ? 
             L1ArmConstants.SCORING_OF_BACK:
             L1ArmConstants.SCORING_OF_FRONT;
 
         
-        swerve.field.getObject("L1ScorePose").setPose(L1ScorePose);
+        swerve.field.getObject("L1ScorePose").setPose(RightScorePose);
         if(pointToReefButton){
             //absDrive.setHeading(calculatePointToCenterOfReefHeading());
             absDrive.setHeading(calculatePointToTargetHeading(L4Target)); 
@@ -504,6 +505,7 @@ public class CoralHandlerCommand extends Command {
             case L4_INTAKING:
                 // L4 intaking pos
                 // L1 backstop ~95 deg
+                L4arm.setArmAngle(L4ArmConstants.STOWED);
                 L4arm.setArmAngle(L4ArmConstants.INTAKING);
                 
                 if(inAuto){
@@ -522,7 +524,7 @@ public class CoralHandlerCommand extends Command {
             break;
 
             case L4_SCORING:
-                //L4arm.setArmAngle(L4ArmConstants.SCORING);
+                L4arm.setArmAngle(L4ArmConstants.SCORING);
                 L4arm.setArmAngle(L4ScoreAngle);
 
                 
@@ -633,13 +635,31 @@ public class CoralHandlerCommand extends Command {
                     Rotation2d.fromDegrees(0)))));
         
      }
-     private Pose2d findL1ScorePose(){
+     private Pose2d findRightScorePose(){
         Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_TRANSFORM);
 
         Pose2d closestL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
         Pose2d currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 0);
         for(int side = 0; side <= 5; side ++){
             currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + side + 0);
+            if(Math.hypot(currentL4Pole.getX() - shoulderFieldPose.getX(), currentL4Pole.getY() - shoulderFieldPose.getY()) < Math.hypot(closestL4Pole.getX() - shoulderFieldPose.getX(), closestL4Pole.getY() - shoulderFieldPose.getY())){
+                closestL4Pole = currentL4Pole;
+            }
+        }
+        if(Math.abs(swerve.getPose().getRotation().getRadians() - calculatePointToCenterOfReefHeading().getRadians()) < Math.PI/2){
+            return findScoringPose(closestL4Pole);
+        }
+        else{
+            return new Pose2d(findScoringPose(closestL4Pole).getTranslation(),findScoringPose(closestL4Pole).getRotation().rotateBy(Rotation2d.fromDegrees(180)));
+        }
+    }
+    private Pose2d findLeftScorePose(){
+        Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_TRANSFORM);
+
+        Pose2d closestL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 1);
+        Pose2d currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + 0 + 1);
+        for(int side = 0; side <= 5; side ++){
+            currentL4Pole = Constants.Auton.POSE_MAP.get(swerve.getAlliance()).get("R" + side + 1);
             if(Math.hypot(currentL4Pole.getX() - shoulderFieldPose.getX(), currentL4Pole.getY() - shoulderFieldPose.getY()) < Math.hypot(closestL4Pole.getX() - shoulderFieldPose.getX(), closestL4Pole.getY() - shoulderFieldPose.getY())){
                 closestL4Pole = currentL4Pole;
             }
@@ -658,23 +678,43 @@ public class CoralHandlerCommand extends Command {
     public Trigger getCoralNotInL1(){
         return new Trigger(() -> !coralInL1);
     }
-    public Command L4AutoScore(){
+    public Command LeftL4AutoScore(){
         return Commands.sequence(
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
-            new AlignToPose(() -> L4ScorePose, swerve),
+            new AlignToPose(() -> LeftScorePose, swerve),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
             new WaitCommand(Constants.Auton.SCORING_WAIT_TIME + L4ArmConstants.TIME_TO_SCORING),
             cancelL4AutoScore()
             );
     }
-    public Command handOffAndL4(){
+    public Command RightL4AutoScore(){
         return Commands.sequence(
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
-            new AlignToPose(() -> L4ScorePose, swerve),
+            new AlignToPose(() -> RightScorePose, swerve),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L4SCORE_KEY, true)),
+            new WaitCommand(Constants.Auton.SCORING_WAIT_TIME + L4ArmConstants.TIME_TO_SCORING),
+            cancelL4AutoScore()
+            );
+    }
+
+    public Command LefthandOffAndL4(){
+        return Commands.sequence(
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
+            new AlignToPose(() -> LeftScorePose, swerve),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_HANDOFF_KEY, true)),
             new WaitCommand(Constants.Auton.HANDOFF_WAIT_TIME),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_HANDOFF_KEY, false)),
-            L4AutoScore()
+            LeftL4AutoScore()
+        );
+    }
+    public Command RighthandOffAndL4(){
+        return Commands.sequence(
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
+            new AlignToPose(() -> RightScorePose, swerve),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_HANDOFF_KEY, true)),
+            new WaitCommand(Constants.Auton.HANDOFF_WAIT_TIME),
+            new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_HANDOFF_KEY, false)),
+            RightL4AutoScore()
         );
     }
     public Command cancelL4AutoScore(){
@@ -695,7 +735,7 @@ public class CoralHandlerCommand extends Command {
         return 
         Commands.sequence(
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, true)),
-            new AlignToPose(() -> L1ScorePose, swerve),
+            new AlignToPose(() -> RightScorePose, swerve),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.L1SCORE_KEY, true)),
             new WaitCommand(Constants.Auton.SCORING_WAIT_TIME + L4ArmConstants.TIME_TO_SCORING),
             new InstantCommand(() -> SmartDashboard.putBoolean(Constants.Auton.AUTO_ENABLED_KEY, false)),

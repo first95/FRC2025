@@ -166,11 +166,11 @@ public class RobotContainer {
 
     coralHandler = new CoralHandlerCommand(
       () -> operatorController.getHID().getLeftBumperButton(),    // L1Intake
-      () -> operatorController.getHID().getBButton(),    // L1Eject
+      () -> operatorController.getHID().getAButton(),    // L1Eject
       () -> operatorController.getHID().getYButton(),    //L1Inject
       () -> driveController.getHID().getRawButton(1),   // L4 intake
       () -> headingController.getHID().getRawButton(1), // L4 Score
-      () -> operatorController.getHID().getAButton(),   // Handoff
+      () -> operatorController.getHID().getBButton(),   // Handoff
       () -> operatorController.getHID().getRightBumperButton(), //L1Score
       () -> operatorController.getHID().getLeftStickButton(), //Stow
       () -> operatorController.getHID().getXButton(), //L1 HumanLoading
@@ -306,10 +306,16 @@ public class RobotContainer {
     operatorController.povUp().onTrue(climber.runWinch(ClimberConstants.WINCH_OUT_SPEED));
     operatorController.povCenter().onTrue(climber.runWinch(0));
     headingController.button(3).and(coralHandler.getCoralInL1())
-      .onTrue(coralHandler.handOffAndL4())
+      .onTrue(coralHandler.LefthandOffAndL4())
       .onFalse(coralHandler.cancelL4AutoScore());
     headingController.button(3).and(coralHandler.getCoralNotInL1())
-      .onTrue(coralHandler.L4AutoScore())
+      .onTrue(coralHandler.LeftL4AutoScore())
+      .onFalse(coralHandler.cancelL4AutoScore());
+    headingController.button(4).and(coralHandler.getCoralInL1())
+      .onTrue(coralHandler.RighthandOffAndL4())
+      .onFalse(coralHandler.cancelL4AutoScore());
+    headingController.button(4).and(coralHandler.getCoralNotInL1())
+      .onTrue(coralHandler.RightL4AutoScore())
       .onFalse(coralHandler.cancelL4AutoScore());
     driveController.button(4)
       .whileTrue(coralHandler.L1AutoScore())
