@@ -529,7 +529,7 @@ public class CoralHandlerCommand extends Command {
 
                 
                 if(inAuto){
-                    L4ScoreAngle = calculateL4ScoreAngle(L4Target);
+                    //L4ScoreAngle = calculateL4ScoreAngle(L4Target);
                     if(!autoL4ScoreTrigger){
                         currentState = State.IDLE;
                     }
