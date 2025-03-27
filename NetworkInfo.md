@@ -22,7 +22,3 @@
 | 10.0.95.16 | Spare LimeLight 3G | Focus iffy, still reads apriltags.  Has L1 pipeline in Pipeline 1, L4 pipeline in pipeline 4    |
 
 LimeLight 2+ and the two 3G's are on Firmware 2025.0 and are configured with AprilTag localization pipelines.  We did get a couple Google Coral TPUs to try Machine Learning game piece recognition as well, but have not yet found a use for them.
-
-## ToDo
-* Save the pipelines / settings of the two on-robot 3Gs for backup.
-* pre-configure the spare 3G as much as possible to make swaping it into use as easy as possible
