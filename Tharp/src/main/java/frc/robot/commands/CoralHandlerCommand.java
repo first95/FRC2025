@@ -421,7 +421,9 @@ public class CoralHandlerCommand extends Command {
                     if(climbButton){
                         currentState = State.CLIMBING_L1_POSITIONING;
                     }
-                    
+                    if(L1HumanLoadButton){
+                        currentState = State.IDLE;
+                    }
                     if(HandOffButton){
                         currentState = State.IDLE;
                     }
