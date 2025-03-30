@@ -648,12 +648,13 @@ public class CoralHandlerCommand extends Command {
                 closestL4Pole = currentL4Pole;
             }
         }
-        if(Math.abs(swerve.getPose().getRotation().getRadians() - calculatePointToCenterOfReefHeading().getRadians()) < Math.PI/2){
-            return findScoringPose(closestL4Pole);
-        }
-        else{
-            return new Pose2d(findScoringPose(closestL4Pole).getTranslation(),findScoringPose(closestL4Pole).getRotation().rotateBy(Rotation2d.fromDegrees(180)));
-        }
+        // if(Math.abs(swerve.getPose().getRotation().getRadians() - calculatePointToCenterOfReefHeading().getRadians()) < Math.PI/2){
+        //     return findScoringPose(closestL4Pole);
+        // }
+        // else{
+        //     return new Pose2d(findScoringPose(closestL4Pole).getTranslation(),findScoringPose(closestL4Pole).getRotation().rotateBy(Rotation2d.fromDegrees(180)));
+        // }
+        return findScoringPose(closestL4Pole); 
     }
     private Pose2d findLeftScorePose(){
         Pose2d shoulderFieldPose = swerve.getPose().plus(L4ArmConstants.SHOULDER_TRANSFORM);
@@ -666,12 +667,13 @@ public class CoralHandlerCommand extends Command {
                 closestL4Pole = currentL4Pole;
             }
         }
-        if(Math.abs(swerve.getPose().getRotation().getRadians() - calculatePointToCenterOfReefHeading().getRadians()) < Math.PI/2){
-            return findScoringPose(closestL4Pole);
-        }
-        else{
-            return new Pose2d(findScoringPose(closestL4Pole).getTranslation(),findScoringPose(closestL4Pole).getRotation().rotateBy(Rotation2d.fromDegrees(180)));
-        }
+        // if(Math.abs(swerve.getPose().getRotation().getRadians() - calculatePointToCenterOfReefHeading().getRadians()) < Math.PI/2){
+        //     return findScoringPose(closestL4Pole);
+        // }
+        // else{
+        //     return new Pose2d(findScoringPose(closestL4Pole).getTranslation(),findScoringPose(closestL4Pole).getRotation().rotateBy(Rotation2d.fromDegrees(180)));
+        // }
+        return findScoringPose(closestL4Pole);
     }
 
     public Trigger getCoralInL1(){

@@ -263,7 +263,7 @@ public final class Constants {
         public static final boolean INVERTED = false;
 
         public static final int SMARTCURRENTLIMIT = 80;
-        public static final double OPEN_LOOP_RAMP_RATE = 0;
+        public static final double OPEN_LOOP_RAMP_RATE = .3;
 
         public static final int FAULTS_PERIOD_MS = 20;
 
@@ -282,9 +282,9 @@ public final class Constants {
         public static final int CYCLE_RELEASED_THRESHOLD = 20;
 
         public static final double HOLDING_SPEED = 0.34;
-        public static final double SCORE_SPEED = -1;
+        public static final double SCORE_SPEED = -0.3;
         public static final double INTAKE_SPEED = 0.8;
-        public static final double HAND_OFF_SPEED = -0.30;
+        public static final double HAND_OFF_SPEED = -0.tw;
 
     }
 
@@ -375,7 +375,7 @@ public final class Constants {
         public static final int DEBUG_FLAG = 0b10;
 
         public static final int APRILTAG_PIPELINE_NUMBER = 0;
-        public static final String BOW_LIMELIGHT_NAME = "limelight-bow";
+        public static final String BOW_LIMELIGHT_NAME = "no";//"limelight-bow";
         public static final String STERN_LIMELIGHT_NAME = "limelight-stern";
 
         @SuppressWarnings("unused")
@@ -420,7 +420,7 @@ public final class Constants {
         public static final double FOLLOW_TRAJECTORY_KI = 0;
         public static final double FOLLOW_TRAJECTORY_KD = 0;
 
-        public static final double SCORING_WAIT_TIME = 0.25;
+        public static final double SCORING_WAIT_TIME = 0.40;
         public static final double HUMANLOAD_WAIT_TIME = 0.8;
         public static final double HANDOFF_WAIT_TIME = 2;
 
