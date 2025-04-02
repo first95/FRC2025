@@ -284,7 +284,7 @@ public final class Constants {
         public static final double HOLDING_SPEED = 0.34;
         public static final double SCORE_SPEED = -0.3;
         public static final double INTAKE_SPEED = 0.8;
-        public static final double HAND_OFF_SPEED = -0.tw;
+        public static final double HAND_OFF_SPEED = -0.30;
 
     }
 
