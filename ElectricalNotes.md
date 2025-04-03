@@ -17,8 +17,8 @@ Front of the robot is the coral intake side
 |        9 |  40A |  9  | Back Right Drive motor (Spark FLEX)   |
 |          |      |     |*Non-drive motors*                     |
 |        2 |  40A | 10  | L4 Shoulder (Spark MAX)               |
-|       12 |  40A | 11  | L1 (utility) arm shoulder             |
-|       13 |  40A | 12  | L2 (utility) arm intake roller        |
+|       12 |  40A | 11  | L1 (utility) arm intake motor             |
+|       13 |  40A | 12  | L1 (utility) arm shoulder        |
 |       17 |  40A | 13  | Climber winch motor                   |
 |          |      |     |*Non-motor breakers*                   |
 |        3 |  10A |     | VRM for both Limelight 3G's           |
