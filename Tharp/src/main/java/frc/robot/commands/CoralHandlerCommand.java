@@ -187,11 +187,11 @@ public class CoralHandlerCommand extends Command {
 
         LeftScorePose = findLeftScorePose();
         RightScorePose = findRightScorePose();      
-        L1ScoreAngle = Math.abs(swerve.getPose().getRotation().getRadians() - calculatePointToCenterOfReefHeading().getRadians()) < Math.PI/2 ? 
+        L1ScoreAngle = Math.abs(swerve.getPose().getRotation().minus(calculatePointToCenterOfReefHeading()).getRadians()) < Math.PI/2 ? 
             L1ArmConstants.SCORING_OF_BACK:
             L1ArmConstants.SCORING_OF_FRONT;
-
         
+        SmartDashboard.putNumber("L1ScoreAngle", L1ScoreAngle.getDegrees());
         swerve.field.getObject("L1ScorePose").setPose(RightScorePose);
         if(pointToReefButton){
             //absDrive.setHeading(calculatePointToCenterOfReefHeading());
