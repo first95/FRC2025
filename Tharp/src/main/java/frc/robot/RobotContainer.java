@@ -320,7 +320,7 @@ public class RobotContainer {
     driveController.button(4)
       .whileTrue(coralHandler.L1AutoScore())
       .onFalse(coralHandler.cancelL1AutoScore());
-    
+    operatorController.button(9).onTrue(new InstantCommand(() -> setBrakes(false)).ignoringDisable(true));
     // operatorController.button(5).whileTrue(
     //   new AlignToPose("Reef", drivebase)//align to scoring position
     //   .andThen(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble,1)))//when aligned vibrate the controller
@@ -328,6 +328,7 @@ public class RobotContainer {
     // .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
     //   L1arm.incrementArmVoltage(0.01);   
     // }  
+
     // if (operatorController.b().getAsBoolean() == true){
     //   L1arm.incrementArmVoltage(-0.01);
     // }
